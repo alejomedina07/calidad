@@ -1,0 +1,24 @@
+{
+  "name": "calidad",
+  "version": "1.0.0",
+  "description": "Aplicacion para manejar notificaciones de calidad",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alejandro Medina",
+  "license": "ISC",
+  "dependencies": {
+    "angular": "^1.7.9",
+    "angular-animate": "^1.7.9",
+    "angular-aria": "^1.7.9",
+    "angular-material": "^1.1.21",
+    "angular-messages": "^1.7.9",
+    "debug": "^4.1.1",
+    "express": "^4.17.1",
+    "jquery": "^3.4.1",
+    "moment": "^2.24.0",
+    "pug": "^2.0.4",
+    "pushsafer-notifications": "^0.1.8"
+  }
+}

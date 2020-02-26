@@ -1,0 +1,40 @@
+- 
+  var stylesheets = [ 
+    "/static/angular-material/angular-material.css", 
+    "/static/scripts/angular-material-sidemenu/dest/angular-material-sidemenu.css",
+    "/static/styles/style.css" 
+  ]
+- 
+  var javascripts = [ 
+    "/static/jquery/dist/jquery.js",
+    "/static/angular/angular.js",
+    "/static/angular-aria/angular-aria.js",
+    "/static/angular-messages/angular-messages.js",
+    "/static/angular-animate/angular-animate.js",
+    "/static/scripts/angular-material-sidemenu/dest/angular-material-sidemenu.js",
+    "/static/angular-material/angular-material.js",
+    "/static/scripts/main.js", 
+    "/static/scripts/controllers/header.js", 
+    "/static/scripts/controllers/notificacion.js", 
+  ]
+doctype html
+html(ng-app='calidad')
+  head
+    meta(charset='utf-8')
+    title= "Calidad"
+    meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(keywords="Calidad")
+    meta(description="Calidad")
+    each stylesheet in stylesheets
+      link(rel='stylesheet', href=stylesheet)
+    each javascript in javascripts
+      script(src=javascript)
+  body
+    div(layout="column" )
+      block header
+      //- span(flex)
+      block content 
+      span(flex)
+      block footer 
+        //- i Pendiente por footer

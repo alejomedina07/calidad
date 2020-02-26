@@ -1,0 +1,67 @@
+header(ng-controller="header as $cCtr")
+  md-toolbar.md-primary.md-whiteframe-1dp
+    .md-toolbar-tools.tamano-cabecera
+      md-button.md-icon-button(aria-label='Menú de opciones' ng-click='$cCtr.abrirMenuIzquierda()')
+        //- i.material-icons menu
+        md-icon(md-svg-src='static/content/icons/menu.svg')
+      span(flex flex-xs)
+      a(href="/" title="Terrano")
+        .nombre-empresa
+          h1 CALIDAD
+          span Sistema Integrado de Notificaciones
+      span(flex flex-xs)
+      md-progress-circular(md-mode="indeterminate" ng-show="$cCtr.mostrarCargadorDeRutas")
+      //- md-button.md-icon-button(aria-label='Recargar' ng-click='$cCtr.actualizar()' ng-show="!$cCtr.mostrarCargadorDeRutas")
+      //-   i.material-icons.color-blanco refresh
+      //-   md-tooltip(md-direction="left") Cargar esta página de nuevo
+      //- div.cantidad-de-notificaciones
+      //-   md-button.md-icon-button(aria-label='Menú de tareas' ng-click='$cCtr.abrirMenuDerecha()')
+      //-     i.material-icons.color-blanco comment
+      //-       md-tooltip(md-direction="left") Ver notificaciones
+      //-   span(ng-show="$cCtr.cantidadDeNotificacionesGenerales") {{$cCtr.cantidadDeNotificacionesGenerales}}
+      //- md-button.md-icon-button(aria-label='Internet en línea' ng-show="$cCtr.enLinea" disabled)
+      //-   i.material-icons.color-blanco wifi
+      //-     md-tooltip(md-direction="left") Internet en línea
+      //- md-button.md-icon-button(aria-label='Internet fuera de línea' ng-hide="$cCtr.enLinea" disabled)
+      //-   i.material-icons.color-rojo signal_wifi_off
+      //-     md-tooltip(md-direction="left") Internet fuera de línea
+      //- md-button.md-icon-button(aria-label='Salir del sistema' ng-click='$cCtr.cerrarSesion()')
+      //-   i.material-icons.color-blanco power_settings_new
+      //-     md-tooltip(md-direction="left") Salir
+      //- general-reloj-componente()
+      
+
+  section(layout="row" flex)
+    md-sidenav.md-sidenav-left.barra-lateral-izquierda(md-component-id='left' md-whiteframe='4')
+      md-toolbar(layout='row')
+        h1.md-toolbar-tools Menú de opciones
+        md-button(aria-label='Menú de opciones' ng-click='$cCtr.abrirMenuIzquierda()')
+          md-icon(md-svg-src='static/content/icons/menu.svg')
+      md-content
+        md-list-item.md-3-line
+          img.md-avatar(ng-src='{{$cCtr.usuarioConectado.atributos.fotografiaRecursoCompleto || "/estatico/estilos/imagenes/logo_terrano_fondo_amarillo.jpg"}}' alt="{{$cCtr.usuarioConectado.atributos.nombreCompleto.completo}}")
+          .md-list-item-text(layout='column')
+            h3 {{$cCtr.usuarioConectado.atributos.nombreCompleto.nombres}} 
+            | {{$cCtr.usuarioConectado.atributos.nombreCompleto.apellidos}}
+            div(layout='row')
+              h4 {{$cCtr.usuarioConectado.obtenerCargo().texto}}
+              span(flex)
+              i.material-icons.cursor-informativo(ng-if='$cCtr.usuarioConectado.atributos.ultimaFechaIngreso') fingerprint
+                md-tooltip(md-direction="bottom") Última fecha de ingreso: {{$cCtr.usuarioConectado.atributos.ultimaFechaIngreso | fechas: 'LL'}} {{$cCtr.usuarioConectado.atributos.ultimaFechaIngreso | fechas: 'LT'}}
+        md-divider
+        md-sidemenu        
+          md-sidemenu-group(ng-repeat="menu in $cCtr.MENU")
+            md-sidemenu-content(md-icon='{{menu.icono}}' md-heading='{{menu.nombre}}' md-arrow='true')
+              md-sidemenu-button(ng-repeat="submenu in menu.submenu" ui-sref="{{submenu.parametros ? submenu.enlace + '(' + (submenu.parametros | json : 0) + ')' : submenu.enlace}}" ui-sref-active="activo")
+                md-icon(md-svg-src='static/content/icons/menu.svg')
+                | {{submenu.nombre}}
+                //- i.material-icons {{submenu.icono}}
+        
+      md-button.md-fab.md-fab-bottom-right.my-fab-button(ng-click='$cCtr.cerrarSesion()')
+        md-icon
+          i.material-icons.color-blanco power_settings_new
+        md-tooltip(md-direction="left") Salir
+
+  
+  
+  

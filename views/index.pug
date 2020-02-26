@@ -1,0 +1,52 @@
+extends ./layout/layout
+
+block header
+  include ./inclusions/header
+block content
+  //- div(layout="row")
+  br
+  div.md-whiteframe-2dp(layout="column" flex layout-margin layout-padding ng-controller="notificacion as $nCtrl")
+    div(layout="row" layout-align="center center" flex layout-margin layout-padding)
+      h2 Generar Notificacion
+    md-divider
+    div(layout="row" layout-xs="column" layout-align="start start" flex layout-margin layout-padding)
+      span(flex hide-sm)
+      md-input-container.w-100.md-block(flex)
+        label Seleccione Linea
+        md-select(ng-model='$nCtrl.form.linea')
+          md-option(ng-repeat='state in [1,2,3]', value='{{state}}')
+            | Linea-{{state}}
+      
+      md-input-container.md-block.w-100(flex)
+        label Seleccione OP
+        md-select(ng-model='$nCtrl.form.op')
+          md-option(ng-repeat='state in [1,2,3,4,5,6,7,8,9]', value='{{state}}')
+            | OP-{{state}}      
+      span(flex hide-sm)
+    div(layout="row" layout-xs="column" layout-align="start start" flex layout-margin layout-padding)
+      span(flex hide-sm)
+      md-input-container.md-block.w-100(flex)
+        label Seleccione Icono
+        md-select(ng-model='$nCtrl.form.icono')
+          md-option(ng-repeat='icono in $nCtrl.iconos', ng-value='icono.id')
+            md-icon(md-svg-src='static/content/icons/{{icono.icono}}.svg')
+            | &nbsp;{{ icono.nombre }} 
+      md-input-container.md-block.w-100(flex)
+        label Seleccione Sonido
+        md-select(ng-model='$nCtrl.form.sonido')
+          md-option(ng-repeat='sonido in $nCtrl.sonidos', ng-value='sonido.id')
+            | {{ sonido.nombre }}      
+      span(flex hide-sm)
+    div(layout="row" layout-xs="column" layout-align="start start" flex layout-margin layout-padding layout-wrap="")
+      .md-whiteframe-2dp.w-100.puesto-de-trabajo( ng-class="{'puesto-activo':$nCtrl.form.puesto == opcion}" flex flex-sm="30" layout="column" layout-align="center center" 
+        ng-click="$nCtrl.form.puesto = opcion" ng-repeat="opcion in [1,2,3,4,5]")
+        h3 Puesto de trabajo {{ opcion }}
+        md-icon(md-svg-src='static/content/icons/tools.svg')
+        br
+    //- div(layout="row" layout-align="start start" flex layout-margin layout-padding)
+    //-   .md-whiteframe-2dp.puesto-de-trabajo(flex layout="column" layout-align="center center" ng-click="$nCtrl.form.puesto = opcion" ng-repeat="opcion in [4,5,6]")
+    //-     h3 Puesto de trabajo {{ opcion }}
+    //-     md-icon(md-svg-src='static/content/icons/tools.svg')
+    //-     br
+    div(layout="row" layout-align="end end" flex )
+      md-button.md-raised.md-primary(ng-click="$nCtrl.generarNotificacion()") Generar
