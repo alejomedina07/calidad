@@ -2,12 +2,14 @@
   var stylesheets = [ 
     "/static/angular-material/angular-material.css", 
     "/static/scripts/angular-material-sidemenu/dest/angular-material-sidemenu.css",
-    "/static/styles/style.css" 
+    "/static/styles/style.css",
+    "/static/styles/tabla.css"
   ]
 - 
   var javascripts = [ 
     "/static/jquery/dist/jquery.js",
     "/static/angular/angular.js",
+    "/static/moment/moment.js",
     "/static/angular-aria/angular-aria.js",
     "/static/angular-messages/angular-messages.js",
     "/static/angular-animate/angular-animate.js",
@@ -15,7 +17,7 @@
     "/static/angular-material/angular-material.js",
     "/static/scripts/main.js", 
     "/static/scripts/controllers/header.js", 
-    "/static/scripts/controllers/notificacion.js", 
+    "/static/scripts/controllers/notificacion.js",
   ]
 doctype html
 html(ng-app='calidad')
@@ -30,11 +32,12 @@ html(ng-app='calidad')
       link(rel='stylesheet', href=stylesheet)
     each javascript in javascripts
       script(src=javascript)
-  body
-    div(layout="column" )
+  body(layout="column")
+    div(flex )
       block header
-      //- span(flex)
+        include ../inclusions/header
       block content 
-      span(flex)
+    span(flex)
+    div(layout="column" layout-align="end center")
       block footer 
-        //- i Pendiente por footer
+        span © BUSSCAR  {{ moment().format('YYYY') }} Todos los derechos reservados

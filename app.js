@@ -2,7 +2,9 @@ var express = require('express'),
   path = require('path'),
   bodyParser = require('body-parser'),
   // mongoose = require ('mongoose'),
+  
   app = express();
+
 
 // mongoose.connect ('mongodb://localhost/es_vida');
 app.use(bodyParser.json());

@@ -22,6 +22,7 @@
     $nCtrl.generarNotificacion = function () {
       console.log('$nCtrl.form');
       console.log($nCtrl.form);
+      var colores = {1:'#fff', 2:'', 3:'', 4:'', 5:'',};
       $http.post('/generar-notificacion/', $nCtrl.form)
       .then(function(result){
         console.log(result);
@@ -30,6 +31,15 @@
         console.log(e);
       });
     };
-
+    $nCtrl.data = [];
+    for (var i = 0; i < 20; i++) {
+      $nCtrl.data.push({
+        fecha:moment().format('LLL'),
+        name:'puesto ' + i,
+        calories:'estado ' + i,
+        fat:'asistencia ' + i,
+        carbs:'h ' + i
+      });
+    }
   });
 })();

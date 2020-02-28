@@ -5,31 +5,13 @@ header(ng-controller="header as $cCtr")
         //- i.material-icons menu
         md-icon(md-svg-src='static/content/icons/menu.svg')
       span(flex flex-xs)
-      a(href="/" title="Terrano")
+      a(href="/" title="Calidad")
         .nombre-empresa
           h1 CALIDAD
           span Sistema Integrado de Notificaciones
       span(flex flex-xs)
       md-progress-circular(md-mode="indeterminate" ng-show="$cCtr.mostrarCargadorDeRutas")
-      //- md-button.md-icon-button(aria-label='Recargar' ng-click='$cCtr.actualizar()' ng-show="!$cCtr.mostrarCargadorDeRutas")
-      //-   i.material-icons.color-blanco refresh
-      //-   md-tooltip(md-direction="left") Cargar esta página de nuevo
-      //- div.cantidad-de-notificaciones
-      //-   md-button.md-icon-button(aria-label='Menú de tareas' ng-click='$cCtr.abrirMenuDerecha()')
-      //-     i.material-icons.color-blanco comment
-      //-       md-tooltip(md-direction="left") Ver notificaciones
-      //-   span(ng-show="$cCtr.cantidadDeNotificacionesGenerales") {{$cCtr.cantidadDeNotificacionesGenerales}}
-      //- md-button.md-icon-button(aria-label='Internet en línea' ng-show="$cCtr.enLinea" disabled)
-      //-   i.material-icons.color-blanco wifi
-      //-     md-tooltip(md-direction="left") Internet en línea
-      //- md-button.md-icon-button(aria-label='Internet fuera de línea' ng-hide="$cCtr.enLinea" disabled)
-      //-   i.material-icons.color-rojo signal_wifi_off
-      //-     md-tooltip(md-direction="left") Internet fuera de línea
-      //- md-button.md-icon-button(aria-label='Salir del sistema' ng-click='$cCtr.cerrarSesion()')
-      //-   i.material-icons.color-blanco power_settings_new
-      //-     md-tooltip(md-direction="left") Salir
-      //- general-reloj-componente()
-      
+
 
   section(layout="row" flex)
     md-sidenav.md-sidenav-left.barra-lateral-izquierda(md-component-id='left' md-whiteframe='4')
@@ -39,7 +21,7 @@ header(ng-controller="header as $cCtr")
           md-icon(md-svg-src='static/content/icons/menu.svg')
       md-content
         md-list-item.md-3-line
-          img.md-avatar(ng-src='{{$cCtr.usuarioConectado.atributos.fotografiaRecursoCompleto || "/estatico/estilos/imagenes/logo_terrano_fondo_amarillo.jpg"}}' alt="{{$cCtr.usuarioConectado.atributos.nombreCompleto.completo}}")
+          //- img.md-avatar(ng-src='{{$cCtr.usuarioConectado.atributos.fotografiaRecursoCompleto || "/estatico/estilos/imagenes/logo_terrano_fondo_amarillo.jpg"}}' alt="{{$cCtr.usuarioConectado.atributos.nombreCompleto.completo}}")
           .md-list-item-text(layout='column')
             h3 {{$cCtr.usuarioConectado.atributos.nombreCompleto.nombres}} 
             | {{$cCtr.usuarioConectado.atributos.nombreCompleto.apellidos}}

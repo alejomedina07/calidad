@@ -1,0 +1,37 @@
+extends ../layout/layout
+
+block header
+  include ../inclusions/header
+block content
+  div.md-whiteframe-2dp(layout="column" flex layout-margin layout-padding ng-controller="notificacion as $nCtrl")
+    //- div(layout="row" layout-align="center center" flex layout-margin layout-padding)
+    //-   h2 Lista de notificaciones
+    //- md-divider
+    md-content(layout-padding)
+      table.responsive-table
+        caption Lista de notificaciones
+        thead
+          tr
+            th(scope='col') Fecha
+            th(scope='col') Puesto de trabajo
+            th(scope='col') Estado
+            th(scope='col') Asistencia de Usuarios
+            th(scope='col') Acciones
+
+        tfoot
+          //- tr
+          //-   td(colspan='7')
+          //-     | Sources: 
+          //-     a(href='http://en.wikipedia.org/wiki/List_of_highest-grossing_animated_films', rel='external') Wikipedia
+          //-     |  & 
+          //-     a(href='http://www.boxofficemojo.com/genres/chart/?id=animation.htm', rel='external') Box Office Mojo
+          //-     | . Data is current as of October 3, 2018.
+        tbody
+          tr(ng-repeat="dato in $nCtrl.data")
+            th(scope='row') {{dato.fecha | date : 'short'}}
+            td(data-title='Puesto de trabajo') {{ dato.name }}
+            td(data-title='Estado') {{ dato.calories }}
+            td(data-title='Asistencia de Usuarios') {{ dato.fat }}
+            td(data-title='Acciones') {{ dato.carbs }}
+
+          

@@ -3,11 +3,28 @@ var express = require('express'),
   // ObjectId = require('mongoose').Types.ObjectId,
   moment= require('moment'),
   push = require( 'pushsafer-notifications' ),
+  db = require( '../models/BBOO' ),
   router = express.Router();
 
 
 router.get("/", function(req, res) {
+  // console.log('connection');
+  // console.log(connection);
+  db.consulta('hola')
+  .then(value => {
+    console.log('value');
+    console.log(value);
+  })
+  .catch(err => {
+    console.log('err');
+    console.log(err);
+  });
   res.render("index");
+});
+
+
+router.get("/lista", function(req, res) {
+  res.render("notificaciones/lista");
 });
 
 
@@ -22,7 +39,7 @@ router.post("/generar-notificacion", function(req, res) {
   });
 
   var msg = {
-      m: 'Se solicita en la linea ' + req.body.linea + ' OP-' + req.body.op + ' En el puesto ' + req.body.puesto,   // message (required)
+      m: 'Se solicita en la linea ' + req.body.linea + ' OP-00' + req.body.op + ' En el puesto de trabajo ' + req.body.puesto,   // message (required)
       t: "Notificacion",                     // title (optional)
       s: req.body.sonido,                                // sound (value 0-50)
       v: '3',                                // vibration (empty or value 1-3)
@@ -32,9 +49,10 @@ router.post("/generar-notificacion", function(req, res) {
       re: '60',
       u: 'https://www.pushsafer.com',        // url (optional)
       ut: 'Open Link',                       // url title (optional)
-      d: '22618'
+      d: '22759'
   };
 
+  if (req.body.icono == 5) msg.c = '#FF0000';
 
   console.log('msg');
   console.log(msg);
@@ -49,5 +67,9 @@ router.post("/generar-notificacion", function(req, res) {
   //   console.log(error);
   // });
 });
+
+
+
+
 
 module.exports = router;

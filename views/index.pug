@@ -1,18 +1,18 @@
 extends ./layout/layout
 
-block header
-  include ./inclusions/header
+//- block header
+//-   include ./inclusions/header
 block content
   //- div(layout="row")
   br
   div.md-whiteframe-2dp(layout="column" flex layout-margin layout-padding ng-controller="notificacion as $nCtrl")
     div(layout="row" layout-align="center center" flex layout-margin layout-padding)
-      h2 Generar Notificacion
+      h2 Generar Notificación
     md-divider
     div(layout="row" layout-xs="column" layout-align="start start" flex layout-margin layout-padding)
       span(flex hide-sm)
       md-input-container.w-100.md-block(flex)
-        label Seleccione Linea
+        label Seleccione Línea
         md-select(ng-model='$nCtrl.form.linea')
           md-option(ng-repeat='state in [1,2,3]', value='{{state}}')
             | Linea-{{state}}
