@@ -34,7 +34,7 @@ router.post("/generar-notificacion", function(req, res) {
   console.log(req.body);
 
   var p = new push( {
-      k: 'Kd6vXa7P7mGzVcuHXDp5',             // your 20 chars long private key
+      k: 'bTfKBVlOsrWJUePSeVta',             // your 20 chars long private key
       debug: true
   });
 
@@ -49,7 +49,7 @@ router.post("/generar-notificacion", function(req, res) {
       re: '60',
       u: 'https://www.pushsafer.com',        // url (optional)
       ut: 'Open Link',                       // url title (optional)
-      d: '22759'
+      d: 'a'
   };
 
   if (req.body.icono == 5) msg.c = '#FF0000';

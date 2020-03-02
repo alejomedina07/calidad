@@ -4,12 +4,35 @@ block header
   include ../inclusions/header
 block content
   div.md-whiteframe-2dp(layout="column" flex layout-margin layout-padding ng-controller="notificacion as $nCtrl")
-    //- div(layout="row" layout-align="center center" flex layout-margin layout-padding)
-    //-   h2 Lista de notificaciones
+    div(layout="row" layout-align="start center" flex)
+      h2 Lista de notificaciones
+      md-button.md-raised.md-primary + Crear
+    div(layout="row" layout-align="start center" flex style="margin-bottom:0px;")
+      md-datepicker(ng-model='$nCtrl.fechaInicio' md-placeholder='Fecha de inicio')      
+      md-datepicker(ng-model='$nCtrl.fechaFin' md-placeholder='Fecha de fin')      
+      md-button.md-raised(style="margin-left:20px;" ng-click="filtros = !filtros") Mas Filtros
+      span(flex="10")
+    div(layout="row" layout-align="start center" flex style="margin-bottom:0px;" ng-if="filtros" layout-margin)
+      md-input-container(flex)
+        label Filtro uno
+        input(ng-model='user.firstName')
+      md-input-container.md-block(flex)
+        label Filtro dos 
+        input(ng-model='user.firstName')                
+      md-input-container.md-block(flex)
+        label Filtro tres
+        input(ng-model='user.firstName')      
+      md-input-container.md-block(flex)
+        label Filtro cuatro
+        input(ng-model='user.firstName')                
+      md-input-container.md-block(flex)
+        label Filtro cinco
+        input(ng-model='user.firstName')                
     //- md-divider
+      
     md-content(layout-padding)
       table.responsive-table
-        caption Lista de notificaciones
+        //- caption Lista de notificaciones
         thead
           tr
             th(scope='col') Fecha
