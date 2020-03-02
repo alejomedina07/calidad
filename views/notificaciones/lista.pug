@@ -7,6 +7,9 @@ block content
     div(layout="row" layout-align="start center" flex)
       h2 Lista de notificaciones
       md-button.md-raised.md-primary + Crear
+      span(flex)
+      img(src="/static/content/QR.png")
+      span(flex)
     div(layout="row" layout-align="start center" flex style="margin-bottom:0px;")
       md-datepicker(ng-model='$nCtrl.fechaInicio' md-placeholder='Fecha de inicio')      
       md-datepicker(ng-model='$nCtrl.fechaFin' md-placeholder='Fecha de fin')      

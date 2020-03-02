@@ -58,14 +58,14 @@ router.post("/generar-notificacion", function(req, res) {
   console.log(msg);
 
   // Promise.all([p.send(msg)])
-  // p.send(msg)
-  // .then(result => {
-  //   console.log(result);
-  //   res.json({ msg:result });
-  // })
-  // .catch(error => {
-  //   console.log(error);
-  // });
+  p.send(msg)
+  .then(result => {
+    console.log(result);
+    res.json({ msg:result });
+  })
+  .catch(error => {
+    console.log(error);
+  });
 });
 
 
