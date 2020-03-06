@@ -2,10 +2,10 @@ var mysql = require('mysql'),
   General = function(){};
 
 const connection = mysql.createConnection({
-	host     : 'localhost',
+	host     : '172.16.0.12',
 	user     : 'root',
-	password : '',
-	database : 'nodelogin'
+	password : 'skpc99;B',
+	database : 'homologacion'
 });
 
 
@@ -15,9 +15,10 @@ General.prototype.consulta = function (query) {
   return new Promise((resolver, rechazar) => {
     connection.connect(function(error) {
       if (error) rechazar(error);
-      connection.query("SELECT name, address FROM customers", function (err, result, fields) {
+      connection.query("SELECT * FROM bodega", function (err, result, fields) {
         if (err) rechazar(error);
-        console.log(fields);
+        // console.log('fields');
+        // console.log(fields);
         resolver(fields);
       });
     });

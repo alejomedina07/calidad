@@ -13,7 +13,7 @@ block content
     div(layout="row" layout-align="start center" flex style="margin-bottom:0px;")
       md-datepicker(ng-model='$nCtrl.fechaInicio' md-placeholder='Fecha de inicio')      
       md-datepicker(ng-model='$nCtrl.fechaFin' md-placeholder='Fecha de fin')      
-      md-button.md-raised(style="margin-left:20px;" ng-click="filtros = !filtros") Mas Filtros
+      md-button.md-raised(style="margin-left:20px;" ng-click="filtros = !filtros") {{ filtros ? 'Menos' : 'Mas' }} Filtros
       span(flex="10")
     div(layout="row" layout-align="start center" flex style="margin-bottom:0px;" ng-if="filtros" layout-margin)
       md-input-container(flex)

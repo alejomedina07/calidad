@@ -1,5 +1,5 @@
 var express = require('express'),
-  debug=require("debug")("EV:index"),
+  debug=require("debug")("BSS:index"),
   // ObjectId = require('mongoose').Types.ObjectId,
   moment= require('moment'),
   push = require( 'pushsafer-notifications' ),
@@ -16,7 +16,8 @@ router.get("/", function(req, res) {
     console.log(value);
   })
   .catch(err => {
-    console.log('err');
+    console.log('err 13644');
+    debug(err);
     console.log(err);
   });
   res.render("index");
@@ -47,8 +48,8 @@ router.post("/generar-notificacion", function(req, res) {
       // c: '#FF0000',                          // iconcolor (optional)
       pr: '2',
       re: '60',
-      u: 'https://www.pushsafer.com',        // url (optional)
-      ut: 'Open Link',                       // url title (optional)
+      // u: 'https://www.pushsafer.com',        // url (optional)
+      // ut: 'Open Link',                       // url title (optional)
       d: 'a'
   };
 
