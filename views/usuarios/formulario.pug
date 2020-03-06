@@ -1,0 +1,70 @@
+extends ../layout/layout
+
+block header
+  include ../inclusions/header
+block content
+
+  br
+  div.md-whiteframe-2dp(layout="column" flex layout-margin layout-padding ng-controller="formUsuario as $fCtrl")
+    div(layout="row" layout-align="center center" flex ng-init="$fCtrl.id = " + id + ';$fCtrl.init();')
+      b.titulo Crear Usuario
+    //- md-divider
+    div(layout="row" layout-xs="column" layout-align="start start" flex )
+      .md-whiteframe-2dp(layout="column" layout-align="center center" flex layout-margin layout-padding)
+        md-content(style="width:100%" layout-margin layout-padding)
+          div(layout="row" layout-xs="column" layout-sm="column" layout-align="center center" layout-margin )
+            md-input-container.md-block(flex)
+              label Nombre Completo
+              input(ng-model='$fCtrl.form.nombre')
+              i(class='error' ng-show="$fCtrl.errores.nombre" ng-repeat="opcion in  $fCtrl.errores.nombre")
+                | {{ opcion }}
+            md-input-container.md-block(flex style=" margin-top: -15px;")
+              label Estado
+              md-select(ng-model='$fCtrl.form.estado')
+                md-option(ng-repeat='opcion in ["Activo", "Inactivo"]', ng-value='opcion')
+                  | {{opcion}}
+              i(class='error' ng-show="$fCtrl.errores.estado" ng-repeat="opcion in  $fCtrl.errores.estado")
+                | {{ opcion }}          
+          div(layout="row" layout-xs="column" layout-sm="column" layout-align="center center" layout-margin )
+            md-input-container.md-block(flex)
+              label Correo 
+              input(ng-model='$fCtrl.form.correo')
+              i(class='error' ng-show="$fCtrl.errores.correo" ng-repeat="opcion in  $fCtrl.errores.correo")
+                | {{ opcion }}
+            md-input-container.md-block(flex)
+              label Usuario de Red
+              input(ng-model='$fCtrl.form.usuarioRed')
+              i(class='error' ng-show="$fCtrl.errores.usuarioRed" ng-repeat="opcion in  $fCtrl.errores.usuarioRed")
+                | {{ opcion }}
+          
+          div(layout="row" layout-xs="column" layout-sm="column" layout-align="center center" layout-margin ng-if="!$fCtrl.id")
+            md-input-container.md-block(flex)
+              label Contraseña
+              input(ng-model='$fCtrl.form.contrasena' type="password")
+              i(class='error' ng-show="$fCtrl.errores.contrasena" ng-repeat="opcion in  $fCtrl.errores.contrasena")
+                | {{ opcion }}
+            md-input-container.md-block(flex)
+              label Confirmar Contraseña
+              input(ng-model='$fCtrl.form.contrasena2' type="password")
+              i(class='error' ng-show="$fCtrl.errores.contrasena2" ng-repeat="opcion in  $fCtrl.errores.contrasena2")
+                | {{ opcion }}
+          div(layout="row" layout-xs="column" layout-sm="column" layout-align="center center" layout-margin )
+            md-input-container.md-block(flex)
+              label Ingrese ID de la aplicación movil
+              input(ng-model='$fCtrl.form.idAplicacionMovil')
+              i(class='error' ng-show="$fCtrl.errores.idAplicacionMovil" ng-repeat="opcion in  $fCtrl.errores.idAplicacionMovil")
+                | {{ opcion }}
+            md-input-container.md-block(flex style=" margin-top: -15px;")
+              label Rol
+              md-select(ng-model='$fCtrl.form.idRol')
+                md-option(ng-repeat='opcion in $fCtrl.roles', ng-value='opcion.id')
+                  | {{ opcion.nombre }}
+              i(class='error' ng-show="$fCtrl.errores.rol" ng-repeat="opcion in  $fCtrl.errores.rol")
+                | {{ opcion }}
+      .md-whiteframe-2dp(layout="column" layout-align="center center" flex-xs layout-margin layout-padding)
+        b(style="margin-bottom:-2px;") Escanear Código QR
+        img(src="/static/images/QR.png")
+
+    div(layout="row" layout-align="end end" flex )
+      md-button.md-raised(href="/usuarios/") Cancelar
+      md-button.md-raised.md-primary(ng-click="$fCtrl.guardar()") Crear

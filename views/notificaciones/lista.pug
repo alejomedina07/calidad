@@ -3,12 +3,12 @@ extends ../layout/layout
 block header
   include ../inclusions/header
 block content
-  div.md-whiteframe-2dp(layout="column" flex layout-margin layout-padding ng-controller="notificacion as $nCtrl")
+  .md-whiteframe-2dp(layout-margin layout-padding ng-controller="listaNotificacion as $nCtrl")
     div(layout="row" layout-align="start center" flex)
       h2 Lista de notificaciones
       md-button.md-raised.md-primary + Crear
       span(flex)
-      img(src="/static/content/QR.png")
+      img(src="/static/images/QR.png")
       span(flex)
     div(layout="row" layout-align="start center" flex style="margin-bottom:0px;")
       md-datepicker(ng-model='$nCtrl.fechaInicio' md-placeholder='Fecha de inicio')      

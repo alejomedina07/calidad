@@ -1,0 +1,94 @@
+extends ../layout/layout
+
+block header
+  include ../inclusions/header
+block content
+  .md-whiteframe-2dp(layout-margin layout-padding ng-controller="listaUsuario as $lCtrl")
+    div(layout="row" layout-align="center center" flex)
+      h2 Lista de usuarios
+      md-input-container.md-block(md-no-float='' flex style="margin-bottom: 0;margin-left:40px;" )
+        md-icon(md-svg-src='/static/content/icons/search.svg')
+        input(ng-model='$lCtrl.search' type='text' placeholder='Buscar...' aria-label='Buscar...' ng-change="$lCtrl.filtrar()")
+
+      md-button.md-raised.md-primary(href="/usuarios/formulario" style="margin-left:20px;") + Crear
+      span(flex)
+    md-content      
+      table.responsive-table
+        thead
+          tr
+            th(scope='col' ng-click="$lCtrl.ordenarPor('nombre')") 
+              div(layout="row")
+                span Nombre
+                span(flex)
+                md-icon(md-svg-src="/static/content/icons/sort{{ $lCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$lCtrl.propertyName === 'nombre'")
+            th(scope='col' ng-click="$lCtrl.ordenarPor('usuarioRed')") 
+              div(layout="row")
+                span Usuario de Red
+                span(flex)
+                md-icon(md-svg-src="/static/content/icons/sort{{ $lCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$lCtrl.propertyName === 'usuarioRed'")
+            th(scope='col' ng-click="$lCtrl.ordenarPor('correo')") 
+              div(layout="row")
+                span Correo
+                span(flex)
+                md-icon(md-svg-src="/static/content/icons/sort{{ $lCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$lCtrl.propertyName === 'correo'")
+            th(scope='col' ng-click="$lCtrl.ordenarPor('fechaCreacion')") 
+              div(layout="row")
+                span Fecha de Creación
+                span(flex)
+                md-icon(md-svg-src="/static/content/icons/sort{{ $lCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$lCtrl.propertyName === 'fechaCreacion'")
+            th(scope='col' ng-click="$lCtrl.ordenarPor('estado')") 
+              div(layout="row")
+                span Estado
+                span(flex)
+                md-icon(md-svg-src="/static/content/icons/sort{{ $lCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$lCtrl.propertyName === 'estado'")
+            th(scope='col' ng-click="$lCtrl.ordenarPor('idAplicacionMovil')") 
+              div(layout="row")
+                span Id Aplicación
+                span(flex)
+                md-icon(md-svg-src="/static/content/icons/sort{{ $lCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$lCtrl.propertyName === 'idAplicacionMovil'")
+            th(scope='col' ) Acciones
+        tfoot
+          tr
+            td.text-right(colspan='7')
+              div(layout="row" layout-xs="column" layout-align="end center")
+                span Mostrando &nbsp; 
+                md-select(placeholder='' ng-model='$lCtrl.registrosXpagina' ng-change="$lCtrl.paginar()")
+                  md-option(ng-value='opcion' ng-repeat='opcion in [10, 20, 50]') {{opcion}}
+                span &nbsp; Registros Por Página
+                div
+                  md-button.md-icon-button(aria-label='boton' ng-disabled="$lCtrl.pagina == 0" ng-click="$lCtrl.pagina = $lCtrl.pagina - 1" ) 
+                    span.flechas <
+                  span {{ $lCtrl.pagina + 1 }} / {{$lCtrl.totalPaginas}}
+                  md-button.md-icon-button(aria-label='boton' ng-disabled="$lCtrl.pagina == ($lCtrl.totalPaginas - 1)" ng-click="$lCtrl.pagina = $lCtrl.pagina + 1" ) 
+                    span.flechas >
+        tbody
+          tr(ng-repeat="item in $lCtrl.usuariosFiltrados | limitTo : $lCtrl.registrosXpagina : ($lCtrl.registrosXpagina*$lCtrl.pagina) | orderBy:$lCtrl.propertyName:$lCtrl.reverse | filter:$lCtrl.search")
+            th(scope='row') {{ item.nombre }}
+            td(data-title='Usuario de Red') {{ item.usuarioRed }}
+            td(data-title='Correo') {{ item.correo }}
+            td(data-title='Fecha de Creación') {{ item.fechaCreacion | date : 'short'}}
+            td(data-title='Estado') {{ item.estado }}
+            td(data-title='Estado') {{ item.idAplicacionMovil }}
+            td(data-title='Acciones') 
+              md-button.md-icon-button(aria-label='boton' href="/usuarios/formulario/{{ item.id }}" ) 
+                md-icon(md-svg-src='/static/content/icons/edit.svg')
+              md-button.md-icon-button(aria-label='boton' ng-click="$lCtrl.confirmarEliminar($event, item.id)") 
+                md-icon(md-svg-src='/static/content/icons/delete.svg' style="color:red;")
+
+    div(style='visibility: hidden')
+      #myDialog.md-dialog-container
+        md-dialog(aria-label='Eliminar')
+          form(ng-cloak='')
+            md-toolbar(style="background:red;")
+              .md-toolbar-tools
+                span(flex='')
+                b Eliminar Registro
+                span(flex='')
+                md-button.md-icon-button(ng-click='$lCtrl.cerrar()' style="font-size:22pt;") X
+            md-dialog-content
+              .md-dialog-content
+                p Esta seguro que desea eliminar el registro ?
+            md-dialog-actions(layout='row' layout-align="end end")
+              md-button.md-raised(ng-click="$lCtrl.eliminar()" style="color:red;") Eliminar
+              md-button.md-raised(ng-click="$lCtrl.cerrar()") Cancelar
+ 

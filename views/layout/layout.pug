@@ -1,9 +1,8 @@
 - 
   var stylesheets = [ 
     "/static/angular-material/angular-material.css", 
-    "/static/scripts/angular-material-sidemenu/dest/angular-material-sidemenu.css",
-    "/static/styles/style.css",
-    "/static/styles/tabla.css"
+    "/static/stylesheets/style.css",
+    "/static/stylesheets/tabla.css"
   ]
 - 
   var javascripts = [ 
@@ -13,17 +12,22 @@
     "/static/angular-aria/angular-aria.js",
     "/static/angular-messages/angular-messages.js",
     "/static/angular-animate/angular-animate.js",
-    "/static/scripts/angular-material-sidemenu/dest/angular-material-sidemenu.js",
     "/static/angular-material/angular-material.js",
-    "/static/scripts/main.js", 
-    "/static/scripts/controllers/header.js", 
-    "/static/scripts/controllers/notificacion.js",
+    "/static/angular-md5/angular-md5.js",
+    "/static/javascripts/librerias/validate.js", 
+    "/static/javascripts/main.js", 
+    "/static/javascripts/factories/toast.js", 
+    "/static/javascripts/controllers/header.js", 
+    "/static/javascripts/controllers/notificaciones/lista.js",
+    "/static/javascripts/controllers/notificaciones/form.js",
+    "/static/javascripts/controllers/usuarios/lista.js",
+    "/static/javascripts/controllers/usuarios/form.js",
   ]
 doctype html
 html(ng-app='calidad')
   head
     meta(charset='utf-8')
-    title= "Calidad"
+    title= "Calidad - " + title
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     meta(keywords="Calidad")
@@ -32,10 +36,10 @@ html(ng-app='calidad')
       link(rel='stylesheet', href=stylesheet)
     each javascript in javascripts
       script(src=javascript)
-  body(layout="column")
-    div(flex )
+  body
+    div(layout="column" )
       block header
-        include ../inclusions/header
+      //-   include ../inclusions/header
       block content 
     //- span(flex)
     //- div(layout="column" layout-align="end center")

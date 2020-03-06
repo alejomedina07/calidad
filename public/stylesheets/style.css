@@ -1,0 +1,95 @@
+@font-face {
+  font-family: "Light";
+  src: url("../content/fonts/Poppins-Light.otf");
+}
+@font-face {
+  font-family: "Medium";
+  src: url("../content/fonts/Poppins-Medium.otf");
+}
+@font-face {
+  font-family: "Regular";
+  src: url("../content/fonts/Poppins-Regular.otf");
+}
+
+body {
+  font-family: "Light";
+  background: #eee;
+}
+.md-whiteframe-2dp {
+  background: #fff;
+}
+md-content {
+  background: #fff;
+  
+}
+.tamano-cabecera {
+  height: 84px !important;
+  max-height: 84px !important;
+}
+
+.logo {
+  height: 50px;
+}
+.nombre-empresa {
+  font-size: 18pt;
+  font-family: "Regular";
+}
+
+.nombre-usuario {
+  font-size: 12pt;
+  font-family: "Light";
+  margin-left: 10px;
+}
+
+.nombre-empresa h1 {
+  text-align: center;
+  font-weight: bold;
+  font-size: 2em;
+  height: 45px;
+}
+.puesto-de-trabajo md-icon{
+  width: 80pt;
+  min-height: 80pt;
+  height: 80pt;
+}
+.w-100 {
+  width: 100%!important;
+}
+.puesto-activo {
+  border: 3px solid #3f51b5;
+  border-radius: 10px;
+  width: 102%!important;
+}
+.puesto-de-trabajo:focus {
+    outline:none;
+}
+
+.md-button {
+  text-transform: capitalize;
+}
+.titulo {
+  font-size: 20pt;
+  font-family: "Regular"
+}
+
+
+/* .md-toast-content-general(@background-color, @color, @font-size){
+  .color(@color);
+  background-color: @background-color;
+  font-size: @font-size;
+} */
+
+md-toast.toast-verde .md-toast-content {
+  color:#fff;
+  background-color: green;
+  font-size: 12pt;
+}
+md-toast.toast-rojo .md-toast-content {
+  color:#fff;
+  background-color: red;
+  font-size: 12pt;
+}
+.error {
+  font-size: 10pt;
+  color:red;
+}
