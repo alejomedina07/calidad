@@ -2,12 +2,20 @@ extends ./layout/layout
 
 block content
   br
-  div(layout="column" flex layout-margin layout-padding)
+  div(layout="column" flex layout-margin layout-padding ng-controller="login as $lCtrl")
     span(flex)
     div(layout="row")
       span(flex)
-      .md-whiteframe-2dp(flex layout-margin layout-padding)
-        h2 login
+      .md-whiteframe-2dp(flex flex-xs="90" layout-margin layout-padding)
+        div(layout="column" layout-align="center center")
+          h2 login
+          md-input-container.md-block(flex)
+            label Usuario de Red 
+            input(ng-model='$lCtrl.form.usuarioRed')
+          md-input-container.md-block(flex)
+            label Contraseña
+            input(ng-model='$lCtrl.form.contrasena' type="password")
+          md-button.md-raised(ng-click="$lCtrl.login()") login
       span(flex)
     span(flex)
     

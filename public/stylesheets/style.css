@@ -15,12 +15,15 @@ body {
   font-family: "Light";
   background: #eee;
 }
+input {
+  font-family: "Light";
+}
 .md-whiteframe-2dp {
   background: #fff;
 }
 md-content {
   background: #fff;
-  
+
 }
 .tamano-cabecera {
   height: 84px !important;
@@ -92,4 +95,11 @@ md-toast.toast-rojo .md-toast-content {
 .error {
   font-size: 10pt;
   color:red;
+}
+
+.w-100 {
+  width: 100%;
+}
+.m-10 {
+  margin: 10px;
 }

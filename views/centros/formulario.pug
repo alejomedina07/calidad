@@ -1,0 +1,55 @@
+extends ../layout/layout
+
+block header
+  include ../inclusions/header
+block content
+
+  br
+  div.md-whiteframe-2dp(layout="column" flex layout-margin layout-padding ng-controller="formCentro as $fCtrl")
+    div(layout="row" layout-align="center center" flex ng-init="$fCtrl.id = " + id + ';$fCtrl.init();')
+      b.titulo Crear Centro de Trabajo
+    //- md-divider
+    .md-whiteframe-2dp(layout="column" layout-align="center center" flex layout-margin layout-padding)
+      md-content(style="width:100%" layout-margin layout-padding)
+        //- div(layout="row" layout-align="center center" layout-sm="column" layout-xs="column")
+        div(layout="column" layout-align="center center" flex )
+          i(class='error' ng-show="$fCtrl.errores.linea" ng-repeat="opcion in $fCtrl.errores.linea")
+            | {{ opcion }}
+          md-radio-group(ng-model='$fCtrl.form.linea' layout="row" layout-xs="column" layout-align-xs="start start" layout-align="center center" ng-change="$fCtrl.obtenerOPs()" ng-disabled="$fCtrl.id")
+            md-radio-button.md-primary(value='LL') 
+              b Linea Liviana
+            md-radio-button.md-primary(value='LP') 
+              b Linea Pesada
+            md-radio-button.md-primary(value='LB') 
+              b Linea BusStar
+
+        
+        //- br(hide-xs)
+        div(layout="row" layout-xs="column" layout-sm="column" layout-align="center center" layout-margin )
+          md-input-container.w-100(style="margin-bottom:20px;" flex)
+            label Centro de trabajo
+            md-select(ng-model='$fCtrl.form.idCentro' ng-disabled="!$fCtrl.form.linea || $fCtrl.id")
+              md-option(ng-repeat='opcion in $fCtrl.listaOps', ng-value='opcion.id')
+                | {{opcion.codigo}} - {{opcion.descripcion}}
+            i(class='error' ng-show="$fCtrl.errores.idCentro" ng-repeat="opcion in  $fCtrl.errores.idCentro")
+              | {{ opcion }}          
+          md-input-container.w-100(style="margin-bottom:20px;" flex)
+            label Auditores
+            md-select(ng-model='$fCtrl.form.auditores' ng-disabled="!$fCtrl.form.linea" multiple)
+              md-option(ng-repeat='opcion in $fCtrl.auditores', ng-value='opcion.id')
+                | {{opcion.nombre}}
+            i(class='error' ng-show="$fCtrl.errores.auditores" ng-repeat="opcion in  $fCtrl.errores.auditores")
+              | {{ opcion }}          
+            
+        div(layout="row" layout-xs="column" layout-sm="column" layout-align="center center" layout-margin )
+          md-input-container.w-100(flex)
+            label Usuarios a notificar
+            md-select(ng-model='$fCtrl.form.usuarios' ng-disabled="!$fCtrl.form.linea" multiple)
+              md-option(ng-repeat='opcion in $fCtrl.usuarios', ng-value='opcion.id')
+                | {{opcion.nombre}}
+            i(class='error' ng-show="$fCtrl.errores.usuarios" ng-repeat="opcion in  $fCtrl.errores.usuarios")
+              | {{ opcion }} 
+        br
+    div(layout="row" layout-align="end end" flex )
+      md-button.md-raised(href="/usuarios/") Cancelar
+      md-button.md-raised.md-primary(ng-click="$fCtrl.guardar()") Crear

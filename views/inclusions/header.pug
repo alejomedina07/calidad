@@ -6,17 +6,17 @@ header(ng-controller="header as $cCtr")
         //- i.material-icons menu
         md-icon(md-svg-src='/static/content/icons/menu.svg')
       span(flex flex-xs)
-      a(href="/notificaciones/" title="Calidad")
+      a(href="/notificaciones/" title="Calidad" hide-xs)
         .nombre-empresa
           b Notificaciones
           //- span Sistema Integrado de Notificaciones
       //- span Notificaciones
-      span(flex flex-xs)
-      md-icon(md-svg-src='/static/content/icons/user.svg')
-      span.nombre-usuario 
+      span(flex flex-xs hide-xs)
+      md-icon(md-svg-src='/static/content/icons/user.svg' hide-xs)
+      span.nombre-usuario(hide-xs)
         b Hola, 
-        | Alejandro Medina
-      md-button.md-icon-button(aria-label='Menú de opciones' ng-click='$cCtr.abrirMenuIzquierda()')
+        | #{usuario.nombre}
+      md-button.md-icon-button(aria-label='Menú de opciones' href="/logout" hide-xs)
         md-icon(md-svg-src='/static/content/icons/logout.svg')
   section(layout="row" flex)
     
@@ -28,20 +28,17 @@ header(ng-controller="header as $cCtr")
       md-content
         md-list-item.md-3-line
           .md-list-item-text(layout='column')
-            h3 Alejandro  
-            | Medina Ruiz
+            b= usuario.nombre
             div(layout='row')
-              h4 Desarrollador
+              h4= usuario.rol
               span(flex)
               md-icon(md-svg-src='/static/content/icons/user.svg')
-                //- md-tooltip(md-direction="bottom") 
         md-divider
         md-menu-content(width='4', ng-mouseleave='$mdMenu.close()')
           md-menu-item(ng-repeat='item in $cCtr.MENU')
             md-button(href="{{item.url}}")
               | {{item.nombre}}
-        
-      md-button.md-primary.md-fab.md-fab-bottom-right.my-fab-button(ng-click='$cCtr.cerrarSesion()')
+      md-button.md-primary.md-fab.md-fab-bottom-right.my-fab-button(href="/logout")
         md-icon(md-svg-src='/static/content/icons/logout.svg')
         md-tooltip(md-direction="left") Salir
 

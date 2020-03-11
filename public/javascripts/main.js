@@ -8,6 +8,41 @@ var app = angular.module('calidad', [
 
 
 
+
+app.config(function($httpProvider) {
+  $httpProvider.interceptors.push(function ($q, $rootScope) {
+    console.log('????????????????????');
+    return {
+      // Add an interceptor for requests.
+      'request': function (config) {
+        config.headers = config.headers || {}; // Default to an empty object if no headers are set.
+
+        // Set the header if the token is stored.
+
+        if(localStorage.getItem("token")) {
+          config.headers.Authorization = localStorage.getItem("token");
+        }
+
+        return config;
+      },
+
+      // Add an interceptor for any responses that error.
+      'responseError': function(response) {
+
+        // Check if the error is auth-related.
+        if(response.status === 401 || response.status === 403) {
+          // $state.go('login');
+        }
+
+        return $q.reject(response);
+      }
+
+    };
+  });
+});
+
+
+
 app.config(function() {
   moment.locale('es_co', {
     months : 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),

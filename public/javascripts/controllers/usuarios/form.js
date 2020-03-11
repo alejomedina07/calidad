@@ -43,10 +43,7 @@
     $fCtrl.guardar = function() {
       $fCtrl.errores = validate($fCtrl.form, _validar);
       if (!$fCtrl.errores) {
-        if (!$fCtrl.id) {
-          $fCtrl.form.contrasena = md5.createHash($fCtrl.form.contrasena)
-          $fCtrl.form.fechaCreacion = new Date();
-        }
+        if (!$fCtrl.id) { $fCtrl.form.contrasena = md5.createHash($fCtrl.form.contrasena); };
         delete $fCtrl.form.contrasena2;
         let url = $fCtrl.form.id ? '/usuarios/editar' : '/usuarios/';
         $http.post(url, $fCtrl.form)
