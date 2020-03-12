@@ -5,6 +5,7 @@ var createError = require('http-errors');
   logger = require('morgan'),
   session = require('express-session'),
   bodyParser = require('body-parser'),
+  favicon = require('express-favicon');
   app = express();
 
 
@@ -23,6 +24,8 @@ app.use(bodyParser.json());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+app.use(favicon(__dirname + '/public/images/favicon.ico'));
 
 app.use('/static',express.static(path.join(__dirname, '/node_modules')));
 app.use('/static',express.static(path.join(__dirname, '/public')));

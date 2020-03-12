@@ -12,19 +12,20 @@ router.get('/', mdAutenticacion.verificatoken(notificacion.PERMISO.LISTAR), (req
 });
 
 router.get('/listar',  mdAutenticacion.verificatoken(notificacion.PERMISO.LISTAR), (req, res, next) => {
+  let filtro = req.session.usuario.rol != 'Super Admin' && req.session.usuario.rol != 'Admin' ?
+    `AND uct.idUsuario = '${req.session.usuario.id}' AND uct.estado = 'Activo'` :
+    'AND nt.idUsuarioCreacion = uct.idUsuario';
   let connection = mysql.createConnection(config.connection),
     query = `SELECT
-        notificacion.id,
-      	usuario.nombre as usuario,
-        notificacion.fechaCreacion,
-        notificacion.fechaCierre,
-        notificacion.icono,
-        notificacion.descripcion,
-        notificacion.causa,
-        CONCAT(CT.codigo, "-", CT.descripcion) as centro
-      FROM notificacion
-      INNER JOIN usuario ON usuario.id = notificacion.idUsuarioCreacion
-      INNER JOIN homologacion.centro_trabajo AS CT ON CT.id = notificacion.idCentro`;
+      nt.*,
+      us.nombre as usuario,
+      CONCAT(CT.codigo, "-", CT.descripcion) as centro,
+      CONCAT(op.prefijo, op.op) as op
+    FROM usuario_centro_trabajo uct
+    INNER JOIN notificacion nt ON (nt.idCentro = uct.idCentro ${filtro})
+    INNER JOIN usuario us ON us.id = nt.idUsuarioCreacion
+    INNER JOIN homologacion.centro_trabajo AS CT ON CT.id = nt.idCentro
+    INNER JOIN pdmsinergia.orden_produccion AS op ON op.id = nt.idOp`;
 
   connection.connect();
   let promesa = config.consultar(connection, query);

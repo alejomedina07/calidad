@@ -37,6 +37,11 @@ block content
         i(class='error' ng-show="$fCtrl.errores.icono" ng-repeat="opcion in $fCtrl.errores.icono")
           | {{ opcion }}
       md-input-container.md-block.w-100(flex)
+        label Descripción
+        input(ng-model="$fCtrl.form.descripcion" type="text")
+        i(class='error' ng-show="$fCtrl.errores.descripcion" ng-repeat="opcion in $fCtrl.errores.descripcion")
+          | {{ opcion }}
+      //- md-input-container.md-block.w-100(flex)
         label Seleccione Sonido
         md-select(ng-model='$fCtrl.form.sonido')
           md-option(ng-repeat='sonido in $fCtrl.sonidos', ng-value='sonido.id')

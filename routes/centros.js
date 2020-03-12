@@ -90,25 +90,22 @@ router.get('/obtener-usuarios',  mdAutenticacion.verificatoken(centro.PERMISO.CR
 
 
 router.post('/',  mdAutenticacion.verificatoken(centro.PERMISO.CREAR), (req, res, next) => {
-  let arrayPromesas = [];
-  req.body.usuarios.forEach( (item, i) => {
-    let connection = mysql.createConnection(config.connection),
-      query = `INSERT INTO usuario_centro_trabajo (idCentro, idUsuario, idRol, linea) VALUES ('${req.body.idCentro}','${item}','${req.body.idRolUsuarios}','${req.body.linea}')`;
-    connection.connect();
-    let promesa = config.consultar(connection, query);
-    arrayPromesas.push(promesa);
+  let connection = mysql.createConnection(config.connection),
+    data = '';
+  req.body.usuarios.forEach((item, i) => {
+    data = ` ${data} ( '${req.body.idCentro}','${item}','${req.body.idRolUsuarios}','${req.body.linea}'),`
   });
-  req.body.auditores.forEach( (item, i) => {
-    let connection = mysql.createConnection(config.connection),
-      query = `INSERT INTO usuario_centro_trabajo (idCentro, idUsuario, idRol, linea) VALUES ('${req.body.idCentro}','${item}','${req.body.idRolAuditor}','${req.body.linea}')`;
-    connection.connect();
-    let promesa = config.consultar(connection, query);
-    arrayPromesas.push(promesa);
+  req.body.auditores.forEach((item, i) => {
+    data = ` ${data} ( '${req.body.idCentro}','${item}','${req.body.idRolAuditor}','${req.body.linea}'),`
   });
+  data = data.slice(0, data.length - 1);
+  let query = `INSERT INTO usuario_centro_trabajo (idCentro, idUsuario, idRol, linea)
+   values ${data}`;
+  connection.connect();
+  let promesa = config.consultar(connection, query);
 
   debug(666666666666666666666666666666666666666666);
-  debug(arrayPromesas);
-  Promise.all(arrayPromesas)
+  promesa
   .then(value => {
     res.json({data: value});
   })
@@ -127,31 +124,22 @@ router.post('/editar',  mdAutenticacion.verificatoken(centro.PERMISO.EDITAR), (r
   let promesa = config.consultar(connection, query);
   promesa
   .then(value => {
-    let arrayPromesas = [];
-    req.body.usuarios.forEach( (item, i) => {
-      let connection = mysql.createConnection(config.connection),
-        query = `INSERT INTO usuario_centro_trabajo
-          (idCentro,idUsuario,idRol,linea,estado)
-          values ('${req.body.idCentro}','${item}','${req.body.idRolUsuarios}','${req.body.linea}','Activo')
-          ON DUPLICATE KEY update estado='Activo'`;
-      connection.connect();
-      let promesa = config.consultar(connection, query);
-      arrayPromesas.push(promesa);
+    let connection = mysql.createConnection(config.connection),
+      data = '';
+    req.body.usuarios.forEach((item, i) => {
+      data = ` ${data} ( '${req.body.idCentro}','${item}','${req.body.idRolUsuarios}','${req.body.linea}'),`
     });
-    req.body.auditores.forEach( (item, i) => {
-      let connection = mysql.createConnection(config.connection),
-        query = `INSERT INTO usuario_centro_trabajo
-          (idCentro,idUsuario,idRol,linea,estado)
-          values ('${req.body.idCentro}','${item}','${req.body.idRolAuditor}','${req.body.linea}','Activo')
-          ON DUPLICATE KEY update estado='Activo'`;
-      connection.connect();
-      let promesa = config.consultar(connection, query);
-      arrayPromesas.push(promesa);
+    req.body.auditores.forEach((item, i) => {
+      data = ` ${data} ( '${req.body.idCentro}','${item}','${req.body.idRolAuditor}','${req.body.linea}'),`
     });
+    data = data.slice(0, data.length - 1);
+    let query = `INSERT INTO usuario_centro_trabajo (idCentro, idUsuario, idRol, linea)
+     values ${data} ON DUPLICATE KEY update estado='Activo'`;
+    connection.connect();
+    let promesa = config.consultar(connection, query);
 
     debug(666666666666666666666666666666666666666666);
-    debug(arrayPromesas);
-    Promise.all(arrayPromesas)
+    promesa
   })
   .then(value => {
     res.json({data: value});

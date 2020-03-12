@@ -8,6 +8,19 @@
     $lCtrl.registrosXpagina = 10;
     $lCtrl.filtros = {};
     $lCtrl.form = {};
+
+
+    var scrolled = false;
+    function updateScroll(){
+        if(!scrolled){
+            var element = document.getElementById("yourDivID");
+            element.scrollTop = element.scrollHeight;
+        }
+    }
+
+    $("#yourDivID").on('scroll', function(){
+        scrolled=true;
+    });
     $lCtrl.excel = function () {
       fnExcelReport();
     }

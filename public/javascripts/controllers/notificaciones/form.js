@@ -3,7 +3,7 @@
 
   app.controller('formNotificacion', function($http, $timeout, ToastFactoria){
     var $fCtrl = this;
-    $fCtrl.form = {};
+    $fCtrl.form = {sonido:8};
 
     $fCtrl.sonidos =  [
       {id:8, nombre:'Buzzer'},
@@ -126,6 +126,9 @@
       },
       sonido: {
         presence: {message: "^El campo 'Sonido' es requerido"},
+      },
+      descripcion: {
+        presence: {message: "^El campo 'Descripción' es requerido"},
       },
     };
 

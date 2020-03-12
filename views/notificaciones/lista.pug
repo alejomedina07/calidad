@@ -118,21 +118,29 @@ block content
                             | &nbsp; {{ item.fechaAsistencia | date : 'short' }}
                 
                 
-                div(layout="row" layout-align="center center")
-                  h4 Cerrar Notificación   
-                md-input-container.md-block(flex)
-                  label Causa
-                  input(ng-model='$lCtrl.form.causa' type="text")
-                  i(class='error' ng-show="$lCtrl.errores.causa" ng-repeat="opcion in $lCtrl.errores.causa")
-                    | {{ opcion }}
-                md-input-container.md-block(flex)
-                  label Descripción
-                  textarea(ng-model='$lCtrl.form.descripcion' md-maxlength='400' rows='3' md-select-on-focus='')
-                  i(class='error' ng-show="$lCtrl.errores.descripcion" ng-repeat="opcion in $lCtrl.errores.descripcion")
-                    | {{ opcion }}
+                div(ng-if="$lCtrl.detalleNotificacion.fechaCierre")
+                  h4 
+                    b Causa: &nbsp; 
+                    | {{ $lCtrl.detalleNotificacion.causa }}
+                  h4 
+                    b Descripción: &nbsp; 
+                    | {{ $lCtrl.detalleNotificacion.descripcion }}
+                div(ng-if="!$lCtrl.detalleNotificacion.fechaCierre")
+                  div(layout="row" layout-align="center center")
+                    h4 Cerrar Notificación   
+                  md-input-container.md-block(flex)
+                    label Causa
+                    input(ng-model='$lCtrl.form.causa' type="text")
+                    i(class='error' ng-show="$lCtrl.errores.causa" ng-repeat="opcion in $lCtrl.errores.causa")
+                      | {{ opcion }}
+                  md-input-container.md-block(flex)
+                    label Descripción
+                    textarea(ng-model='$lCtrl.form.descripcion' md-maxlength='400' rows='3' md-select-on-focus='')
+                    i(class='error' ng-show="$lCtrl.errores.descripcion" ng-repeat="opcion in $lCtrl.errores.descripcion")
+                      | {{ opcion }}
             md-dialog-actions(layout='row' layout-align="end end")
               md-button.md-raised(ng-click="$lCtrl.cerrar()") Cancelar
-              md-button.md-raised.md-primary(ng-click="$lCtrl.cerrarNotificacion()") Cerrar Notificación
+              md-button.md-raised.md-primary(ng-click="$lCtrl.cerrarNotificacion()" ng-disabled="$lCtrl.detalleNotificacion.fechaCierre") Cerrar Notificación
  
 
           
