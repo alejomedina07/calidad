@@ -1,3 +1,13 @@
+var push = require( 'pushsafer-notifications' );
+
+
+var p = new push( {
+    k: 'Your20CharPrivateKey',             // your 20 chars long private key
+    debug: true
+});
+
+module.exports.pushsafer = p;
+
 module.exports.SEED = '@seed-busscar-ti';
 
 // BBOO

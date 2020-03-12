@@ -5,48 +5,61 @@ block header
 block content
   //- div(layout="row")
   br
-  div.md-whiteframe-2dp(layout="column" flex layout-margin layout-padding ng-controller="formNotificacion as $nCtrl")
-    div(layout="row" layout-align="center center" flex layout-margin layout-padding)
+  div.md-whiteframe-2dp(layout="column" flex layout-margin layout-padding ng-controller="formNotificacion as $fCtrl")
+    div(layout="row" layout-align="center center" flex layout-margin layout-padding ng-init="$fCtrl.id = " + id + ';$fCtrl.init();')
       h2 Generar Notificación
     md-divider
     div(layout="row" layout-xs="column" layout-align="start start" flex layout-margin layout-padding)
       span(flex hide-sm)
       md-input-container.w-100.md-block(flex)
         label Seleccione Línea
-        md-select(ng-model='$nCtrl.form.linea')
-          md-option(ng-repeat='state in [1,2,3]', value='{{state}}')
-            | Linea-{{state}}
-      
+        md-select(ng-model='$fCtrl.form.linea' ng-change="$fCtrl.cambioDeLinea()")
+          md-option(ng-repeat='opcion in $fCtrl.lineas', ng-value='opcion')
+            | {{ $fCtrl.obtenerLinea(opcion) }}
+        i(class='error' ng-show="$fCtrl.errores.linea" ng-repeat="opcion in $fCtrl.errores.linea")
+          | {{ opcion }}
       md-input-container.md-block.w-100(flex)
         label Seleccione OP
-        md-select(ng-model='$nCtrl.form.op')
-          md-option(ng-repeat='state in [1,2,3,4,5,6,7,8,9]', value='{{state}}')
-            | OP-{{state}}      
+        md-select(ng-model='$fCtrl.form.idOp')
+          md-option(ng-repeat='opcion in $fCtrl.ops' ng-value='opcion.id')
+            | {{opcion.prefijo}}{{opcion.op}}      
+        i(class='error' ng-show="$fCtrl.errores.idOp" ng-repeat="opcion in $fCtrl.errores.idOp")
+          | {{ opcion }}
       span(flex hide-sm)
     div(layout="row" layout-xs="column" layout-align="start start" flex layout-margin layout-padding)
       span(flex hide-sm)
       md-input-container.md-block.w-100(flex)
         label Seleccione Icono
-        md-select(ng-model='$nCtrl.form.icono')
-          md-option(ng-repeat='icono in $nCtrl.iconos', ng-value='icono.id')
+        md-select(ng-model='$fCtrl.form.icono')
+          md-option(ng-repeat='icono in $fCtrl.iconos', ng-value='icono.id')
             md-icon(md-svg-src='/static/content/icons/{{icono.icono}}.svg')
             | &nbsp;{{ icono.nombre }} 
+        i(class='error' ng-show="$fCtrl.errores.icono" ng-repeat="opcion in $fCtrl.errores.icono")
+          | {{ opcion }}
       md-input-container.md-block.w-100(flex)
         label Seleccione Sonido
-        md-select(ng-model='$nCtrl.form.sonido')
-          md-option(ng-repeat='sonido in $nCtrl.sonidos', ng-value='sonido.id')
+        md-select(ng-model='$fCtrl.form.sonido')
+          md-option(ng-repeat='sonido in $fCtrl.sonidos', ng-value='sonido.id')
             | {{ sonido.nombre }}      
+        i(class='error' ng-show="$fCtrl.errores.sonido" ng-repeat="opcion in $fCtrl.errores.sonido")
+          | {{ opcion }}
       span(flex hide-sm)
-    div(layout="row" layout-xs="column" layout-align="start start" flex layout-margin layout-padding layout-wrap="")
-      .md-whiteframe-2dp.w-100.puesto-de-trabajo( ng-class="{'puesto-activo':$nCtrl.form.puesto == opcion}" flex flex-sm="30" layout="column" layout-align="center center" 
-        ng-click="$nCtrl.form.puesto = opcion" ng-repeat="opcion in [1,2,3,4,5]")
-        h3 Puesto de trabajo {{ opcion }}
+    div(layout="row" layout-align="center center")
+      i(class='error' ng-show="$fCtrl.errores.idCentro" ng-repeat="opcion in $fCtrl.errores.idCentro")
+        | {{ opcion }}
+    div(layout="row" layout-xs="column" layout-align="space-around center" flex layout-margin layout-padding layout-wrap="")
+      .md-whiteframe-2dp.w-100.puesto-de-trabajo( ng-class="{'puesto-activo':$fCtrl.form.idCentro == opcion.idCentro}" 
+        flex="30" flex-xs="100" flex-md="45" flex-sm="45" layout="column" layout-align="center center" 
+        ng-click="$fCtrl.form.idCentro = opcion.idCentro;$fCtrl.form.nombreCentro = opcion.preijo + opcion.op" ng-repeat="opcion in $fCtrl.centros" ng-if="$fCtrl.form.linea == opcion.linea")
+        b {{ opcion.codigo }}
+        b {{ opcion.descripcion }}
+        br  
         md-icon(md-svg-src='/static/content/icons/tools.svg')
         br
     //- div(layout="row" layout-align="start start" flex layout-margin layout-padding)
-    //-   .md-whiteframe-2dp.puesto-de-trabajo(flex layout="column" layout-align="center center" ng-click="$nCtrl.form.puesto = opcion" ng-repeat="opcion in [4,5,6]")
+    //-   .md-whiteframe-2dp.puesto-de-trabajo(flex layout="column" layout-align="center center" ng-click="$fCtrl.form.idCentro = opcion" ng-repeat="opcion in [4,5,6]")
     //-     h3 Puesto de trabajo {{ opcion }}
     //-     md-icon(md-svg-src='static/content/icons/tools.svg')
     //-     br
     div(layout="row" layout-align="end end" flex )
-      md-button.md-raised.md-primary(ng-click="$nCtrl.generarNotificacion()") Generar
+      md-button.md-raised.md-primary(ng-click="$fCtrl.guardar()") Generar

@@ -13,7 +13,7 @@
       $http.post('/login', $lCtrl.form)
       .then(result => {
         localStorage.setItem("token", result.data.token);
-        window.location.href = "/usuarios/";
+        window.location.href = "/notificaciones/formulario";
       })
       .catch(error => {
         console.log('error');

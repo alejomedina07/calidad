@@ -3,61 +3,136 @@ extends ../layout/layout
 block header
   include ../inclusions/header
 block content
-  .md-whiteframe-2dp(layout-margin layout-padding ng-controller="listaNotificacion as $nCtrl")
-    div(layout="row" layout-align="start center" flex)
+  .md-whiteframe-2dp(layout-margin layout-padding ng-controller="listaNotificacion as $lCtrl")
+    div(layout="row" layout-xs="column" layout-align="center center" flex)
       h2 Lista de notificaciones
-      md-button.md-raised.md-primary + Crear
+      md-input-container.md-block(md-no-float='' flex style="margin-bottom: 0;margin-left:40px;" )
+        md-icon(md-svg-src='/static/content/icons/search.svg')
+        input(ng-model='$lCtrl.search' type='text' placeholder='Buscar...' aria-label='Buscar...' ng-change="$lCtrl.filtrar()")
+
+      md-button.md-raised.md-primary(href="/notificaciones/formulario" style="margin-left:20px;") + Crear
+      md-button.md-raised.md-primary(ng-click="$lCtrl.excel()" style="margin-left:20px;") + excel
       span(flex)
-      img(src="/static/images/QR.png")
-      span(flex)
-    div(layout="row" layout-align="start center" flex style="margin-bottom:0px;")
-      md-datepicker(ng-model='$nCtrl.fechaInicio' md-placeholder='Fecha de inicio')      
-      md-datepicker(ng-model='$nCtrl.fechaFin' md-placeholder='Fecha de fin')      
-      md-button.md-raised(style="margin-left:20px;" ng-click="filtros = !filtros") {{ filtros ? 'Menos' : 'Mas' }} Filtros
-      span(flex="10")
-    div(layout="row" layout-align="start center" flex style="margin-bottom:0px;" ng-if="filtros" layout-margin)
-      md-input-container(flex)
-        label Filtro uno
-        input(ng-model='user.firstName')
-      md-input-container.md-block(flex)
-        label Filtro dos 
-        input(ng-model='user.firstName')                
-      md-input-container.md-block(flex)
-        label Filtro tres
-        input(ng-model='user.firstName')      
-      md-input-container.md-block(flex)
-        label Filtro cuatro
-        input(ng-model='user.firstName')                
-      md-input-container.md-block(flex)
-        label Filtro cinco
-        input(ng-model='user.firstName')                
-    //- md-divider
-      
-    md-content(layout-padding)
-      table.responsive-table
-        //- caption Lista de notificaciones
+    md-content
+      table.responsive-table#headerTable
         thead
           tr
-            th(scope='col') Fecha
-            th(scope='col') Puesto de trabajo
-            th(scope='col') Estado
-            th(scope='col') Asistencia de Usuarios
-            th(scope='col') Acciones
-
+            th(scope='col' ng-click="$lCtrl.ordenarPor('usuario')") 
+              div(layout="row")
+                span Creador
+                span(flex)
+                md-icon(md-svg-src="/static/content/icons/sort{{ $lCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$lCtrl.propertyName === 'usuario'")
+            th(scope='col' ng-click="$lCtrl.ordenarPor('fechaCreacion')") 
+              div(layout="row")
+                span(flex)
+                span Fecha de Creación
+                span(flex)
+                md-icon(md-svg-src="/static/content/icons/sort{{ $lCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$lCtrl.propertyName === 'fechaCreacion'")
+            th(scope='col' ng-click="$lCtrl.ordenarPor('fechaCierre')") 
+              div(layout="row")
+                span(flex)
+                span Fecha de Cierre
+                span(flex)
+                md-icon(md-svg-src="/static/content/icons/sort{{ $lCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$lCtrl.propertyName === 'fechaCierre'")
+            th(scope='col' ng-click="$lCtrl.ordenarPor('descripcion')") 
+              div(layout="row")
+                span(flex)
+                span Descripción
+                span(flex)
+                md-icon(md-svg-src="/static/content/icons/sort{{ $lCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$lCtrl.propertyName === 'descripcion'")
+            th(scope='col' ng-click="$lCtrl.ordenarPor('causa')") 
+              div(layout="row")
+                span(flex)
+                span Causa
+                span(flex)
+                md-icon(md-svg-src="/static/content/icons/sort{{ $lCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$lCtrl.propertyName === 'causa'")
+            th(scope='col' ng-click="$lCtrl.ordenarPor('centro')") 
+              div(layout="row")
+                span(flex)
+                span Centro
+                span(flex)
+                md-icon(md-svg-src="/static/content/icons/sort{{ $lCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$lCtrl.propertyName === 'centro'")
+            th(scope='col' ) Acciones
         tfoot
-          //- tr
-          //-   td(colspan='7')
-          //-     | Sources: 
-          //-     a(href='http://en.wikipedia.org/wiki/List_of_highest-grossing_animated_films', rel='external') Wikipedia
-          //-     |  & 
-          //-     a(href='http://www.boxofficemojo.com/genres/chart/?id=animation.htm', rel='external') Box Office Mojo
-          //-     | . Data is current as of October 3, 2018.
+          tr
+            td.text-right(colspan='7')
+              div(layout="row" layout-xs="column" layout-align="end center")
+                span Mostrando &nbsp; 
+                md-select(placeholder='' ng-model='$lCtrl.registrosXpagina' ng-change="$lCtrl.paginar()")
+                  md-option(ng-value='opcion' ng-repeat='opcion in [10, 20, 50]') {{opcion}}
+                span &nbsp; Registros Por Página
+                div
+                  md-button.md-icon-button(aria-label='boton' ng-disabled="$lCtrl.pagina == 0" ng-click="$lCtrl.pagina = $lCtrl.pagina - 1" ) 
+                    span.flechas <
+                  span {{ $lCtrl.pagina + 1 }} / {{$lCtrl.totalPaginas}}
+                  md-button.md-icon-button(aria-label='boton' ng-disabled="$lCtrl.pagina == ($lCtrl.totalPaginas - 1)" ng-click="$lCtrl.pagina = $lCtrl.pagina + 1" ) 
+                    span.flechas >
         tbody
-          tr(ng-repeat="dato in $nCtrl.data")
-            th(scope='row') {{dato.fecha | date : 'short'}}
-            td(data-title='Puesto de trabajo') {{ dato.name }}
-            td(data-title='Estado') {{ dato.calories }}
-            td(data-title='Asistencia de Usuarios') {{ dato.fat }}
-            td(data-title='Acciones') {{ dato.carbs }}
+          tr(ng-repeat="item in $lCtrl.notificacionesFiltrados | limitTo : $lCtrl.registrosXpagina : ($lCtrl.registrosXpagina*$lCtrl.pagina) | orderBy:$lCtrl.propertyName:$lCtrl.reverse | filter:$lCtrl.search")
+            th(scope='row') {{ item.usuario }}
+            td(data-title='Fecha de Creación :') {{ item.fechaCreacion | date : 'short'}}
+            td(data-title='Fecha de Cierre :') {{ item.fechaCierre | date : 'short'}}
+            td(data-title='Descripción :') {{ item.descripcion }} &nbsp;
+            td(data-title='Causa :') {{ item.causa }} &nbsp;
+            td(data-title='Centro :') {{ item.centro }}
+            td(data-title='Acciones :') 
+              //- md-button.md-icon-button(aria-label='boton' href="/notificaciones/formulario/{{ item.id }}" ) 
+              //-   md-icon(md-svg-src='/static/content/icons/edit.svg')
+              md-button.md-icon-button(aria-label='boton' ng-click="$lCtrl.detalle($event, item)") 
+                md-icon(md-svg-src='/static/content/icons/eye.svg' style="color:#4369e2;")
+
+    div(style='visibility: hidden')
+      #myDialog.md-dialog-container
+        md-dialog(aria-label='Eliminar'  flex="70" flex-xs="90" flex-sm="90")
+          form(ng-cloak='')
+            md-toolbar.md-primary
+              .md-toolbar-tools
+                span(flex='')
+                b Detalle Registro
+                span(flex='')
+                md-button.md-icon-button(ng-click='$lCtrl.cerrar()' style="font-size:22pt;") X
+            md-dialog-content
+              .md-dialog-content(style="padding: 0 24px;")
+                div(layout="row" layout-align="center center")
+                  h4 Asistencia de usuarios
+                  md-input-container.md-block(md-no-float='' flex style="margin-bottom: 0;margin-left:40px;" )
+                    md-icon(md-svg-src='/static/content/icons/search.svg')
+                    input(ng-model='$lCtrl.buscarAsistente' type='text' placeholder='Buscar usuario...' aria-label='Buscar...' )
+                .md-whiteframe-2dp(layout-paddig)
+                  table.responsive-table.w-100
+                    thead
+                      tr
+                        th(scope='col') Nombre
+                        th(scope='col') Estado
+                        th(scope='col') Fecha de Asistencia
+                    tbody
+                      tr(ng-repeat="item in $lCtrl.detalleNotificacion.asistentes | filter:$lCtrl.buscarAsistente")
+                        th(scope='row') {{ item.nombre }}
+                        td(data-title='Estado :' ng-style="{'color': item.estado == 'Pendiente' ? 'red'  : '#4369e2'}") {{ item.estado }}
+                        td(data-title='Fecha de Asistencia :') 
+                          md-button.md-primary.md-raised(ng-if="!item.fechaAsistencia" style="margin: -2px;" ng-click="$lCtrl.marcarAsistencia(item.id)") 
+                            md-icon(md-svg-src='/static/content/icons/tick.svg')
+                            | &nbsp; Marcar asistencia
+                          span(ng-if="item.fechaAsistencia" style="color:#4369e2;")
+                            md-icon(md-svg-src='/static/content/icons/tick.svg')
+                            | &nbsp; {{ item.fechaAsistencia | date : 'short' }}
+                
+                
+                div(layout="row" layout-align="center center")
+                  h4 Cerrar Notificación   
+                md-input-container.md-block(flex)
+                  label Causa
+                  input(ng-model='$lCtrl.form.causa' type="text")
+                  i(class='error' ng-show="$lCtrl.errores.causa" ng-repeat="opcion in $lCtrl.errores.causa")
+                    | {{ opcion }}
+                md-input-container.md-block(flex)
+                  label Descripción
+                  textarea(ng-model='$lCtrl.form.descripcion' md-maxlength='400' rows='3' md-select-on-focus='')
+                  i(class='error' ng-show="$lCtrl.errores.descripcion" ng-repeat="opcion in $lCtrl.errores.descripcion")
+                    | {{ opcion }}
+            md-dialog-actions(layout='row' layout-align="end end")
+              md-button.md-raised(ng-click="$lCtrl.cerrar()") Cancelar
+              md-button.md-raised.md-primary(ng-click="$lCtrl.cerrarNotificacion()") Cerrar Notificación
+ 
 
           
