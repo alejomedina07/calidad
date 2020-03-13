@@ -1,10 +1,10 @@
 var MENU = [
-  { nombre:"Lista de Usuarios", url:"/usuarios/" },
-  { nombre:"Crear Usuarios", url:"/usuarios/formulario" },
-  { nombre:"Lista de Notificaciones", url:"/notificaciones/" },
-  { nombre:"Crear Notificaciones", url:"/notificaciones/formulario" },
-  { nombre:"Lista de Centros de trabajo", url:"/centros/" },
-  { nombre:"Crear Centros de trabajo", url:"/centros/formulario" },
+  { permiso:"usuario.listar", nombre:"Lista de Usuarios", url:"/usuarios/" },
+  { permiso:"usuario.crear", nombre:"Crear Usuarios", url:"/usuarios/formulario" },
+  { permiso:"notificacion.listar", nombre:"Lista de Notificaciones", url:"/notificaciones/" },
+  { permiso:"notificacion.crear", nombre:"Crear Notificaciones", url:"/notificaciones/formulario" },
+  { permiso:"centro.listar", nombre:"Lista de Centros de trabajo", url:"/centros/" },
+  { permiso:"centro.crear", nombre:"Crear Centros de trabajo", url:"/centros/formulario" },
 ];
 
 (function(){
@@ -12,12 +12,17 @@ var MENU = [
 
   app.controller('header', ['$scope', '$rootScope', '$mdSidenav', '$mdDialog', function($scope, $rootScope, $mdSidenav, $mdDialog){
     var $cCtr = this;
+
     $cCtr.MENU = MENU;
 
+    $cCtr.operaciones = localStorage.getItem("operaciones");
 
-
-    $cCtr.actualizar = function() {
-     // $state.reload();
+    $cCtr.obtenerPermiso = function(permiso) {
+      console.log('permiso');
+      console.log(permiso);
+      console.log('$cCtr.operaciones');
+      console.log($cCtr.operaciones);
+      return $cCtr.operaciones.includes(permiso);
     };
 
     $cCtr.abrirMenuIzquierda = function() {

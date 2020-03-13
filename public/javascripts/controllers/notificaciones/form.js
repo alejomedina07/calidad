@@ -20,6 +20,16 @@
       {id:5, icono:'warning' , nombre:'Peligro'},
     ];
 
+    $fCtrl.focoParaBuscar = function() {
+      $timeout(function(){
+        var campo = angular.element('.campo-busqueda');
+        campo.focus();
+      }, 500);
+    };
+
+    $fCtrl.buscar = function(ev) {
+        ev.stopPropagation();
+    };
 
     $fCtrl.init = function() {
       if ($fCtrl.id) obtenerUsuario();

@@ -107,3 +107,16 @@ md-toast.toast-rojo .md-toast-content {
 .m-10 {
   margin: 10px;
 }
+
+.campo-busqueda {
+  width: 95%;
+  border: none;
+  outline: none;
+  border: none;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 0px 0px, rgba(0, 0, 0, 0.14) 0px 0px 0px 0px, rgba(0, 0, 0, 0.12) 0px 0px 0px 0px;
+  padding-left: 10px;
+  height: 48px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}

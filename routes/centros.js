@@ -33,7 +33,6 @@ router.get('/listar',  mdAutenticacion.verificatoken(centro.PERMISO.LISTAR), (re
     debug(err);
     debug(err);
     res.status(500).json(err);
-    // connection.end();
   });
 });
 
@@ -49,7 +48,7 @@ router.get('/obtener-ops', mdAutenticacion.verificatoken(centro.PERMISO.CREAR), 
   .catch(err => {
     debug('err *------------');
     debug(err);
-    // connection.end();
+    res.status(500).json(err);
   });
 });
 

@@ -18,7 +18,7 @@ router.get('/listar',  mdAutenticacion.verificatoken(usuario.PERMISO.LISTAR), (r
     res.json(value);
   })
   .catch(err => {
-    connection.end();
+    res.status(500).json(err);
   });
 });
 
@@ -31,7 +31,7 @@ router.get('/obtener-roles', mdAutenticacion.verificatoken(usuario.PERMISO.CREAR
   })
   .catch(err => {
     debug(err);
-    connection.end();
+    res.status(500).json(err);
   });
 });
 

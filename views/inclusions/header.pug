@@ -35,7 +35,7 @@ header(ng-controller="header as $cCtr")
               md-icon(md-svg-src='/static/content/icons/user.svg')
         md-divider
         md-menu-content(width='4', ng-mouseleave='$mdMenu.close()')
-          md-menu-item(ng-repeat='item in $cCtr.MENU')
+          md-menu-item(ng-repeat='item in $cCtr.MENU' ng-if="$cCtr.obtenerPermiso(item.permiso)")
             md-button(href="{{item.url}}")
               | {{item.nombre}}
       md-button.md-primary.md-fab.md-fab-bottom-right.my-fab-button(href="/logout")

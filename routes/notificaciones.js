@@ -8,7 +8,7 @@ let express = require('express'),
  router = express.Router();
 
 router.get('/', mdAutenticacion.verificatoken(notificacion.PERMISO.LISTAR), (req, res, next) => {
-  res.render("notificaciones/lista", { title: 'Notificacions', usuario:req.session.usuario });
+  res.render("notificaciones/lista", { title: 'Notificaciones', usuario:req.session.usuario });
 });
 
 router.get('/listar',  mdAutenticacion.verificatoken(notificacion.PERMISO.LISTAR), (req, res, next) => {
@@ -33,7 +33,7 @@ router.get('/listar',  mdAutenticacion.verificatoken(notificacion.PERMISO.LISTAR
     res.json(value);
   })
   .catch(err => {
-    connection.end();
+    res.status(500).json(err);
   });
 });
 
@@ -55,7 +55,7 @@ router.get('/obtener-centros', mdAutenticacion.verificatoken(notificacion.PERMIS
   })
   .catch(err => {
     debug(err);
-    connection.end();
+    res.status(500).json(err);
   });
 });
 
@@ -77,7 +77,7 @@ router.get('/obtener-asistencias/:id', mdAutenticacion.verificatoken(notificacio
   })
   .catch(err => {
     debug(err);
-    connection.end();
+    res.status(500).json(err);
   });
 });
 
@@ -96,16 +96,16 @@ router.get('/obtener-ops', mdAutenticacion.verificatoken(notificacion.PERMISO.CR
   })
   .catch(err => {
     debug(err);
-    connection.end();
+    res.status(500).json(err);
   });
 });
 
 router.get('/formulario', mdAutenticacion.verificatoken(notificacion.PERMISO.CREAR), (req, res, next) => {
-  res.render('notificaciones/formulario', { title: 'Notificacions - Formulario', usuario:req.session.usuario });
+  res.render('notificaciones/formulario', { title: 'Notificaciones - Formulario', usuario:req.session.usuario });
 });
 
 router.get('/formulario/:id', mdAutenticacion.verificatoken(notificacion.PERMISO.EDITAR), (req, res, next) => {
-  res.render('notificaciones/formulario', { title: 'Notificacions - Formulario', id : req.params.id, usuario:req.session.usuario });
+  res.render('notificaciones/formulario', { title: 'Notificaciones - Formulario', id : req.params.id, usuario:req.session.usuario });
 });
 
 router.post('/',  mdAutenticacion.verificatoken(notificacion.PERMISO.CREAR), (req, res, next) => {
@@ -118,8 +118,8 @@ router.post('/',  mdAutenticacion.verificatoken(notificacion.PERMISO.CREAR), (re
 
   let connection2 = mysql.createConnection(config.connection),
     query2 = `INSERT INTO notificacion
-     (idUsuarioCreacion,icono,sonido,idOp,idCentro)
-     values ('${req.session.usuario.id}','${req.body.icono}','${req.body.sonido}','${req.body.idOp}', '${req.body.idCentro}')`;
+     (idUsuarioCreacion,icono,sonido,idOp,idCentro,descripcion)
+     values ('${req.session.usuario.id}','${req.body.icono}','${req.body.sonido}','${req.body.idOp}', '${req.body.idCentro}', '${req.body.descripcion}')`;
   connection2.connect();
   let promesa2 = config.consultar(connection2, query2);
   arrayPromesasNOtificacion.push(promesa2)
@@ -168,7 +168,7 @@ router.post('/cerrar-notificacion',  mdAutenticacion.verificatoken(notificacion.
   let moment = require('moment');
   let connection = mysql.createConnection(config.connection),
     query = `UPDATE notificacion
-     SET descripcion = '${req.body.descripcion}', causa = '${req.body.causa}', fechaCierre = '${moment().format('YYYY-MM-DD hh:mm:ss')}'
+     SET causa = '${req.body.causa}', fechaCierre = '${moment().format('YYYY-MM-DD hh:mm:ss')}'
      WHERE id = '${req.body.id}'`;
   connection.connect();
   let promesa = config.consultar(connection, query);

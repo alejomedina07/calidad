@@ -91,7 +91,7 @@
 @media (min-width: 75em) {
   .responsive-table th,
   .responsive-table td {
-    padding: .55em;
+    padding: .35em;
   }
 }
 .responsive-table caption {

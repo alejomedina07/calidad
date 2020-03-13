@@ -5,6 +5,17 @@
     var $fCtrl = this;
     $fCtrl.form = {};
 
+    $fCtrl.focoParaBuscar = function() {
+      $timeout(function(){
+        var campo = angular.element('.campo-busqueda');
+        campo.focus();
+      }, 500);
+    };
+
+    $fCtrl.buscar = function(ev) {
+        ev.stopPropagation();
+    };
+
     $fCtrl.init = function() {
       if ($fCtrl.id) obtenerCentro();
       obtenerUsuarios();

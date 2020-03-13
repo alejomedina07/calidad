@@ -20,9 +20,13 @@ block content
           | {{ opcion }}
       md-input-container.md-block.w-100(flex)
         label Seleccione OP
-        md-select(ng-model='$fCtrl.form.idOp')
-          md-option(ng-repeat='opcion in $fCtrl.ops' ng-value='opcion.id')
-            | {{opcion.prefijo}}{{opcion.op}}      
+        md-select(ng-model='$fCtrl.form.idOp' md-on-close="$fCtrl.busqueda = ''"  md-on-open='$fCtrl.focoParaBuscar()')
+          md-select-header
+            input.campo-busqueda(ng-model='$fCtrl.busqueda' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar OP...')
+          md-option(ng-value='opcion.id' ng-repeat="opcion in $fCtrl.ops | filter:$fCtrl.busqueda") {{opcion.prefijo}}{{opcion.op}}
+        //- md-select(ng-model='$fCtrl.form.idOp')
+        //-   md-option(ng-repeat='opcion in $fCtrl.ops' ng-value='opcion.id')
+        //-     | {{opcion.prefijo}}{{opcion.op}}      
         i(class='error' ng-show="$fCtrl.errores.idOp" ng-repeat="opcion in $fCtrl.errores.idOp")
           | {{ opcion }}
       span(flex hide-sm)

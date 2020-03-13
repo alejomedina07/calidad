@@ -10,23 +10,33 @@
     $lCtrl.form = {};
 
 
-    var scrolled = false;
-    function updateScroll(){
-        if(!scrolled){
-            var element = document.getElementById("yourDivID");
-            element.scrollTop = element.scrollHeight;
-        }
+    $lCtrl.excel = function (filtrados) {
+      let array;
+      if (filtrados) {
+        array = $lCtrl.notificacionesFiltrados
+      }else {
+        array = $lCtrl.notificaciones.filter(x => x.fechaCierre);
+      }
+      fnExcelReport(array);
     }
 
-    $("#yourDivID").on('scroll', function(){
-        scrolled=true;
-    });
-    $lCtrl.excel = function () {
-      fnExcelReport();
-    }
-
-    function fnExcelReport()
+    function fnExcelReport(array)
     {
+      var k = '<tbody>'
+      array.forEach((item, i) => {
+        let fechaCierre = item.fechaCierre ? moment(item.fechaCierre).format('LLL') : '';
+        k+= '<tr>';
+        k+= '<td>' + item.usuario + '</td>';
+        k+= '<td>' + moment(item.fechaCreacion).format('LLL') + '</td>';
+        k+= '<td>' + fechaCierre + '</td>';
+        k+= '<td>' + item.descripcion + '</td>';
+        k+= '<td>' + item.causa + '</td>';
+        k+= '<td>' + item.centro + '</td>';
+        k+= '</tr>';
+      });
+
+      k+='</tbody>';
+      document.getElementById('tbody').innerHTML = k;
         var tab_text="<table border='2px'><tr bgcolor='#87AFC6'>";
         var textRange; var j=0,
         tab = document.getElementById('headerTable'); // id of table
@@ -43,7 +53,7 @@
         tab_text= tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
 
         var ua = window.navigator.userAgent;
-        var msie = ua.indexOf("MSIE ");
+        var msie = ua.indexOf("MSIE "), sa;
 
         if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
         {
@@ -53,10 +63,14 @@
             txtArea1.focus();
             sa=txtArea1.document.execCommand("SaveAs",true,"Say Thanks to Sumit.xls");
         }
-        else                 //other browser not tested on IE 11
-            sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
-
-        return (sa);
+        else {                //other browser not tested on IE 11
+            // sa = window.open('data:application/vnd.ms-excel;charset=UTF-8;base64,' + encodeURIComponent(tab_text));
+            var a = document.getElementById('csv');
+            a.textContent='download';
+            a.download="Notificaciones.xls";
+            a.href='data:application/vnd.ms-excel;charset=utf-8,%EF%BB%BF,' + encodeURIComponent(tab_text);
+            a.click();
+        }
     }
 
     $lCtrl.listarNotificaciones = function () {
@@ -151,11 +165,12 @@
       causa: {
         presence: {message: "^El campo 'Causa' es requerido"},
       },
-      descripcion: {
-        presence: {message: "^El campo 'Descripción' es requerido"},
-      }
+      // descripcion: {
+      //   presence: {message: "^El campo 'Descripción' es requerido"},
+      // }
     };
 
     $lCtrl.listarNotificaciones();
   });
+
 })();

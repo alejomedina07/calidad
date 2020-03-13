@@ -4,17 +4,24 @@ block header
   include ../inclusions/header
 block content
   .md-whiteframe-2dp(layout-margin layout-padding ng-controller="listaNotificacion as $lCtrl")
-    div(layout="row" layout-xs="column" layout-align="center center" flex)
-      h2 Lista de notificaciones
-      md-input-container.md-block(md-no-float='' flex style="margin-bottom: 0;margin-left:40px;" )
+    b.titulo Lista de notificaciones
+    div(layout="row" layout-sm="column" layout-align="center center" flex style="margin:0")
+      //- md-button.md-fab(aria-label='Excel' style="background-color: #fff;" ng-click="$lCtrl.excel()")
+        md-icon(md-svg-src='/static/content/icons/excel.svg')
+      md-input-container.md-block(md-no-float='' flex style="margin-bottom: 0;" )
         md-icon(md-svg-src='/static/content/icons/search.svg')
         input(ng-model='$lCtrl.search' type='text' placeholder='Buscar...' aria-label='Buscar...' ng-change="$lCtrl.filtrar()")
 
-      md-button.md-raised.md-primary(href="/notificaciones/formulario" style="margin-left:20px;") + Crear
-      md-button.md-raised.md-primary(ng-click="$lCtrl.excel()" style="margin-left:20px;") + excel
-      span(flex)
+      md-button.md-raised(ng-click="$lCtrl.excel(true)" style="margin-left:15px;") 
+        | Exportar notificaciones Filtradas &nbsp; 
+        md-icon(md-svg-src='/static/content/icons/excel.svg')
+      md-button.md-raised(ng-click="$lCtrl.excel()" style="margin-left:5px;") 
+        | Exportar notificaciones Cerradas &nbsp; 
+        md-icon(md-svg-src='/static/content/icons/excel.svg')
+      //- span(flex)
+      md-button.md-raised.md-primary(href="/notificaciones/formulario" style="margin-left:5px;") + Crear
     md-content
-      table.responsive-table#headerTable
+      table.responsive-table
         thead
           tr
             th(scope='col' ng-click="$lCtrl.ordenarPor('usuario')") 
@@ -76,71 +83,23 @@ block content
             td(data-title='Causa :') {{ item.causa }} &nbsp;
             td(data-title='Centro :') {{ item.centro }}
             td(data-title='Acciones :') 
-              //- md-button.md-icon-button(aria-label='boton' href="/notificaciones/formulario/{{ item.id }}" ) 
-              //-   md-icon(md-svg-src='/static/content/icons/edit.svg')
               md-button.md-icon-button(aria-label='boton' ng-click="$lCtrl.detalle($event, item)") 
                 md-icon(md-svg-src='/static/content/icons/eye.svg' style="color:#4369e2;")
 
     div(style='visibility: hidden')
       #myDialog.md-dialog-container
-        md-dialog(aria-label='Eliminar'  flex="70" flex-xs="90" flex-sm="90")
-          form(ng-cloak='')
-            md-toolbar.md-primary
-              .md-toolbar-tools
-                span(flex='')
-                b Detalle Registro
-                span(flex='')
-                md-button.md-icon-button(ng-click='$lCtrl.cerrar()' style="font-size:22pt;") X
-            md-dialog-content
-              .md-dialog-content(style="padding: 0 24px;")
-                div(layout="row" layout-align="center center")
-                  h4 Asistencia de usuarios
-                  md-input-container.md-block(md-no-float='' flex style="margin-bottom: 0;margin-left:40px;" )
-                    md-icon(md-svg-src='/static/content/icons/search.svg')
-                    input(ng-model='$lCtrl.buscarAsistente' type='text' placeholder='Buscar usuario...' aria-label='Buscar...' )
-                .md-whiteframe-2dp(layout-paddig)
-                  table.responsive-table.w-100
-                    thead
-                      tr
-                        th(scope='col') Nombre
-                        th(scope='col') Estado
-                        th(scope='col') Fecha de Asistencia
-                    tbody
-                      tr(ng-repeat="item in $lCtrl.detalleNotificacion.asistentes | filter:$lCtrl.buscarAsistente")
-                        th(scope='row') {{ item.nombre }}
-                        td(data-title='Estado :' ng-style="{'color': item.estado == 'Pendiente' ? 'red'  : '#4369e2'}") {{ item.estado }}
-                        td(data-title='Fecha de Asistencia :') 
-                          md-button.md-primary.md-raised(ng-if="!item.fechaAsistencia" style="margin: -2px;" ng-click="$lCtrl.marcarAsistencia(item.id)") 
-                            md-icon(md-svg-src='/static/content/icons/tick.svg')
-                            | &nbsp; Marcar asistencia
-                          span(ng-if="item.fechaAsistencia" style="color:#4369e2;")
-                            md-icon(md-svg-src='/static/content/icons/tick.svg')
-                            | &nbsp; {{ item.fechaAsistencia | date : 'short' }}
-                
-                
-                div(ng-if="$lCtrl.detalleNotificacion.fechaCierre")
-                  h4 
-                    b Causa: &nbsp; 
-                    | {{ $lCtrl.detalleNotificacion.causa }}
-                  h4 
-                    b Descripción: &nbsp; 
-                    | {{ $lCtrl.detalleNotificacion.descripcion }}
-                div(ng-if="!$lCtrl.detalleNotificacion.fechaCierre")
-                  div(layout="row" layout-align="center center")
-                    h4 Cerrar Notificación   
-                  md-input-container.md-block(flex)
-                    label Causa
-                    input(ng-model='$lCtrl.form.causa' type="text")
-                    i(class='error' ng-show="$lCtrl.errores.causa" ng-repeat="opcion in $lCtrl.errores.causa")
-                      | {{ opcion }}
-                  md-input-container.md-block(flex)
-                    label Descripción
-                    textarea(ng-model='$lCtrl.form.descripcion' md-maxlength='400' rows='3' md-select-on-focus='')
-                    i(class='error' ng-show="$lCtrl.errores.descripcion" ng-repeat="opcion in $lCtrl.errores.descripcion")
-                      | {{ opcion }}
-            md-dialog-actions(layout='row' layout-align="end end")
-              md-button.md-raised(ng-click="$lCtrl.cerrar()") Cancelar
-              md-button.md-raised.md-primary(ng-click="$lCtrl.cerrarNotificacion()" ng-disabled="$lCtrl.detalleNotificacion.fechaCierre") Cerrar Notificación
- 
+        include ./formCierre
 
-          
+    div(style='display: none')
+      <iframe id="txtArea1" style="display:none"></iframe>
+      a#csv
+      table#headerTable
+        thead
+          tr
+            th Creador
+            th Fecha de Creación
+            th Fecha de Cierre
+            th Descripción
+            th Causa
+            th Centro
+        tbody(id="tbody")
