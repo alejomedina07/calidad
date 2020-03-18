@@ -1,28 +1,27 @@
 (function(){
   'use strict';
 
-  app.controller('login', ['$scope', '$rootScope', '$http', 'md5', function($scope, $rootScope, $http, md5){
+  app.controller('login', ['$scope', '$rootScope', '$http', 'md5', 'ToastFactoria', function($scope, $rootScope, $http, md5, ToastFactoria){
     var $lCtrl = this;
 
 
 
     $lCtrl.login = function() {
-      if ($lCtrl.form.contrasena) {
-        $lCtrl.form.contrasena = md5.createHash($lCtrl.form.contrasena);
-      };
+      // if ($lCtrl.form.contrasena) {
+      //   $lCtrl.form.contrasena = md5.createHash($lCtrl.form.contrasena);
+      // };
       $http.post('/login', $lCtrl.form)
       .then(result => {
         localStorage.setItem("operaciones", result.data.usuario.operaciones);
         window.location.href = "/notificaciones/formulario";
       })
       .catch(error => {
-        console.log('error');
-        console.log(error);
+        ToastFactoria.rojo({contenido:error.data.mensaje})
       });
     };
 
     var current = null;
-    document.querySelector('#email').addEventListener('focus', function(e) {
+    document.querySelector('#user').addEventListener('focus', function(e) {
       if (current) current.pause();
       current = anime({
         targets: 'path',

@@ -6,8 +6,11 @@
     $lCtrl.pagina = 0;
     $lCtrl.idEliminar = 0;
     $lCtrl.registrosXpagina = 10;
-    $lCtrl.filtros = {};
+    $lCtrl.fechaInicio = new Date()
+    $lCtrl.fechaFin = new Date()
     $lCtrl.form = {};
+
+
 
 
     $lCtrl.excel = function (filtrados) {
@@ -74,15 +77,20 @@
     }
 
     $lCtrl.listarNotificaciones = function () {
-      $http.get('/notificaciones/listar')
-      .then(function(result){
-        $lCtrl.notificaciones = result.data;
-        $lCtrl.notificacionesFiltrados = $lCtrl.notificaciones;
-        $lCtrl.paginar();
-      })
-      .catch(function(e){
-        console.log(e);
-      });
+      if (moment($lCtrl.fechaFin).diff($lCtrl.fechaInicio, "month", true) <= 3) {
+
+        let url = `/notificaciones/listar?fechaInicio=${moment($lCtrl.fechaInicio).format('YYYY-MM-DD')}
+          &fechaFin=${moment($lCtrl.fechaFin).format('YYYY-MM-DD')}`
+        $http.get(url)
+        .then(function(result){
+          $lCtrl.notificaciones = result.data;
+          $lCtrl.notificacionesFiltrados = $lCtrl.notificaciones;
+          $lCtrl.paginar();
+        })
+        .catch(function(e){
+          console.log(e);
+        });
+      }else ToastFactoria.rojo({contenido: 'El rango entre las fechas no deben ser mayor a 3 meses.'});
     };
 
     $lCtrl.cerrarNotificacion = function () {

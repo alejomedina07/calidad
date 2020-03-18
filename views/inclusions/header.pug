@@ -21,27 +21,44 @@ header(ng-controller="header as $cCtr")
   section(layout="row" flex)
     
     md-sidenav.md-sidenav-left.barra-lateral-izquierda(md-component-id='left' md-whiteframe='4')
-      md-toolbar(layout='row')
-        h1.md-toolbar-tools MENU
-        md-button(aria-label='Menú de opciones' ng-click='$cCtr.abrirMenuIzquierda()')
-          md-icon(md-svg-src='/static/content/icons/back.svg')
-      md-content
+      md-toolbar(md-scroll-shrink='')
+        .md-toolbar-tools(layout-align="center center")
+          h3 Menu 
+      md-content(role='navigation')
         md-list-item.md-3-line
           .md-list-item-text(layout='column')
-            b= usuario.nombre
+            b(style="font-size:13pt;font-family: 'Regular';")= usuario.nombre
             div(layout='row')
               h4= usuario.rol
               span(flex)
-              md-icon(md-svg-src='/static/content/icons/user.svg')
-        md-divider
-        md-menu-content(width='4', ng-mouseleave='$mdMenu.close()')
-          md-menu-item(ng-repeat='item in $cCtr.MENU' ng-if="$cCtr.obtenerPermiso(item.permiso)")
-            md-button(href="{{item.url}}")
-              | {{item.nombre}}
-      md-button.md-primary.md-fab.md-fab-bottom-right.my-fab-button(href="/logout")
-        md-icon(md-svg-src='/static/content/icons/logout.svg')
-        md-tooltip(md-direction="left") Salir
-
-  
-  
-  
+              md-icon(md-svg-src='/static/content/icons/user.svg')        
+        ul.side-menu
+          li.parent-list-item(ng-repeat='section in $cCtr.menu.sections', ng-class="{'parentActive' : vm.isSectionSelected(section)}")
+            h2.menu-heading(ng-if="section.type === 'heading'", id='heading_{{ section.name }}')
+              | {{section.Name}}
+            menu-link(section='section' ng-if="section.type === 'link' && $cCtr.obtenerPermiso(section.permiso)")
+            menu-toggle(section='section' ng-if="section.type === 'toggle' && $cCtr.obtenerPermiso(section.permiso)")      
+      //- md-toolbar(layout='row')
+      //-   h1.md-toolbar-tools MENU
+      //-   md-button(aria-label='Menú de opciones' ng-click='$cCtr.abrirMenuIzquierda()')
+      //-     md-icon(md-svg-src='/static/content/icons/back.svg')
+      //- md-content
+      //-   md-list-item.md-3-line
+      //-     .md-list-item-text(layout='column')
+      //-       b= usuario.nombre
+      //-       div(layout='row')
+      //-         h4= usuario.rol
+      //-         span(flex)
+      //-         md-icon(md-svg-src='/static/content/icons/user.svg')
+      //-   md-divider
+      //-   md-menu-content(width='4', ng-mouseleave='$mdMenu.close()')
+      //-     md-menu-item(ng-repeat='item in $cCtr.MENU' ng-if="$cCtr.obtenerPermiso(item.permiso)")
+      //-       md-button(href="{{item.url}}")
+      //-         | {{item.nombre}}
+      //- md-button.md-primary.md-fab.md-fab-bottom-right.my-fab-button(href="/logout")
+      //-   md-icon(md-svg-src='/static/content/icons/logout.svg')
+      //-   md-tooltip(md-direction="left") Salir
+      //- 
+      //- 
+      //- 
+      //- 

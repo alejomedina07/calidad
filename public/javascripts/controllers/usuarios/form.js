@@ -22,11 +22,9 @@
         $fCtrl.form = result.data[0];
         $fCtrl.form.id = $fCtrl.id;
         $fCtrl.form.idAplicacionMovil = String($fCtrl.form.idAplicacionMovil);
-        $fCtrl.form.contrasena2 = $fCtrl.form.contrasena;
-        console.log($fCtrl.form);
       })
       .catch(error => {
-        console.log(error);
+        ToastFactoria.rojo({contenido: 'Error al obtener el usuario.'});
       });
     }
 
@@ -36,15 +34,15 @@
         $fCtrl.roles = result.data;
       })
       .catch(error => {
-
+        ToastFactoria.rojo({contenido: 'Error al obtener los roles.'});
       });
     }
 
     $fCtrl.guardar = function() {
       $fCtrl.errores = validate($fCtrl.form, _validar);
       if (!$fCtrl.errores) {
-        if (!$fCtrl.id) { $fCtrl.form.contrasena = md5.createHash($fCtrl.form.contrasena); };
-        delete $fCtrl.form.contrasena2;
+        // if (!$fCtrl.id) { $fCtrl.form.contrasena = md5.createHash($fCtrl.form.contrasena); };
+        // delete $fCtrl.form.contrasena2;
         let url = $fCtrl.form.id ? '/usuarios/editar' : '/usuarios/';
         $http.post(url, $fCtrl.form)
         .then(result => {
@@ -74,16 +72,16 @@
       usuarioRed: {
         presence: {message: "^El campo 'Usuario de Red' es requerido"},
       },
-      contrasena: {
-        presence: {message: "^El campo 'Contraseña' es requerido"},
-      },
-      contrasena2: {
-        presence: {message: "^El campo 'Confirmar Contraseña' es requerido"},
-        equality: {
-          attribute: "contrasena",
-          message: "^EL campo 'Confirmar Contraseña' no coincide con la 'Contraseña'"
-        }
-      },
+      // contrasena: {
+      //   presence: {message: "^El campo 'Contraseña' es requerido"},
+      // },
+      // contrasena2: {
+      //   presence: {message: "^El campo 'Confirmar Contraseña' es requerido"},
+      //   equality: {
+      //     attribute: "contrasena",
+      //     message: "^EL campo 'Confirmar Contraseña' no coincide con la 'Contraseña'"
+      //   }
+      // },
       idAplicacionMovil: {
         presence: {message: "^El campo 'ID de Aplicación Movil' es requerido"},
         format: {

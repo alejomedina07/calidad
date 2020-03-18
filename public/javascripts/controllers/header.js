@@ -1,16 +1,9 @@
-var MENU = [
-  { permiso:"usuario.listar", nombre:"Lista de Usuarios", url:"/usuarios/" },
-  { permiso:"usuario.crear", nombre:"Crear Usuarios", url:"/usuarios/formulario" },
-  { permiso:"notificacion.listar", nombre:"Lista de Notificaciones", url:"/notificaciones/" },
-  { permiso:"notificacion.crear", nombre:"Crear Notificaciones", url:"/notificaciones/formulario" },
-  { permiso:"centro.listar", nombre:"Lista de Centros de trabajo", url:"/centros/" },
-  { permiso:"centro.crear", nombre:"Crear Centros de trabajo", url:"/centros/formulario" },
-];
+
 
 (function(){
   'use strict';
 
-  app.controller('header', ['$scope', '$rootScope', '$mdSidenav', '$mdDialog', function($scope, $rootScope, $mdSidenav, $mdDialog){
+  app.controller('header', ['$scope', '$rootScope', '$mdSidenav', '$mdDialog','menu', function($scope, $rootScope, $mdSidenav, $mdDialog, menu){
     var $cCtr = this;
 
     $cCtr.MENU = MENU;
@@ -18,10 +11,6 @@ var MENU = [
     $cCtr.operaciones = localStorage.getItem("operaciones");
 
     $cCtr.obtenerPermiso = function(permiso) {
-      console.log('permiso');
-      console.log(permiso);
-      console.log('$cCtr.operaciones');
-      console.log($cCtr.operaciones);
       return $cCtr.operaciones.includes(permiso);
     };
 
@@ -37,6 +26,33 @@ var MENU = [
     $cCtr.$onInit = function() {
 
     };
+
+    // var vm = this;
+    var aboutMeArr = ['Family', 'Location', 'Lifestyle'];
+    var budgetArr = ['Housing', 'LivingExpenses', 'Healthcare', 'Travel'];
+    var incomeArr = ['SocialSecurity', 'Savings', 'Pension', 'PartTimeJob'];
+    var advancedArr = ['Assumptions', 'BudgetGraph', 'AccountBalanceGraph', 'IncomeBalanceGraph'];
+
+    //functions for menu-link and menu-toggle
+    $cCtr.isOpen = isOpen;
+    $cCtr.toggleOpen = toggleOpen;
+    $cCtr.autoFocusContent = false;
+    $cCtr.menu = menu;
+
+    $cCtr.status = {
+      isFirstOpen: true,
+      isFirstDisabled: false
+    };
+
+
+    function isOpen(section) {
+      return menu.isSectionSelected(section);
+    }
+
+    function toggleOpen(section) {
+      menu.toggleSelectSection(section);
+    }
+
 
 
   }]);

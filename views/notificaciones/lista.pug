@@ -4,22 +4,29 @@ block header
   include ../inclusions/header
 block content
   .md-whiteframe-2dp(layout-margin layout-padding ng-controller="listaNotificacion as $lCtrl")
-    b.titulo Lista de notificaciones
-    div(layout="row" layout-sm="column" layout-align="center center" flex style="margin:0")
-      //- md-button.md-fab(aria-label='Excel' style="background-color: #fff;" ng-click="$lCtrl.excel()")
-        md-icon(md-svg-src='/static/content/icons/excel.svg')
-      md-input-container.md-block(md-no-float='' flex style="margin-bottom: 0;" )
+    div(layout="row" layout-sm="column" layout-xs="column" layout-align="center center" flex style="margin:0")
+      b.titulo Lista de notificaciones
+      md-button.md-raised.md-primary(href="/notificaciones/formulario" style="margin-left:15px;") + Crear
+      md-input-container.w-100.md-block(md-no-float='' flex style="margin-bottom: 0;margin-left:15px;" )
         md-icon(md-svg-src='/static/content/icons/search.svg')
         input(ng-model='$lCtrl.search' type='text' placeholder='Buscar...' aria-label='Buscar...' ng-change="$lCtrl.filtrar()")
-
+      span(flex)
+    div(layout="row" layout-sm="column" layout-xs="column" layout-align="center center" flex style="margin:0")
+      //- md-button.md-fab(aria-label='Excel' style="background-color: #fff;" ng-click="$lCtrl.excel()")
+        md-icon(md-svg-src='/static/content/icons/excel.svg')
+      md-datepicker(ng-model='$lCtrl.fechaInicio' md-max-date="$lCtrl.fechaFin" md-placeholder='Fecha de inicio')
+      md-datepicker(ng-model='$lCtrl.fechaFin' md-min-date="$lCtrl.fechaInicio" md-placeholder='Fecha de Fin')
+      md-button.md-raised.primary(ng-click="$lCtrl.listarNotificaciones()" style="margin-left:15px;") 
+        | &nbsp; Filtrar
+        md-icon(md-svg-src='/static/content/icons/filter.svg' style="height: 15px; min-height: 15px;")
       md-button.md-raised(ng-click="$lCtrl.excel(true)" style="margin-left:15px;") 
-        | Exportar notificaciones Filtradas &nbsp; 
+        | Exportar&nbsp; 
         md-icon(md-svg-src='/static/content/icons/excel.svg')
       md-button.md-raised(ng-click="$lCtrl.excel()" style="margin-left:5px;") 
         | Exportar notificaciones Cerradas &nbsp; 
         md-icon(md-svg-src='/static/content/icons/excel.svg')
-      //- span(flex)
-      md-button.md-raised.md-primary(href="/notificaciones/formulario" style="margin-left:5px;") + Crear
+      span(flex)
+      
     md-content
       table.responsive-table
         thead

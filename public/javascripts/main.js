@@ -1,3 +1,12 @@
+var MENU = [
+  { permiso:"usuario.listar", nombre:"Lista de Usuarios", url:"/usuarios/" },
+  { permiso:"usuario.crear", nombre:"Crear Usuarios", url:"/usuarios/formulario" },
+  { permiso:"notificacion.listar", nombre:"Lista de Notificaciones", url:"/notificaciones/" },
+  { permiso:"notificacion.crear", nombre:"Crear Notificaciones", url:"/notificaciones/formulario" },
+  { permiso:"centro.listar", nombre:"Lista de Centros de trabajo", url:"/centros/" },
+  { permiso:"centro.crear", nombre:"Crear Centros de trabajo", url:"/centros/formulario" },
+];
+
 var app = angular.module('calidad', [
   'ngMaterial',
   'ngMessages',
@@ -5,43 +14,6 @@ var app = angular.module('calidad', [
   'angular-md5',
   'ngAria'
 ]);
-
-
-
-
-app.config(function($httpProvider) {
-  $httpProvider.interceptors.push(function ($q, $rootScope) {
-    console.log('????????????????????');
-    return {
-      // Add an interceptor for requests.
-      'request': function (config) {
-        config.headers = config.headers || {}; // Default to an empty object if no headers are set.
-
-        // Set the header if the token is stored.
-
-        if(localStorage.getItem("token")) {
-          config.headers.Authorization = localStorage.getItem("token");
-        }
-
-        return config;
-      },
-
-      // Add an interceptor for any responses that error.
-      'responseError': function(response) {
-
-        // Check if the error is auth-related.
-        if(response.status === 401 || response.status === 403) {
-          // $state.go('login');
-        }
-
-        return $q.reject(response);
-      }
-
-    };
-  });
-});
-
-
 
 app.config(function() {
   moment.locale('es_co', {
