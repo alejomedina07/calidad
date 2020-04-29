@@ -7,9 +7,6 @@
 
 
     $lCtrl.login = function() {
-      // if ($lCtrl.form.contrasena) {
-      //   $lCtrl.form.contrasena = md5.createHash($lCtrl.form.contrasena);
-      // };
       $lCtrl.loading = true;
       $http.post('/login', $lCtrl.form)
       .then(result => {
