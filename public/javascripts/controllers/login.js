@@ -10,12 +10,15 @@
       // if ($lCtrl.form.contrasena) {
       //   $lCtrl.form.contrasena = md5.createHash($lCtrl.form.contrasena);
       // };
+      $lCtrl.loading = true;
       $http.post('/login', $lCtrl.form)
       .then(result => {
         localStorage.setItem("operaciones", result.data.usuario.operaciones);
+        // $lCtrl.loading = false;
         window.location.href = "/notificaciones/formulario";
       })
       .catch(error => {
+        $lCtrl.loading = false;
         ToastFactoria.rojo({contenido:error.data.mensaje})
       });
     };
