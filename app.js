@@ -9,9 +9,6 @@ var createError = require('http-errors');
   app = express();
 
 
-
-
-
 app.use(session({
 	secret: 'secret',
 	resave: true,

@@ -12,11 +12,11 @@
         type: 'toggle', icon:'phone',
         pages: [{
           name: 'Lista de Notificaciones',  permiso:'notificacion.listar',
-          state: 'home.beers.ipas',
+          state: '/notificaciones',
           type: 'link', icon: 'fa fa-group'
         }, {
           name: 'Crear Notificación',  permiso:'notificacion.crear',
-          state: 'home.beers.porters',
+          state: '/notificaciones/formulario',
           type: 'link', icon: 'fa fa-map-marker'
         }]
       });
@@ -26,11 +26,11 @@
         type: 'toggle', icon:'target',
         pages: [{
           name: 'Listar Usuarios',  permiso:'usuario.listar',
-          state: 'home.beers.ipas',
+          state: '/usuarios/',
           type: 'link', icon: 'fa fa-group'
         }, {
           name: 'Crear Usuarios',  permiso:'usuario.crear',
-          state: 'home.beers.porters',
+          state: '/usuarios/formulario',
           type: 'link', icon: 'fa fa-map-marker'
         }]
       });
@@ -41,11 +41,11 @@
         type: 'toggle', icon:'tools-menu',
         pages: [{
           name: 'Listar Centros de trabajo',  permiso:'centro.listar',
-          state: 'munchies.cheetos',
+          state: '/centros',
           type: 'link', icon: 'fa fa-group'
         }, {
           name: 'Crear Centro de trabajo',  permiso:'centro.crear',
-          state: 'munchies.bananachips',
+          state: '/centros/formulario',
           type: 'link', icon: 'fa fa-map-marker'
         }]
       });
@@ -126,7 +126,7 @@
   app.run(['$templateCache', function ($templateCache) {
       $templateCache.put('partials/menu-link.tmpl.html',
         '<md-button ng-class="{\'{{section.icon}}\' : true}" ui-sref-active="active" \n' +
-        '  ui-sref="{{section.state}}" ng-click="focusSection()">\n' +
+        '  href="{{section.state}}" ng-click="focusSection()">\n' +
         '  {{section | humanizeDoc}}\n' +
         '  <span  class="md-visually-hidden "\n' +
         '    ng-if="isSelected()">\n' +

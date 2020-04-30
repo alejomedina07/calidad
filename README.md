@@ -1,23 +1,30 @@
-# module-name  
+# Sistema de notificaciones
 
-**Badges**
+## Descripción
 
-Optional badges such as npm version, test and build coverage, and so on.
+Esta Aplicación sirve realizar notificaciones cuando haya un motivo para citar a ciertos usuarios a un puesto de trabajo,
+se realizó con el fin de poder alertar al personal sobre una incidencia y que dicha alerta llegue al celular o a un dispositivo
+en el cual el usuario regularmente lleve con él, la idea es llevar un control sobre quienes asistieron a la llamada de alerta y en que tiempo,
+pudiendo con estos datos realizar reportes de las acciones que lleven a una notificación, las causas y el tiempo de las respuestas que cada persona
+tiene.
 
-**Summary**
+**Versiónes**
 
-One- or two-sentence description of what the module does.  
+⋅⋅*[Express js ^4.16.1](https://expressjs.com/es/)
+⋅⋅*[Node js v12.16.1](https://nodejs.org/en/)
+⋅⋅*[Angular js ^1.7.9](https://code.angularjs.org/1.7.9/docs/api)
 
-## Overview
+**Resumen**
 
-Optionally, include a section of one or two paragraphs with more high-level
-information on what the module does, what problems it solves, why one would
-use it and how.  Don't just repeat what's in the summary.
+La Aplicación permitira alertar correctamente y de manera eficiente al personal en caso de ser necesario.
 
-## Installation
+
+## Instalación de dependencias.
+
+Para instalar todos las librerías que se requieren para el correcto funcionamiento de la Aplicación, es necesario que despues de descargar el repositorio en Git, en un terminal o CMD se ejecute el siguiente comando dentro de la carpeta contenedora del proyecto:
 
 ```
-$ npm install module-name
+$ npm install
 ```
 
 ## Basic use
@@ -26,15 +33,13 @@ General description of how to use the module with basic example.
 
 ## API
 
-Full API documentation.  
+### Los web services disponibles son:
 
-## Examples
+1. Listar notificaciones
+  >  ``` URL ``` + /notificaciones
+  Traera en un Tipo de objeto JSON todas las notificaciones
 
-Additional examples here.
 
-## Tests
-
-What tests are included and how to run them.
 
 ## Contributing
 
