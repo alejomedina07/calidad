@@ -27,16 +27,12 @@ Para instalar todos las librerías que se requieren para el correcto funcionamie
 $ npm install
 ```
 
-## Basic use
-
-General description of how to use the module with basic example.  
-
 ## API
 
 ### Los web services disponibles son:
 
 1. Listar notificaciones
-  >  ``` URL ``` + /notificaciones
+  ``` URL ``` + /notificaciones
   Traera en un Tipo de objeto JSON todas las notificaciones
 
 
