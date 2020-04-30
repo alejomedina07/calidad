@@ -38,12 +38,12 @@ $ npm install
 
 ## API
 
-### Los web services disponibles son:
+## Los web services disponibles son:
 
 
-## Usuarios
+### Usuarios
 
----
+
 <dl>
   <dt>http://pcalidad.busscar.com.co:3000/usuarios</dt>
   <dd>Llevara a la vista que permite visualizar todos los usuarios creados.</dd>
@@ -53,9 +53,9 @@ $ npm install
 </dl>
 
 
-## Centros de trabajo
+### Centros de trabajo
 
----
+
 <dl>
   <dt>http://pcalidad.busscar.com.co:3000/centros</dt>
   <dd>Llevara a la vista que permite visualizar todos los centros de trabajo creados.</dd>
@@ -64,9 +64,9 @@ $ npm install
     <dd>Llevara a la vista que permite crear un nuevo centro de trabajo</dd>
 </dl>
 
-## Notificaciones
+### Notificaciones
 
----
+
 <dl>
   <dt>http://pcalidad.busscar.com.co:3000/notificaciones</dt>
   <dd>Llevara a la vista que permite visualizar todas las notificaciones creadas.</dd>
