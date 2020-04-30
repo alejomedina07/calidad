@@ -41,7 +41,7 @@ $ npm install
 ### Los web services disponibles son:
 
 
-**Usuarios
+## Usuarios
 
 ---
 <dl>
@@ -53,7 +53,7 @@ $ npm install
 </dl>
 
 
-**Centros de trabajo
+## Centros de trabajo
 
 ---
 <dl>
@@ -64,7 +64,7 @@ $ npm install
     <dd>Llevara a la vista que permite crear un nuevo centro de trabajo</dd>
 </dl>
 
-**Notificaciones
+## Notificaciones
 
 ---
 <dl>
