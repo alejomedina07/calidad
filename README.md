@@ -8,20 +8,25 @@ en el cual el usuario regularmente lleve con él, la idea es llevar un control s
 pudiendo con estos datos realizar reportes de las acciones que lleven a una notificación, las causas y el tiempo de las respuestas que cada persona
 tiene.
 
-**Versiónes**
-
-*[Express js ^4.16.1](https://expressjs.com/es/)
----
-*[Node js v12.16.1](https://nodejs.org/en/)
----
-*[Angular js ^1.7.9](https://code.angularjs.org/1.7.9/docs/api)
 ---
 
 
-**Resumen**
+*Versiónes*
+
+**[Express js ^4.16.1](https://expressjs.com/es/)
+---
+**[Node js v12.16.1](https://nodejs.org/en/)
+---
+**[Angular js ^1.7.9](https://code.angularjs.org/1.7.9/docs/api)
+---
+
+
+*Resumen*
 
 La Aplicación permitira alertar correctamente y de manera eficiente al personal en caso de ser necesario.
 
+
+---
 
 ## Instalación de dependencias.
 
@@ -71,9 +76,13 @@ $ npm install
 </dl>
 
 
-## Technologies
-Project is created with:
-* Lorem version: 12.3
+---
+
+## Tecnologías
+Este proyecto fue creado con:
+* [Pug v2.0.0-beta11](https://pugjs.org/api/getting-started.html)
+  Pug (anteriormente conocido como Jade) es un motor de plantilla de Node.js. con el que seremos capaces de escribir código HTML de una sintaxis mucho más sencilla, clara y directa, tanto a la hora de escribir como de leer y modificar.
+  [ver introducción](https://www.silocreativo.com/introduccion-primeros-pasos-pug/)
 * Ipsum version: 2.33
 * Ament library version: 999
 
