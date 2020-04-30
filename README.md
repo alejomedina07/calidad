@@ -32,11 +32,19 @@ $ npm install
 ### Los web services disponibles son:
 
 1. Listar notificaciones
+
+---
 ```
-  `URL` + /notificaciones
+  **URL** + /notificaciones
   Traera en un Tipo de objeto JSON todas las notificaciones
 ```
-2.
+<dl>
+  <dt>**URL** + /notificaciones</dt>
+  <dd>Traera en un Tipo de objeto JSON todas las notificaciones</dd>
+
+  <dt>Markdown in HTML</dt>
+  <dd>Does *not* work **very** well. Use HTML <em>tags</em>.</dd>
+</dl>
 
 
 ## Contributing
