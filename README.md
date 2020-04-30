@@ -31,20 +31,23 @@ $ npm install
 
 ### Los web services disponibles son:
 
-1. Listar notificaciones
+1. Notificaciones
 
 ---
-```
-  **URL** + /notificaciones
-  Traera en un Tipo de objeto JSON todas las notificaciones
-```
 <dl>
-  <dt>**URL** + /notificaciones</dt>
+  <dt>http://pcalidad.busscar.com.co:3000/notificaciones</dt>
   <dd>Traera en un Tipo de objeto JSON todas las notificaciones</dd>
 
   <dt>Markdown in HTML</dt>
   <dd>Does *not* work **very** well. Use HTML <em>tags</em>.</dd>
 </dl>
+
+
+## Technologies
+Project is created with:
+* Lorem version: 12.3
+* Ipsum version: 2.33
+* Ament library version: 999
 
 
 ## Contributing
