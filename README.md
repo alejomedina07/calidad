@@ -8,10 +8,22 @@ en el cual el usuario regularmente lleve con él, la idea es llevar un control s
 pudiendo con estos datos realizar reportes de las acciones que lleven a una notificación, las causas y el tiempo de las respuestas que cada persona
 tiene.
 
+
+---
+
+## Tecnologías
+Este proyecto fue creado con:
+* [Pug v2.0.0-beta11](https://pugjs.org/api/getting-started.html)  
+  Pug (anteriormente conocido como Jade) es un motor de plantilla de Node.js. con el que seremos capaces de escribir código HTML de una sintaxis mucho más sencilla, clara y directa, tanto a la hora de escribir como de leer y modificar. No es necesario Instalación si ya se instalo Node js  
+  [ver introducción](https://www.silocreativo.com/introduccion-primeros-pasos-pug/)
+* Login realizado con: [Json Web Token v^8.5.1"](https://www.jsonwebtoken.io/)  
+  JSON Web Token (JWT) es un estándar abierto (RFC-7519) basado en JSON para crear un token que sirva para enviar datos entre aplicaciones o servicios y garantizar que sean válidos y seguros.  
+  [ver introducción](https://platzi.com/blog/introduccion-json-web-tokens/)
+* [Mysql v^2.18.1](https://github.com/mysqljs/mysql)
 ---
 
 
-*Versiónes*
+## Versiónes
 
 [Express js ^4.16.1](https://expressjs.com/es/)
 ---
@@ -21,7 +33,7 @@ tiene.
 ---
 
 
-*Resumen*
+## Resumen
 
 La Aplicación permitira alertar correctamente y de manera eficiente al personal en caso de ser necesario.
 
@@ -74,16 +86,3 @@ $ npm install
   <dt>http://pcalidad.busscar.com.co:3000/notificaciones/formulario</dt>
     <dd>Llevara a la vista que permite crear una nueva notificación</dd>
 </dl>
-
-
----
-
-## Tecnologías
-Este proyecto fue creado con:
-* [Pug v2.0.0-beta11](https://pugjs.org/api/getting-started.html)  
-  Pug (anteriormente conocido como Jade) es un motor de plantilla de Node.js. con el que seremos capaces de escribir código HTML de una sintaxis mucho más sencilla, clara y directa, tanto a la hora de escribir como de leer y modificar. No es necesario Instalación si ya se instalo Node js  
-  [ver introducción](https://www.silocreativo.com/introduccion-primeros-pasos-pug/)
-* Login realizado con: [Json Web Token v^8.5.1"](https://www.jsonwebtoken.io/)  
-  JSON Web Token (JWT) es un estándar abierto (RFC-7519) basado en JSON para crear un token que sirva para enviar datos entre aplicaciones o servicios y garantizar que sean válidos y seguros.  
-  [ver introducción](https://platzi.com/blog/introduccion-json-web-tokens/)
-* [Mysql v^2.18.1](https://github.com/mysqljs/mysql)
