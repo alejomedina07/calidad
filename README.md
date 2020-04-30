@@ -10,9 +10,13 @@ tiene.
 
 **Versiónes**
 
-⋅⋅*[Express js ^4.16.1](https://expressjs.com/es/)
-⋅⋅*[Node js v12.16.1](https://nodejs.org/en/)
-⋅⋅*[Angular js ^1.7.9](https://code.angularjs.org/1.7.9/docs/api)
+*[Express js ^4.16.1](https://expressjs.com/es/)
+---
+*[Node js v12.16.1](https://nodejs.org/en/)
+---
+*[Angular js ^1.7.9](https://code.angularjs.org/1.7.9/docs/api)
+---
+
 
 **Resumen**
 
@@ -31,15 +35,39 @@ $ npm install
 
 ### Los web services disponibles son:
 
-1. Notificaciones
+
+1. Usuarios
+
+---
+<dl>
+  <dt>http://pcalidad.busscar.com.co:3000/usuarios</dt>
+  <dd>Llevara a la vista que permite visualizar todos los usuarios creados.</dd>
+
+  <dt>http://pcalidad.busscar.com.co:3000/usuarios/formulario</dt>
+    <dd>Llevara a la vista que permite crear un nuevo usuario</dd>
+</dl>
+
+
+2. Centros de trabajo
+
+---
+<dl>
+  <dt>http://pcalidad.busscar.com.co:3000/centros</dt>
+  <dd>Llevara a la vista que permite visualizar todos los centros de trabajo creados.</dd>
+
+  <dt>http://pcalidad.busscar.com.co:3000/centros/formulario</dt>
+    <dd>Llevara a la vista que permite crear un nuevo centro de trabajo</dd>
+</dl>
+
+3. Notificaciones
 
 ---
 <dl>
   <dt>http://pcalidad.busscar.com.co:3000/notificaciones</dt>
-  <dd>Traera en un Tipo de objeto JSON todas las notificaciones</dd>
+  <dd>Llevara a la vista que permite visualizar todas las notificaciones creadas.</dd>
 
-  <dt>Markdown in HTML</dt>
-  <dd>Does *not* work **very** well. Use HTML <em>tags</em>.</dd>
+  <dt>http://pcalidad.busscar.com.co:3000/notificaciones/formulario</dt>
+    <dd>Llevara a la vista que permite crear una nueva notificación</dd>
 </dl>
 
 
