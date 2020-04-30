@@ -32,9 +32,11 @@ $ npm install
 ### Los web services disponibles son:
 
 1. Listar notificaciones
-  ``` URL ``` + /notificaciones
+```
+  `URL` + /notificaciones
   Traera en un Tipo de objeto JSON todas las notificaciones
-
+```
+2.
 
 
 ## Contributing
