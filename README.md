@@ -81,41 +81,9 @@ $ npm install
 ## Tecnologías
 Este proyecto fue creado con:
 * [Pug v2.0.0-beta11](https://pugjs.org/api/getting-started.html)  
-  Pug (anteriormente conocido como Jade) es un motor de plantilla de Node.js. con el que seremos capaces de escribir código HTML de una sintaxis mucho más sencilla, clara y directa, tanto a la hora de escribir como de leer y modificar.
+  Pug (anteriormente conocido como Jade) es un motor de plantilla de Node.js. con el que seremos capaces de escribir código HTML de una sintaxis mucho más sencilla, clara y directa, tanto a la hora de escribir como de leer y modificar. No es necesario Instalación si ya se instalo Node js  
   [ver introducción](https://www.silocreativo.com/introduccion-primeros-pasos-pug/)
-* Ipsum version: 2.33
-* Ament library version: 999
-
-
-## Contributing
-
-This project welcomes contributions from the community. Contributions are
-accepted using GitHub pull requests; for more information, see
-[GitHub documentation - Creating a pull request](https://help.github.com/articles/creating-a-pull-request/).
-
-For a good pull request, we ask you provide the following:
-
-1. Include a clear description of your pull request in the description
-   with the basic "what" and "why"s for the request.
-2. The tests should pass as best as you can. GitHub will automatically run
-   the tests as well, to act as a safety net.
-3. The pull request should include tests for the change. A new feature should
-   have tests for the new feature and bug fixes should include a test that fails
-   without the corresponding code change and passes after they are applied.
-   The command `npm run test-cov` will generate a `coverage/` folder that
-   contains HTML pages of the code coverage, to better understand if everything
-   you're adding is being tested.
-4. If the pull request is a new feature, please include appropriate documentation
-   in the `README.md` file as well.
-5. To help ensure that your code is similar in style to the existing code,
-   run the command `npm run lint` and fix any displayed issues.
-
-## Contributors
-
-Names of module "owners" (lead developers) and other developers who
-have contributed.
-
-## License
-
-Link to the license, with a short description of what it is,
-e.g. "MIT" or whatever.  
+* Login realizado con: [Json Web Token v^8.5.1"](https://www.jsonwebtoken.io/)  
+  JSON Web Token (JWT) es un estándar abierto (RFC-7519) basado en JSON para crear un token que sirva para enviar datos entre aplicaciones o servicios y garantizar que sean válidos y seguros.  
+  [ver introducción](https://platzi.com/blog/introduccion-json-web-tokens/)
+* [Mysql v^2.18.1](https://github.com/mysqljs/mysql)
