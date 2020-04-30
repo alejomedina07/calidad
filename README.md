@@ -80,7 +80,7 @@ $ npm install
 
 ## Tecnologías
 Este proyecto fue creado con:
-* [Pug v2.0.0-beta11](https://pugjs.org/api/getting-started.html)
+* [Pug v2.0.0-beta11](https://pugjs.org/api/getting-started.html)  
   Pug (anteriormente conocido como Jade) es un motor de plantilla de Node.js. con el que seremos capaces de escribir código HTML de una sintaxis mucho más sencilla, clara y directa, tanto a la hora de escribir como de leer y modificar.
   [ver introducción](https://www.silocreativo.com/introduccion-primeros-pasos-pug/)
 * Ipsum version: 2.33
