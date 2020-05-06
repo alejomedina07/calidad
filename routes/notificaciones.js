@@ -147,7 +147,7 @@ router.post('/',  mdAutenticacion.verificatoken(notificacion.PERMISO.CREAR), (re
       debug(item);
       var msg = {
           m: `Se solicita en ${req.body.nombreCentro}`,
-          t: "Notificacion", s: req.body.sonido, v: '3', i: req.body.icono, pr: '2', re: '60',
+          t: "Notificación", s: req.body.sonido, v: '3', i: req.body.icono, pr: '2', re: '60',
           d: item.idAplicacionMovil.toString()
       };
       if (req.body.icono == 5) msg.c = '#FF0000';
