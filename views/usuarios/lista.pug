@@ -12,7 +12,9 @@ block content
 
       md-button.md-raised.md-primary(href="/usuarios/formulario" style="margin-left:20px;") + Crear
       span(flex)
-    md-content      
+    md-content  
+      div(ng-if="$lCtrl.loading" layout='row', layout-sm='column', layout-align='center center')
+        md-progress-linear(flex md-mode='indeterminate')    
       table.responsive-table
         thead
           tr

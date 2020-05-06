@@ -72,6 +72,7 @@
     $fCtrl.guardar = function() {
       $fCtrl.errores = validate($fCtrl.form, _validar);
       if (!$fCtrl.errores) {
+        $fCtrl.loading = true;
         let opSeleccionada = $fCtrl.ops.filter( x => { return x.id == $fCtrl.form.idOp  } )
         $fCtrl.form.nombreOp = opSeleccionada[0].prefijo + opSeleccionada[0].op;
         $fCtrl.form.nombreLinea = $fCtrl.obtenerLinea($fCtrl.form.linea);
@@ -80,10 +81,12 @@
         .then(result => {
           ToastFactoria.verde({contenido: 'Usuario creado exitosamente'});
           window.location.href = "/notificaciones/";
+          $fCtrl.loading = false;
         })
         .catch(error => {
           console.log(error);
           ToastFactoria.rojo({contenido: 'No se pudo realizar la acción intentelo de nuevo.'})
+          $fCtrl.loading = false;
         });
       }else ToastFactoria.rojo({contenido: 'Revise los campos.'});
 

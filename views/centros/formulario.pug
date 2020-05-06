@@ -9,6 +9,8 @@ block content
     div(layout="row" layout-align="center center" flex ng-init="$fCtrl.id = " + id + ';$fCtrl.init();')
       b.titulo Crear Centro de Trabajo
     //- md-divider
+    div(ng-if="$fCtrl.loading" layout='row', layout-sm='column', layout-align='center center')
+      md-progress-linear(flex md-mode='indeterminate')
     .md-whiteframe-2dp(layout="column" layout-align="center center" flex layout-margin layout-padding)
       md-content(style="width:100%" layout-margin layout-padding)
         //- div(layout="row" layout-align="center center" layout-sm="column" layout-xs="column")

@@ -9,7 +9,7 @@
     $lCtrl.filtros = {};
 
     $lCtrl.listarCentros = function () {
-
+      $lCtrl.loading = true;
       $http.get('/centros/listar')
       .then(function(result){
         console.log('result');
@@ -17,8 +17,10 @@
         $lCtrl.centros = result.data;
         $lCtrl.centrosFiltrados = $lCtrl.centros;
         $lCtrl.paginar();
+        $lCtrl.loading = false;
       })
       .catch(function(e){
+        $lCtrl.loading = false;
         console.log(e);
       });
     };

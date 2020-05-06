@@ -78,7 +78,7 @@
 
     $lCtrl.listarNotificaciones = function () {
       if (moment($lCtrl.fechaFin).diff($lCtrl.fechaInicio, "month", true) <= 3) {
-
+        $lCtrl.loading = true;
         let url = `/notificaciones/listar?fechaInicio=${moment($lCtrl.fechaInicio).format('YYYY-MM-DD')}
           &fechaFin=${moment($lCtrl.fechaFin).format('YYYY-MM-DD')}`
         $http.get(url)
@@ -86,9 +86,11 @@
           $lCtrl.notificaciones = result.data;
           $lCtrl.notificacionesFiltrados = $lCtrl.notificaciones;
           $lCtrl.paginar();
+          $lCtrl.loading = false;
         })
         .catch(function(e){
           console.log(e);
+          $lCtrl.loading = false;
         });
       }else ToastFactoria.rojo({contenido: 'El rango entre las fechas no deben ser mayor a 3 meses.'});
     };

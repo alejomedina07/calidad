@@ -62,6 +62,7 @@
     }
 
     $fCtrl.guardar = function() {
+      $fCtrl.loading = true;
       $fCtrl.errores = validate($fCtrl.form, _validar);
       if (!$fCtrl.errores) {
         $fCtrl.form.idRolAuditor = $fCtrl.auditores[0].idRol;
@@ -74,7 +75,8 @@
         })
         .catch(error => {
           console.log(error);
-          ToastFactoria.rojo({contenido: 'No se pudo realizar la acción intentelo de nuevo.'})
+          ToastFactoria.rojo({contenido: 'No se pudo realizar la acción intentelo de nuevo.'});
+          $fCtrl.loading = false;
         });
       }else ToastFactoria.rojo({contenido: 'Revise los campos.'});
 

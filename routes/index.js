@@ -44,38 +44,52 @@ app.post('/login',  ( req, res ) => {
       res.status(400).json( { error:false, mensaje: 'Credenciales incorrectas'});
     }else {
 
-      var ActiveDirectory = require('activedirectory');
-      var config = {
-          url: 'ldap://172.16.0.26',
-          baseDN: 'dc=busscarad,dc=local'
-      };
-      var ad = new ActiveDirectory(config);
-      debug(4578979);
-      debug(4578979);
-      // Authenticate
-      // ad.authenticate(`amedinar@busscarad.local`, '+busscar2022', function(err, auth) {
-      ad.authenticate(`${req.body.usuarioRed}@busscarad.local`, req.body.contrasena, function(err, auth) {
-          debug('auth');
-          debug(auth);
-          debug('err');
-          debug(err);
-          if (err) res.status(400).json( { error:true, mensaje: 'Credenciales incorrectas'});
-          else {
-            if (auth) {
-              usuario = usuario[0];
-              token = jwt.sign( { usuario: usuario }, SEED, { expiresIn:14400 } ) // 4horas
-              req.session.loggedin = token;
-              req.session.usuario = usuario;
+      // login sin autenticar en directorio activo
+      usuario = usuario[0];
+      token = jwt.sign( { usuario: usuario }, SEED, { expiresIn:14400 } ) // 4horas
+      req.session.loggedin = token;
+      req.session.usuario = usuario;
 
-              let md5 = require('md5');
-              req.body.contrasena = md5(req.body.contrasena);
-              if (usuario.contrasena != req.body.contrasena) guardarContrasena(req.body.usuarioRed, req.body.contrasena);
-              delete usuario.contrasena;
-              return res.status(200).json( { error:false, usuario, token });
-            }
-            else res.status(400).json( { error:true, mensaje: 'Credenciales incorrectas'});
-          }
-      });
+      let md5 = require('md5');
+      req.body.contrasena = md5(req.body.contrasena);
+      delete usuario.contrasena;
+      return res.status(200).json( { error:false, usuario, token });
+
+      //Fin  login sin autenticar en directorio activo
+
+      // login autenticando en directorio activo
+      // 
+      // var ActiveDirectory = require('activedirectory');
+      // var config = {
+      //     url: 'ldap://172.16.0.26',
+      //     baseDN: 'dc=busscarad,dc=local'
+      // };
+      // var ad = new ActiveDirectory(config);
+      //
+      // // Authenticate
+      // // ad.authenticate(`amedinar@busscarad.local`, '+busscar2022', function(err, auth) {
+      // ad.authenticate(`${req.body.usuarioRed}@busscarad.local`, req.body.contrasena, function(err, auth) {
+      //     debug('auth');
+      //     debug(auth);
+      //     debug('err');
+      //     debug(err);
+      //     if (err) res.status(400).json( { error:true, mensaje: 'Credenciales incorrectas'});
+      //     else {
+      //       if (auth) {
+      //         usuario = usuario[0];
+      //         token = jwt.sign( { usuario: usuario }, SEED, { expiresIn:14400 } ) // 4horas
+      //         req.session.loggedin = token;
+      //         req.session.usuario = usuario;
+      //
+      //         let md5 = require('md5');
+      //         req.body.contrasena = md5(req.body.contrasena);
+      //         if (usuario.contrasena != req.body.contrasena) guardarContrasena(req.body.usuarioRed, req.body.contrasena);
+      //         delete usuario.contrasena;
+      //         return res.status(200).json( { error:false, usuario, token });
+      //       }
+      //       else res.status(400).json( { error:true, mensaje: 'Credenciales incorrectas'});
+      //     }
+      // });
 
     }
   })

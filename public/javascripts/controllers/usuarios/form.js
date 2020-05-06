@@ -41,6 +41,7 @@
     $fCtrl.guardar = function() {
       $fCtrl.errores = validate($fCtrl.form, _validar);
       if (!$fCtrl.errores) {
+        $fCtrl.loading = true;
         // if (!$fCtrl.id) { $fCtrl.form.contrasena = md5.createHash($fCtrl.form.contrasena); };
         // delete $fCtrl.form.contrasena2;
         let url = $fCtrl.form.id ? '/usuarios/editar' : '/usuarios/';
@@ -52,6 +53,7 @@
         .catch(error => {
           console.log(error);
           ToastFactoria.rojo({contenido: 'No se pudo realizar la acción intentelo de nuevo.'})
+          $fCtrl.loading = true;
         });
       }else ToastFactoria.rojo({contenido: 'Revise los campos.'});
 

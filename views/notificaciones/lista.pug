@@ -11,6 +11,8 @@ block content
         md-icon(md-svg-src='/static/content/icons/search.svg')
         input(ng-model='$lCtrl.search' type='text' placeholder='Buscar...' aria-label='Buscar...' ng-change="$lCtrl.filtrar()")
       span(flex)
+    div(ng-if="$lCtrl.loading" layout='row', layout-sm='column', layout-align='center center')
+      md-progress-linear(flex md-mode='indeterminate')
     div(layout="row" layout-sm="column" layout-xs="column" layout-align="center center" flex style="margin:0")
       //- md-button.md-fab(aria-label='Excel' style="background-color: #fff;" ng-click="$lCtrl.excel()")
         md-icon(md-svg-src='/static/content/icons/excel.svg')

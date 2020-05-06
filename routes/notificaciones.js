@@ -8,6 +8,7 @@ let express = require('express'),
  router = express.Router();
 
 router.get('/', mdAutenticacion.verificatoken(notificacion.PERMISO.LISTAR), (req, res, next) => {
+  debug('---------------****************---------------');
   res.render("notificaciones/lista", { title: 'Notificaciones', usuario:req.session.usuario });
 });
 
@@ -112,7 +113,11 @@ router.get('/formulario/:id', mdAutenticacion.verificatoken(notificacion.PERMISO
 router.post('/',  mdAutenticacion.verificatoken(notificacion.PERMISO.CREAR), (req, res, next) => {
   let connection = mysql.createConnection(config.connection),
     arrayPromesasNOtificacion = [],
-    query = `SELECT * FROM usuario_centro_trabajo WHERE idCentro = '${req.body.idCentro}' AND estado = 'Activo' AND idRol = 5`;
+
+    query = `SELECT uct.idUsuario, u.idAplicacionMovil
+      FROM usuario_centro_trabajo uct
+      INNER JOIN usuario u ON uct.idUsuario = u.id
+      WHERE uct.idCentro = '${req.body.idCentro}' AND uct.estado = 'Activo' AND uct.idRol = 5`;
   connection.connect();
   let promesa = config.consultar(connection, query);
   arrayPromesasNOtificacion.push(promesa)
@@ -128,23 +133,32 @@ router.post('/',  mdAutenticacion.verificatoken(notificacion.PERMISO.CREAR), (re
   Promise.all(arrayPromesasNOtificacion)
   .then(value => {
 
-    debug('value usuario_centro_trabajo arrayPromesasNOtificacion 55555555555555555');
-    debug(value);
+    // debug('value usuario_centro_trabajo arrayPromesasNOtificacion 55555555555555555');
+    // debug(value);
+
     let arrayPromesas = [];
-    var msg = {
-        m: `Se solicita en la ${req.body.nombreLinea}, ${req.body.nombreOp} en el centro de trabajo ${req.body.nombreCentro}`,
-        t: "Notificacion", s: req.body.sonido, v: '3', i: req.body.icono, pr: '2', re: '60',
-        d: '22909'
-    };
-    if (req.body.icono == 5) msg.c = '#FF0000';
-    // arrayPromesas.push(pushsafer.send(msg));
 
 
     let connection = mysql.createConnection(config.connection),
       data = '';
     value[0].forEach((item, i) => {
-      data = ` ${data} ( ${item.idUsuario}, ${value[1].insertId},'Pendiente' ),`
+      data = ` ${data} ( ${item.idUsuario}, ${value[1].insertId},'Pendiente' ),`;
+      debug('item safasfasdfasdfasd');
+      debug(item);
+      var msg = {
+          m: `Se solicita en ${req.body.nombreCentro}`,
+          t: "Notificacion", s: req.body.sonido, v: '3', i: req.body.icono, pr: '2', re: '60',
+          d: item.idAplicacionMovil.toString()
+      };
+      if (req.body.icono == 5) msg.c = '#FF0000';
+      debug('msg 123154661*********** ')
+      debug(msg)
+      arrayPromesas.push(pushsafer.send(msg));
     });
+    // if (req.body.icono == 5) msg.c = '#FF0000';
+    // debug('msg 123154661*********** ')
+    // debug(msg)
+    // arrayPromesas.push(pushsafer.send(msg));
     data = data.slice(0, data.length - 1);
     let query = `INSERT INTO asistencia
      (idUsuario,idNotificacion,estado)
@@ -152,10 +166,14 @@ router.post('/',  mdAutenticacion.verificatoken(notificacion.PERMISO.CREAR), (re
     connection.connect();
     let promesa = config.consultar(connection, query);
     arrayPromesas.push(promesa);
+    debug('arrayPromesas');
+    debug(arrayPromesas);
+    // return Promise.all([pushsafer.send(msg1), pushsafer.send(msg)])
     return Promise.all(arrayPromesas)
   })
   .then(value => {
-
+    debug('+++++++++++++++++++++++++++++++++++++++');
+    debug(value);
     res.json({data: value});
   })
   .catch(err => {

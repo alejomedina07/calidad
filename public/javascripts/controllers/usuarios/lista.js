@@ -10,6 +10,7 @@
 
     $lCtrl.listarUsuarios = function () {
 
+      $lCtrl.loading = true;
       $http.get('/usuarios/listar')
       .then(function(result){
         console.log('result');
@@ -30,9 +31,11 @@
         // }
         $lCtrl.usuariosFiltrados = $lCtrl.usuarios;
         $lCtrl.paginar();
+        $lCtrl.loading = false;
       })
       .catch(function(e){
         console.log(e);
+        $lCtrl.loading = false;
       });
     };
 

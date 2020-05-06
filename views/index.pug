@@ -13,6 +13,8 @@ block content
           span(flex)
           img.logo(src="/static/images/logo-busscar.png")
           span(flex)
+        div(ng-if="$lCtrl.loading" layout='row', layout-sm='column', layout-align='center center')
+          md-progress-linear(flex md-mode='indeterminate')
         .container
           .right
             svg(viewBox='0 0 320 300')
@@ -27,8 +29,7 @@ block content
               label(for='password') Contraseña
               input#password(type='password' ng-model='$lCtrl.form.contrasena')
               input#submit(type='submit', value='Ingresar' ng-click="$lCtrl.login()")
-          div(ng-if="$lCtrl.loading" layout='row', layout-sm='column', layout-align='center center')
-            md-progress-linear(flex md-mode='indeterminate')
+        
             //- .spinner.icon-spinner-5(aria-hidden='true')
       span(flex hide-xs)
       //- .md-whiteframe-2dp(flex flex-xs="90" layout-margin layout-padding)

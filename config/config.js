@@ -2,7 +2,7 @@ var push = require( 'pushsafer-notifications' );
 
 
 var p = new push( {
-    k: 'Your20CharPrivateKey',             // your 20 chars long private key
+    k: 'bTfKBVlOsrWJUePSeVta',             // your 20 chars long private key
     debug: true
 });
 
