@@ -79,7 +79,7 @@
         let url = $fCtrl.form.id ? '/notificaciones/editar' : '/notificaciones/';
         $http.post(url, $fCtrl.form)
         .then(result => {
-          ToastFactoria.verde({contenido: 'Usuario creado exitosamente'});
+          ToastFactoria.verde({contenido: 'Notificación creada exitosamente'});
           window.location.href = "/notificaciones/";
           $fCtrl.loading = false;
         })
@@ -104,8 +104,6 @@
         case "LB":
           return "Linea BusStar";
             break;
-
-
       }
     };
 

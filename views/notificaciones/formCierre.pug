@@ -3,7 +3,7 @@ md-dialog(aria-label='Eliminar'  flex="70" flex-xs="90" flex-sm="90")
     md-toolbar.md-primary
       .md-toolbar-tools
         span(flex='')
-        b Detalle Registro
+        b Detalle del Registro {{ $lCtrl.detalleNotificacion.id }}
         span(flex='')
         md-button.md-icon-button(ng-click='$lCtrl.cerrar()' style="font-size:22pt;") X
     md-dialog-content
@@ -28,14 +28,13 @@ md-dialog(aria-label='Eliminar'  flex="70" flex-xs="90" flex-sm="90")
                 th(scope='row') {{ item.nombre }}
                 td(data-title='Estado :' ng-style="{'color': item.estado == 'Pendiente' ? 'red'  : '#4369e2'}") {{ item.estado }}
                 td(data-title='Fecha de Asistencia :') 
-                  md-button.md-primary.md-raised(ng-if="!item.fechaAsistencia" style="margin: -2px;" ng-click="$lCtrl.marcarAsistencia(item.id)") 
+                  md-button.md-primary.md-raised(ng-if="!item.fechaAsistencia" style="margin:-2px;" ng-disabled="$lCtrl.detalleNotificacion.fechaCierre" ng-click="$lCtrl.marcarAsistencia(item.id)") 
                     md-icon(md-svg-src='/static/content/icons/tick.svg')
                     | &nbsp; Marcar asistencia
                   span(ng-if="item.fechaAsistencia" style="color:#4369e2;")
                     md-icon(md-svg-src='/static/content/icons/tick.svg')
                     | &nbsp; {{ item.fechaAsistencia | date : 'short' }}
-        
-        
+
         div(ng-if="$lCtrl.detalleNotificacion.fechaCierre")
           h4 
             b Causa: &nbsp; 
@@ -53,5 +52,4 @@ md-dialog(aria-label='Eliminar'  flex="70" flex-xs="90" flex-sm="90")
     md-dialog-actions(layout='row' layout-align="end end")
       md-button.md-raised(ng-click="$lCtrl.cerrar()") Cancelar
       md-button.md-raised.md-primary(ng-click="$lCtrl.cerrarNotificacion()" ng-disabled="$lCtrl.detalleNotificacion.fechaCierre") Cerrar Notificación
-      
       

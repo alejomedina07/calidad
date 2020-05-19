@@ -51,9 +51,15 @@ router.post('/',  mdAutenticacion.verificatoken(usuario.PERMISO.CREAR), (req, re
   let promesa = config.consultar(connection, query, data);
   promesa
   .then(value => {
-    let connection2 = mysql.createConnection(config.connection),
-      query = "INSERT INTO usuario_rol ( idUsuario, idRol) VALUES (?,?)",
-      data = [ value.insertId, req.body.idRol];
+    let data = '';
+    req.body.idRol.forEach((item, i) => {
+      data = ` ${data} ( '${value.insertId}','${item}'),`
+    });
+    data = data.slice(0, data.length - 1);
+
+    let connection2 = mysql.createConnection(config.connection);
+    let query = `INSERT INTO usuario_rol ( idUsuario, idRol)
+     values ${data}`;
     let promesa = config.consultar(connection2, query, data);
     return promesa
   })
@@ -66,6 +72,7 @@ router.post('/',  mdAutenticacion.verificatoken(usuario.PERMISO.CREAR), (req, re
 });
 
 router.post('/editar',  mdAutenticacion.verificatoken(usuario.PERMISO.EDITAR), (req, res, next) => {
+  debug('**************-*************-************');
   let connection = mysql.createConnection(config.connection),
     query = `UPDATE usuario
      SET nombre = '${req.body.nombre}', estado = '${req.body.estado}', usuarioRed = '${req.body.usuarioRed}', correo = '${req.body.correo}', idAplicacionMovil = '${req.body.idAplicacionMovil}'
@@ -73,10 +80,26 @@ router.post('/editar',  mdAutenticacion.verificatoken(usuario.PERMISO.EDITAR), (
   connection.connect();
   let promesaUsuario = config.consultar(connection, query);
   let connection2 = mysql.createConnection(config.connection),
-    query2 = `UPDATE usuario_rol SET idRol = '${req.body.idRol}' WHERE idUsuario = '${req.body.id}'`;
+    query2 = `DELETE FROM usuario_rol  WHERE idUsuario = '${req.body.id}'`;
+    // query2 = `UPDATE usuario_rol SET idRol = '${req.body.idRol}' WHERE idUsuario = '${req.body.id}'`;
   let promesaUsuarioRol = config.consultar(connection2, query2);
   Promise.all([promesaUsuario, promesaUsuarioRol])
   .then(value => {
+    debug(11111111111111111111111);
+    let data = '';
+    req.body.idRol.forEach((item, i) => {
+      data = ` ${data} ( '${req.body.id}','${item}'),`
+    });
+    data = data.slice(0, data.length - 1);
+    let connection3 = mysql.createConnection(config.connection);
+    let query = `INSERT INTO usuario_rol ( idUsuario, idRol)
+     values ${data}`;
+    let promesa = config.consultar(connection3, query, data);
+    return promesa
+    // res.json({data: value});
+  })
+  .then(value => {
+    debug(222222222222222222222222);
     res.json({data: value});
   })
   .catch(err => {
@@ -92,6 +115,14 @@ router.get('/obtener/:id',  mdAutenticacion.verificatoken(usuario.PERMISO.EDITAR
   connection.connect();
   let promesa = config.consultar(connection, query);
   promesa.then(value => {
+    debug('value obtener');
+    debug(value);
+    let roles = [];
+    value.forEach((item, i) => {
+      roles.push(item.idRol);
+    });
+    debug(roles);
+    value[0].idRol = roles;
     if (value && value.length) res.json(value);
   })
   .catch(err => {

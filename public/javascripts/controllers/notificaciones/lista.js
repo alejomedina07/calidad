@@ -27,6 +27,7 @@
     {
       var k = '<tbody>'
       array.forEach((item, i) => {
+        item.estado = item.fechaCierre ? 'Cerrada' : 'Abierta';
         let fechaCierre = item.fechaCierre ? moment(item.fechaCierre).format('LLL') : '';
         k+= '<tr>';
         k+= '<td>' + item.usuario + '</td>';
@@ -35,6 +36,7 @@
         k+= '<td>' + item.descripcion + '</td>';
         k+= '<td>' + item.causa + '</td>';
         k+= '<td>' + item.centro + '</td>';
+        k+= '<td>' + item.estado + '</td>';
         k+= '</tr>';
       });
 

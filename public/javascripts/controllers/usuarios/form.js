@@ -20,6 +20,11 @@
       .then(result => {
         if (!result.data || !result.data.length) window.location.href = "/usuarios/";
         $fCtrl.form = result.data[0];
+        // $fCtrl.form.idRol = [];
+        // result.data.forEach((item, i) => {
+        //   $fCtrl.form.idRol.push(item.idRol);
+        // });
+
         $fCtrl.form.id = $fCtrl.id;
         $fCtrl.form.idAplicacionMovil = String($fCtrl.form.idAplicacionMovil);
       })
@@ -53,7 +58,7 @@
         .catch(error => {
           console.log(error);
           ToastFactoria.rojo({contenido: 'No se pudo realizar la acción intentelo de nuevo.'})
-          $fCtrl.loading = true;
+          $fCtrl.loading = false;
         });
       }else ToastFactoria.rojo({contenido: 'Revise los campos.'});
 
@@ -93,9 +98,9 @@
           message: "^El id Solo debe contener números"
         }
       },
-      // rol: {
-      //   presence: {message: "^El campo 'Rol' es requerido"},
-      // },
+      idRol: {
+        presence: {message: "^El campo 'Rol' es requerido", allowEmpty: false},
+      },
     };
 
     // $fCtrl.init();

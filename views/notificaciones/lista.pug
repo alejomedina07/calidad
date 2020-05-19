@@ -68,13 +68,15 @@ block content
                 span Centro
                 span(flex)
                 md-icon(md-svg-src="/static/content/icons/sort{{ $lCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$lCtrl.propertyName === 'centro'")
+            th(scope='col' ) Estado
+            th(scope='col' ) Id
             th(scope='col' ) Acciones
         tfoot
           tr
             td.text-right(colspan='7')
               div(layout="row" layout-xs="column" layout-align="end center")
                 span Mostrando &nbsp; 
-                md-select(placeholder='' ng-model='$lCtrl.registrosXpagina' ng-change="$lCtrl.paginar()")
+                md-select(placeholder='' ng-model='$lCtrl.registrosXpagina' ng-change="$lCtrl.pagina = 0;$lCtrl.paginar();")
                   md-option(ng-value='opcion' ng-repeat='opcion in [10, 20, 50]') {{opcion}}
                 span &nbsp; Registros Por Página
                 div
@@ -87,10 +89,12 @@ block content
           tr(ng-repeat="item in $lCtrl.notificacionesFiltrados | limitTo : $lCtrl.registrosXpagina : ($lCtrl.registrosXpagina*$lCtrl.pagina) | orderBy:$lCtrl.propertyName:$lCtrl.reverse | filter:$lCtrl.search")
             th(scope='row') {{ item.usuario }}
             td(data-title='Fecha de Creación :') {{ item.fechaCreacion | date : 'short'}}
-            td(data-title='Fecha de Cierre :') {{ item.fechaCierre | date : 'short'}}
+            td(data-title='Fecha de Cierre :') {{ item.fechaCierre | date : 'short'}} &nbsp;
             td(data-title='Descripción :') {{ item.descripcion }} &nbsp;
             td(data-title='Causa :') {{ item.causa }} &nbsp;
             td(data-title='Centro :') {{ item.centro }}
+            td(data-title='Estado :' ng-init="item.estado = item.fechaCierre ? 'Cerrada' : 'Abierta'") {{ item.fechaCierre ? 'Cerrado' : 'Abierto' }}
+            td(data-title='Id :') {{ item.id }}
             td(data-title='Acciones :') 
               md-button.md-icon-button(aria-label='boton' ng-click="$lCtrl.detalle($event, item)") 
                 md-icon(md-svg-src='/static/content/icons/eye.svg' style="color:#4369e2;")
@@ -111,4 +115,5 @@ block content
             th Descripción
             th Causa
             th Centro
+            th Estado
         tbody(id="tbody")

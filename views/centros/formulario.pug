@@ -35,7 +35,7 @@ block content
             //-     | {{opcion.codigo}} - {{opcion.descripcion}}
             md-select(ng-model='$fCtrl.form.idCentro' md-on-close="$fCtrl.busqueda = ''" md-on-open='$fCtrl.focoParaBuscar()' ng-disabled="!$fCtrl.form.linea || $fCtrl.id")
               md-select-header
-                input.campo-busqueda(ng-model='$fCtrl.busqueda' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar OP...')
+                input.campo-busqueda(ng-model='$fCtrl.busqueda' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar Centro...')
               md-option(ng-value='opcion.id' ng-repeat="opcion in $fCtrl.listaOps | filter:$fCtrl.busqueda") {{opcion.codigo}} - {{opcion.descripcion}}
             i(class='error' ng-show="$fCtrl.errores.idCentro" ng-repeat="opcion in  $fCtrl.errores.idCentro")
               | {{ opcion }}          
@@ -46,7 +46,7 @@ block content
             //-     | {{opcion.nombre}}
             md-select(ng-model='$fCtrl.form.auditores' md-on-close="$fCtrl.busquedaAuditor = ''" md-on-open='$fCtrl.focoParaBuscar()' ng-disabled="!$fCtrl.form.linea" multiple)
               md-select-header
-                input.campo-busqueda(ng-model='$fCtrl.busquedaAuditor' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar OP...')
+                input.campo-busqueda(ng-model='$fCtrl.busquedaAuditor' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar Auditores...')
               md-option(ng-value='opcion.id' ng-repeat="opcion in $fCtrl.auditores | filter:$fCtrl.busquedaAuditor") {{opcion.nombre}}
             
             
@@ -61,7 +61,7 @@ block content
             //-     | {{opcion.nombre}}
             md-select(ng-model='$fCtrl.form.usuarios' md-on-close="$fCtrl.busquedaUsuario = ''" md-on-open='$fCtrl.focoParaBuscar()' ng-disabled="!$fCtrl.form.linea" multiple)
               md-select-header
-                input.campo-busqueda(ng-model='$fCtrl.busquedaUsuario' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar OP...')
+                input.campo-busqueda(ng-model='$fCtrl.busquedaUsuario' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar Usuarios...')
               md-option(ng-value='opcion.id' ng-repeat="opcion in $fCtrl.usuarios | filter:$fCtrl.busquedaUsuario") {{opcion.nombre}}
             
             

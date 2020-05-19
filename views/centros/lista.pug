@@ -50,7 +50,7 @@ block content
             td.text-right(colspan='7')
               div(layout="row" layout-xs="column" layout-align="end center")
                 span Mostrando &nbsp; 
-                md-select(placeholder='' ng-model='$lCtrl.registrosXpagina' ng-change="$lCtrl.paginar()")
+                md-select(placeholder='' ng-model='$lCtrl.registrosXpagina' ng-change="$lCtrl.pagina = 0;$lCtrl.paginar()")
                   md-option(ng-value='opcion' ng-repeat='opcion in [10, 20, 50]') {{opcion}}
                 span &nbsp; Registros Por Página
                 div

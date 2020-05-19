@@ -58,10 +58,10 @@ block content
                 | {{ opcion }}
             md-input-container.md-block(flex style=" margin-top: -15px;")
               label Rol
-              md-select(ng-model='$fCtrl.form.idRol')
-                md-option(ng-repeat='opcion in $fCtrl.roles', ng-value='opcion.id')
+              md-select(ng-model='$fCtrl.form.idRol' multiple)
+                md-option(ng-repeat='opcion in $fCtrl.roles' ng-value='opcion.id')
                   | {{ opcion.nombre }}
-              i(class='error' ng-show="$fCtrl.errores.rol" ng-repeat="opcion in  $fCtrl.errores.rol")
+              i(class='error' ng-show="$fCtrl.errores.idRol" ng-repeat="opcion in  $fCtrl.errores.idRol")
                 | {{ opcion }}
       .md-whiteframe-2dp(layout="column" layout-align="center center" flex-xs layout-margin layout-padding)
         b(style="margin-bottom:-2px;") Escanear Código QR

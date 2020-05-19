@@ -27,7 +27,8 @@ router.get('/listar',  mdAutenticacion.verificatoken(notificacion.PERMISO.LISTAR
     INNER JOIN usuario us ON us.id = nt.idUsuarioCreacion
     INNER JOIN homologacion.centro_trabajo AS CT ON CT.id = nt.idCentro
     INNER JOIN pdmsinergia.orden_produccion AS op ON op.id = nt.idOp
-    WHERE date(nt.fechaCreacion) >= '${req.query.fechaInicio}' AND date(nt.fechaCreacion) <= '${req.query.fechaFin}'`;
+    WHERE date(nt.fechaCreacion) >= '${req.query.fechaInicio}' AND date(nt.fechaCreacion) <= '${req.query.fechaFin}'
+    ORDER BY fechaCreacion DESC`;
 
   connection.connect();
   let promesa = config.consultar(connection, query);

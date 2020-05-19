@@ -20,6 +20,8 @@
       });
     };
 
+
+    // Inicio de estilos para interfaz
     var current = null;
     document.querySelector('#user').addEventListener('focus', function(e) {
       if (current) current.pause();
@@ -45,6 +47,7 @@
         strokeDasharray: { value: '530 1386', duration: 700, easing: 'easeOutQuart' }
       });
     });
+    // Fin de estilos para interfaz
 
   }]);
 })();
