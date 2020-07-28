@@ -51,6 +51,62 @@
       });
 
 
+
+      sections.push({
+        name: 'Chequeo',  permiso:'centro',
+        type: 'toggle', icon:'checklist',
+        pages: [{
+          name: 'Defectos',  permiso:'centro.listar',
+          state: '/chequeo/defectos',
+          type: 'link', icon: 'fa fa-group'
+        }, {
+          name: 'Categorías',  permiso:'centro.crear',
+          state: '/chequeo/categorias',
+          type: 'link', icon: 'fa fa-map-marker'
+        }, {
+          name: 'Operaciones',  permiso:'centro.crear',
+          state: '/chequeo/operaciones',
+          type: 'link', icon: 'fa fa-map-marker'
+        }, {
+          name: 'Chasis-Carroceria',  permiso:'centro.crear',
+          state: '/chequeo/chasis-carroceria',
+          type: 'link', icon: 'fa fa-map-marker'
+        }, {
+          name: 'Chequeo por centro',  permiso:'centro.crear',
+          state: '/chequeo/centro/',
+          type: 'link', icon: 'fa fa-map-marker'
+        }, {
+          name: 'Chequeo',  permiso:'centro.crear',
+          state: '/chequeo/control',
+          type: 'link', icon: 'fa fa-map-marker'
+        }]
+      });
+
+
+
+      sections.push({
+        name: 'Indicadores',  permiso:'centro',
+        type: 'toggle', icon:'graph',
+        pages: [{
+          name: 'Indicador por Centros de trabajo',  permiso:'centro.listar',
+          state: '/chequeo/centro/indicador-centro/',
+          type: 'link', icon: 'fa fa-group'
+        }, {
+          name: 'Indicador por OP',  permiso:'centro.crear',
+          state: '/chequeo/centro/indicador-op',
+          type: 'link', icon: 'fa fa-map-marker'
+        }]
+      });
+
+      sections.push({
+        name: 'Fotos',  permiso:'centro',
+        type: 'toggle', icon:'photo',
+        pages: [{
+          name: 'Indicador por Centros de trabajo',  permiso:'centro.listar',
+          state: '/chequeo/centro/foto/',
+          type: 'link', icon: 'fa fa-group'
+        }]
+      });
       var self;
 
       return self = {

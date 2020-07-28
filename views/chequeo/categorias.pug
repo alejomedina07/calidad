@@ -1,0 +1,79 @@
+extends ../layout/layout
+
+block header
+  include ../inclusions/header
+block content
+  br
+  div(layout-gt-md="row" layout="column" ng-controller="categorias as $cCtrl" layout-margin)
+    .md-whiteframe-2dp(layout-margin layout-padding flex="100" flex-gt-md="30")
+      h2(style="margin-top: 25px;") Formulario
+      form(action="" layout="column")
+        md-input-container.w-100.md-block(flex)
+          label Nombre
+          input(ng-model='$cCtrl.form.nombre')
+          i(class='error' ng-show="$cCtrl.errores.nombre" ng-repeat="opcion in  $cCtrl.errores.nombre")
+            | {{ opcion }}
+        md-input-container.w-100.md-block(flex)
+          label Estado
+          md-select(ng-model='$cCtrl.form.estado')
+            md-option(ng-repeat='opcion in ["Activo", "Inactivo"]', ng-value='opcion')
+              | {{opcion}}
+          i(class='error' ng-show="$cCtrl.errores.estado" ng-repeat="opcion in  $cCtrl.errores.estado")
+            | {{ opcion }}  
+        div(layout="row" layout-align="end end")
+          md-button.md-raised.md-primary(ng-click="$cCtrl.guardar()") {{ $cCtrl.form.id ? 'Editar' : 'Crear'}}
+    .md-whiteframe-2dp(layout-margin layout-padding flex="100" flex-gt-md="70")
+      div(layout="row" layout-align="center center" flex)
+        h2 Lista de Categorías
+        md-input-container.md-block(md-no-float='' flex style="margin-bottom: 0;margin-left:40px;" )
+          md-icon(md-svg-src='/static/content/icons/search.svg')
+          input(ng-model='$cCtrl.search' type='text' placeholder='Buscar...' aria-label='Buscar...' ng-change="$cCtrl.filtrar()")
+      md-content   
+        div(ng-if="$cCtrl.loading" layout='row', layout-sm='column', layout-align='center center')
+          md-progress-linear(flex md-mode='indeterminate')   
+        table.responsive-table
+          thead
+            tr
+              th(scope='col' ng-click="$cCtrl.ordenarPor('id')") 
+                div(layout="row")
+                  span id
+                  span(flex)
+                  md-icon(md-svg-src="/static/content/icons/sort{{ $cCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$cCtrl.propertyName === 'id'")
+              th(scope='col' ng-click="$cCtrl.ordenarPor('nombre')") 
+                div(layout="row")
+                  span(flex)
+                  span Nombre
+                  span(flex)
+                  md-icon(md-svg-src="/static/content/icons/sort{{ $cCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$cCtrl.propertyName === 'codigo'")
+              th(scope='col' ng-click="$cCtrl.ordenarPor('estado')") 
+                div(layout="row")
+                  span(flex)
+                  span estado
+                  span(flex)
+                  md-icon(md-svg-src="/static/content/icons/sort{{ $cCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$cCtrl.propertyName === 'estado'")
+              
+              th(scope='col' ) Fecha de creación
+              th(scope='col' ) Acciones
+          tfoot
+            tr
+              td.text-right(colspan='4')
+                div(layout="row" layout-xs="column" layout-align="end center")
+                  span Mostrando &nbsp; 
+                  md-select(placeholder='' ng-model='$cCtrl.registrosXpagina' ng-change="$cCtrl.pagina = 0;$cCtrl.paginar()")
+                    md-option(ng-value='opcion' ng-repeat='opcion in [10, 20, 50]') {{opcion}}
+                  span &nbsp; Registros Por Página
+                  div
+                    md-button.md-icon-button(aria-label='boton' ng-disabled="$cCtrl.pagina == 0" ng-click="$cCtrl.pagina = $cCtrl.pagina - 1" ) 
+                      span.flechas <
+                    span {{ $cCtrl.pagina + 1 }} / {{$cCtrl.totalPaginas}}
+                    md-button.md-icon-button(aria-label='boton' ng-disabled="$cCtrl.pagina == ($cCtrl.totalPaginas - 1)" ng-click="$cCtrl.pagina = $cCtrl.pagina + 1" ) 
+                      span.flechas >
+          tbody
+            tr(ng-repeat="item in $cCtrl.categoriasFiltrados | limitTo : $cCtrl.registrosXpagina : ($cCtrl.registrosXpagina*$cCtrl.pagina) | orderBy:$cCtrl.propertyName:$cCtrl.reverse | filter:$cCtrl.search")
+              th(scope='row') {{ item.id }}
+              td(data-title='Centro de Red :') {{ item.nombre }}
+              td(data-title='Correo :') {{ item.estado }}            
+              td(data-title='Fecha de Creación :') {{ item.fechaCreacion | date:'medium' }}
+              td(data-title='Acciones :') 
+                md-button.md-icon-button(aria-label='boton' href="#" ng-click="$cCtrl.form = item") 
+                  md-icon(md-svg-src='/static/content/icons/edit.svg')

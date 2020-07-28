@@ -12,6 +12,40 @@ router.get('/', mdAutenticacion.verificatoken(notificacion.PERMISO.LISTAR), (req
   res.render("notificaciones/lista", { title: 'Notificaciones', usuario:req.session.usuario });
 });
 
+router.get('/listar-asistencias',  mdAutenticacion.verificatoken(notificacion.PERMISO.LISTAR), (req, res, next) => {
+  let filtro = req.session.usuario.rol != 'Super Admin' && req.session.usuario.rol != 'Admin' ?
+    `AND uct.idUsuario = '${req.session.usuario.id}' AND uct.estado = 'Activo'` :
+    'AND nt.idUsuarioCreacion = uct.idUsuario';
+  let connection = mysql.createConnection(config.connection),
+    query = `SELECT
+      nt.*,
+      us.nombre as usuario,
+      CONCAT(CT.codigo, "-", CT.descripcion) as centro,
+      CONCAT(op.prefijo, op.op) as op ,
+      asi.fechaAsistencia,
+      asi.estado as estadoAsistencia,
+      usu.nombre as asistente
+    FROM usuario_centro_trabajo uct
+    INNER JOIN notificacion nt ON (nt.idCentro = uct.idCentro ${filtro})
+    INNER JOIN usuario us ON us.id = nt.idUsuarioCreacion
+    INNER JOIN homologacion.centro_trabajo AS CT ON CT.id = nt.idCentro
+    INNER JOIN pdmsinergia.orden_produccion AS op ON op.id = nt.idOp
+    LEFT JOIN asistencia AS asi ON asi.idNotificacion = nt.id
+    LEFT JOIN usuario AS usu ON usu.id = asi.idUsuario
+    WHERE date(nt.fechaCreacion) >= '${req.query.fechaInicio}' AND date(nt.fechaCreacion) <= '${req.query.fechaFin}' AND uct.idRol = 3
+    ORDER BY fechaCreacion DESC`;
+
+  connection.connect();
+  let promesa = config.consultar(connection, query);
+  promesa.then(value => {
+    res.json(value);
+  })
+  .catch(err => {
+    debug(err);
+    res.status(500).json(err);
+  });
+});
+
 router.get('/listar',  mdAutenticacion.verificatoken(notificacion.PERMISO.LISTAR), (req, res, next) => {
   let filtro = req.session.usuario.rol != 'Super Admin' && req.session.usuario.rol != 'Admin' ?
     `AND uct.idUsuario = '${req.session.usuario.id}' AND uct.estado = 'Activo'` :
@@ -27,7 +61,7 @@ router.get('/listar',  mdAutenticacion.verificatoken(notificacion.PERMISO.LISTAR
     INNER JOIN usuario us ON us.id = nt.idUsuarioCreacion
     INNER JOIN homologacion.centro_trabajo AS CT ON CT.id = nt.idCentro
     INNER JOIN pdmsinergia.orden_produccion AS op ON op.id = nt.idOp
-    WHERE date(nt.fechaCreacion) >= '${req.query.fechaInicio}' AND date(nt.fechaCreacion) <= '${req.query.fechaFin}'
+    WHERE date(nt.fechaCreacion) >= '${req.query.fechaInicio}' AND date(nt.fechaCreacion) <= '${req.query.fechaFin}' AND uct.idRol = 3
     ORDER BY fechaCreacion DESC`;
 
   connection.connect();
@@ -50,10 +84,12 @@ router.get('/obtener-centros', mdAutenticacion.verificatoken(notificacion.PERMIS
       CT.codigo, CT.descripcion
     FROM usuario_centro_trabajo
     INNER JOIN homologacion.centro_trabajo AS CT ON CT.id = usuario_centro_trabajo.idCentro
-    WHERE usuario_centro_trabajo.idUsuario = ${req.session.usuario.id} AND usuario_centro_trabajo.estado = 'Activo'`
+    WHERE usuario_centro_trabajo.idUsuario = ${req.session.usuario.id} AND usuario_centro_trabajo.estado = 'Activo'  AND idRol = 3`
   // let query = `SELECT * FROM usuario_centro_trabajo WHERE idUsuario = ${req.session.usuario.id} AND estado = 'Activo'`
   let promesa = config.consultar(connection, query);
   promesa.then(value => {
+    console.log('877974984764564654646');
+    console.log(value);
     res.json(value);
   })
   .catch(err => {

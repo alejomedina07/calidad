@@ -9,10 +9,8 @@ exports.verificatoken = function(permiso, sinPermiso) {
     var token = req.session.loggedin;
     jwt.verify( token, SEED, ( err, decoded ) => {
       if (err || !req.session.usuario || !req.session.usuario.operaciones || !req.session.usuario.operaciones.includes(permiso)) {
-        debug(123456789);
         res.redirect("/")
       }else {
-        debug(9999999999);
         req.session.usuario = decoded.usuario || '';
         next();
       }

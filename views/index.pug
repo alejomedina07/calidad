@@ -17,18 +17,19 @@ block content
           md-progress-linear(flex md-mode='indeterminate')
         .container
           .right
-            svg(viewBox='0 0 320 300')
-              defs
-                lineargradient#linearGradient(inkscape:collect='always', x1='13', y1='193.49992', x2='307', y2='193.49992', gradientUnits='userSpaceOnUse')
-                  stop#stop876(style='stop-color:#7eb7ff;', offset='0')
-                  stop#stop878(style='stop-color:#0047a0;', offset='1')
-              path(d='m 40,120.00016 239.99984,-3.2e-4 c 0,0 24.99263,0.79932 25.00016,35.00016 0.008,34.20084 -25.00016,35 -25.00016,35 h -239.99984 c 0,-0.0205 -25,4.01348 -25,38.5 0,34.48652 25,38.5 25,38.5 h 215 c 0,0 20,-0.99604 20,-25 0,-24.00396 -20,-25 -20,-25 h -190 c 0,0 -20,1.71033 -20,25 0,24.00396 20,25 20,25 h 168.57143')
-            .form
-              label(for='user') Usuario de red
-              input#user(type='text' ng-model='$lCtrl.form.usuarioRed' autofocus )
-              label(for='password') Contraseña
-              input#password(type='password' ng-model='$lCtrl.form.contrasena')
-              input#submit(type='submit', value='Ingresar' ng-click="$lCtrl.login()")
+            form(ng-submit="$lCtrl.login()")
+              svg(viewBox='0 0 320 300')
+                defs
+                  lineargradient#linearGradient(inkscape:collect='always', x1='13', y1='193.49992', x2='307', y2='193.49992', gradientUnits='userSpaceOnUse')
+                    stop#stop876(style='stop-color:#7eb7ff;', offset='0')
+                    stop#stop878(style='stop-color:#0047a0;', offset='1')
+                path(d='m 40,120.00016 239.99984,-3.2e-4 c 0,0 24.99263,0.79932 25.00016,35.00016 0.008,34.20084 -25.00016,35 -25.00016,35 h -239.99984 c 0,-0.0205 -25,4.01348 -25,38.5 0,34.48652 25,38.5 25,38.5 h 215 c 0,0 20,-0.99604 20,-25 0,-24.00396 -20,-25 -20,-25 h -190 c 0,0 -20,1.71033 -20,25 0,24.00396 20,25 20,25 h 168.57143')
+              .form
+                label(for='user') Usuario de red
+                input#user(type='text' ng-model='$lCtrl.form.usuarioRed' autofocus )
+                label(for='password') Contraseña
+                input#password(type='password' ng-model='$lCtrl.form.contrasena')
+                input#submit(type='submit', value='Ingresar')
         
             //- .spinner.icon-spinner-5(aria-hidden='true')
       span(flex hide-xs)

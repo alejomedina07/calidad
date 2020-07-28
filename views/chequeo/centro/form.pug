@@ -1,0 +1,95 @@
+extends ../../layout/layout
+
+block header
+  include ../../inclusions/header
+block content
+  link(rel='stylesheet', href='//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css')
+
+  .md-whiteframe-2dp(layout-margin layout-padding ng-controller="formCentro as $fCtrl" ng-cloak)
+    div(layout="row" layout-align="center center" flex ng-init="$fCtrl.id = { id:" + id + ', idCentro:' + idCentro + '};$fCtrl.init();')
+      b Chequeo por Centro de Trabajo
+    //- md-divider
+    div(ng-if="$fCtrl.loading" layout='row', layout-sm='column', layout-align='center center')
+      md-progress-linear(flex md-mode='indeterminate')
+    form(action="")
+      md-content(style="width:100%" layout-margin layout-padding)
+        //- div(layout="row" layout-align="center center" layout-sm="column" layout-xs="column")
+        div(layout="column" layout-align="center center" flex )
+          i(class='error' ng-show="$fCtrl.errores.linea" ng-repeat="opcion in $fCtrl.errores.linea")
+            | {{ opcion }}
+          md-radio-group(ng-model='$fCtrl.form.linea' layout="row" layout-xs="column" layout-align-xs="start start" layout-align="center center" ng-change="$fCtrl.obtenerOPs()" ng-disabled="$fCtrl.id.id")
+            md-radio-button.md-primary(value='LL') 
+              b Linea Liviana
+            md-radio-button.md-primary(value='LP') 
+              b Linea Pesada
+            md-radio-button.md-primary(value='LB') 
+              b Linea BusStar
+        br
+        div(layout="row" layout-xs="column" layout-sm="column" layout-align="center center" layout-margin )
+          md-input-container.w-100.md-block(flex)
+            label Centro de trabajo
+            md-select(ng-model='$fCtrl.form.idCentro' md-on-close="$fCtrl.busqueda = ''" md-on-open='$fCtrl.focoParaBuscar()' ng-disabled="!$fCtrl.form.linea || $fCtrl.id.id")
+              md-select-header
+                input.campo-busqueda(ng-model='$fCtrl.busqueda' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar Centro...')
+              md-option(ng-value='opcion.id' ng-repeat="opcion in $fCtrl.listaOps | filter:$fCtrl.busqueda") {{opcion.codigo}} - {{opcion.descripcion}}
+            i(class='error' ng-show="$fCtrl.errores.idCentro" ng-repeat="opcion in  $fCtrl.errores.idCentro")
+              | {{ opcion }}  
+          md-input-container.w-100.md-block(flex)
+            label Defectos
+            md-select(ng-model='$fCtrl.form.defectos' multiple)
+              md-option(ng-repeat='opcion in $fCtrl.defectos', ng-value='opcion.id')
+                | {{ opcion.nombre }}
+            i(class='error' ng-show="$fCtrl.errores.defectos" ng-repeat="opcion in  $fCtrl.errores.defectos")
+              | {{ opcion }}          
+        
+        div(layout="row" layout-xs="column" layout-sm="column" layout-align="center center" layout-margin )
+          md-input-container.w-100.md-block(flex)
+            label Carroceria
+            md-select(ng-model='$fCtrl.form.carroceria' md-on-close="$fCtrl.busqueda = ''" md-on-open='$fCtrl.focoParaBuscar()' ng-change="$fCtrl.buscarChasis()")
+              md-select-header
+                input.campo-busqueda(ng-model='$fCtrl.busqueda' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar carroceria...')
+              md-option(ng-value='opcion.idCarroceria' ng-repeat="opcion in $fCtrl.carrocerias | filter:$fCtrl.busqueda") {{opcion.nombre}}
+            i(class='error' ng-show="$fCtrl.errores.carroceria" ng-repeat="opcion in  $fCtrl.errores.carroceria")
+              | {{ opcion }} 
+  
+          md-input-container.w-100.md-block(flex)
+            label Chasis
+            md-select(ng-model='$fCtrl.form.idChasisCarroceria' md-on-close="$fCtrl.busquedaChasis = ''" md-on-open='$fCtrl.focoParaBuscar()' ng-disabled="!$fCtrl.form.carroceria" ng-change="$fCtrl.buscarOperaciones()" )
+              md-select-header
+                input.campo-busqueda(ng-model='$fCtrl.busquedaChasis' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar chasis...')
+              md-option(ng-value='opcion.id' ng-repeat="opcion in $fCtrl.chasis | filter:$fCtrl.busquedaChasis") {{opcion.abreviatura}}
+            i(class='error' ng-show="$fCtrl.errores.idChasisCarroceria" ng-repeat="opcion in  $fCtrl.errores.idChasisCarroceria")
+              | {{ opcion }} 
+      
+        i(class='error' ng-show="$fCtrl.errores.operaciones" ng-repeat="opcion in  $fCtrl.errores.operaciones")
+          | {{ opcion }} 
+        div(layout="row" ng-show="$fCtrl.operaciones && $fCtrl.operaciones.length")
+          fieldset.demo-fieldset(flex)
+           legend.demo-legend &nbsp; 
+             b Operaciones &nbsp;
+           div(layout="row")
+             md-input-container(style="max-width: 100%;")
+               label Seleccionar
+               md-select(ng-model='$fCtrl.form.operaciones' md-on-close="$fCtrl.busquedaOperacion = ''" md-on-open='$fCtrl.focoParaBuscar()' multiple )
+                 md-select-header
+                   input.campo-busqueda(ng-model='$fCtrl.busquedaOperacion' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar Operacion...')
+                 md-option(ng-value='opcion' ng-repeat="opcion in $fCtrl.operaciones | filter:$fCtrl.busquedaOperacion") 
+                   b {{ opcion.nombre }} -
+                   | {{ opcion.categoria }}  
+               i(class='error' ng-show="$fCtrl.errores.idChasisCarroceria" ng-repeat="opcion in  $fCtrl.errores.idChasisCarroceria")
+                 | {{ opcion }} 
+             
+          
+                 
+           br
+           b Ordenar operaciones
+           md-divider()
+           ul.sortable(ui-sortable, ng-model='$fCtrl.form.operaciones')
+             li(ng-repeat='item in $fCtrl.form.operaciones' class="item md-whiteframe-2dp" )  
+               b {{ item.nombre }} - 
+               | {{ item.categoria }} 
+             
+        //- span {{ $fCtrl.form.operaciones | json }}
+        div(layout="row" layout-align="end end" flex )
+          md-button.md-raised(href="/chequeo/centro") Cancelar
+          md-button.md-raised.md-primary(ng-click="$fCtrl.guardar()") Crear

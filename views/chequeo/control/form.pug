@@ -1,0 +1,125 @@
+extends ../../layout/layout
+
+block header
+  include ../../inclusions/header
+block content
+  link(rel='stylesheet', href='//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css')
+
+  .md-whiteframe-2dp(layout-margin layout-padding ng-controller="formControl as $fCtrl" ng-cloak)
+    div(layout="row" layout-align="center center" flex ng-init="$fCtrl.id = " + id + ';$fCtrl.init();')
+      b.titulo Crear Chequeo
+    //- md-divider
+    div(ng-if="$fCtrl.loading" layout='row', layout-sm='column', layout-align='center center')
+      md-progress-linear(flex md-mode='indeterminate')
+    form(action="")
+      md-content(style="width:100%" layout-margin layout-padding ng-show="!$fCtrl.id")
+        //- div(layout="row" layout-align="center center" layout-sm="column" layout-xs="column")
+        div(layout="column" layout-align="center center" flex )
+          i(class='error' ng-show="$fCtrl.errores.linea" ng-repeat="opcion in $fCtrl.errores.linea")
+            | {{ opcion }}
+          md-radio-group(ng-model='$fCtrl.form.linea' layout="row" layout-xs="column" layout-align-xs="start start" layout-align="center center" ng-change="$fCtrl.obtenerOPs();$fCtrl.obtener_ops();" ng-disabled="$fCtrl.id")
+            md-radio-button.md-primary(value='LL') 
+              b Linea Liviana
+            md-radio-button.md-primary(value='LP') 
+              b Linea Pesada
+            md-radio-button.md-primary(value='LB') 
+              b Linea BusStar
+        div(layout="row" layout-xs="column" layout-sm="column" layout-align="center center" layout-margin )
+          md-input-container.w-100.md-block(flex)
+            label Centro de trabajo
+            md-select(ng-model='$fCtrl.form.idCentro' md-on-close="$fCtrl.busqueda = ''" md-on-open='$fCtrl.focoParaBuscar()' ng-change="$fCtrl.buscarCarrocerias()" ng-disabled="!$fCtrl.form.linea || $fCtrl.id")
+              md-select-header
+                input.campo-busqueda(ng-model='$fCtrl.busqueda' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar Centro...')
+              md-option(ng-value='opcion.idCentro' ng-repeat="opcion in $fCtrl.listaOps | filter:$fCtrl.busqueda") {{opcion.codigo}} - {{opcion.nombre}}
+            i(class='error' ng-show="$fCtrl.errores.idCentro" ng-repeat="opcion in  $fCtrl.errores.idCentro")
+              | {{ opcion }}  
+          md-input-container.w-100.md-block(flex)
+            label Carrocería
+            md-select(ng-model='$fCtrl.form.idCarroceria' md-on-close="$fCtrl.busqueda = ''" md-on-open='$fCtrl.focoParaBuscar()' ng-change="$fCtrl.buscarChasis()" ng-disabled="!$fCtrl.form.linea || $fCtrl.id")
+              md-select-header
+                input.campo-busqueda(ng-model='$fCtrl.busqueda' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar Centro...')
+              md-option(ng-value='opcion.id' ng-repeat="opcion in $fCtrl.carrocerias | filter:$fCtrl.busqueda") {{opcion.nombre}}
+            i(class='error' ng-show="$fCtrl.errores.idCarroceria" ng-repeat="opcion in  $fCtrl.errores.idCarroceria")
+              | {{ opcion }}    
+          
+          md-input-container.w-100.md-block(flex)
+            label Chasis
+            md-select(ng-model='$fCtrl.form.idChasisCarroceria' md-on-close="$fCtrl.busquedaChasis = ''" md-on-open='$fCtrl.focoParaBuscar()' ng-disabled="!$fCtrl.form.idCarroceria" )
+              md-select-header
+                input.campo-busqueda(ng-model='$fCtrl.busquedaChasis' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar chasis...')
+              md-option(ng-value='opcion.id' ng-repeat="opcion in $fCtrl.chasis | filter:$fCtrl.busquedaChasis") {{opcion.abreviatura}}
+            i(class='error' ng-show="$fCtrl.errores.idChasisCarroceria" ng-repeat="opcion in  $fCtrl.errores.idChasisCarroceria")
+              | {{ opcion }} 
+        
+        div(layout="row")
+          md-input-container.w-100.md-block(flex)
+            label Orden de Producción
+            md-select(ng-model='$fCtrl.form.op' md-on-close="$fCtrl.busquedaOp = ''" md-on-open='$fCtrl.focoParaBuscar()' ng-disabled="!$fCtrl.form.linea")
+              md-select-header
+                input.campo-busqueda(ng-model='$fCtrl.busquedaOp' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar orden de Producción...')
+              md-option(ng-value='opcion.id' ng-repeat="opcion in $fCtrl.ops | filter:$fCtrl.busquedaOp | limitTo:100") {{opcion.prefijo}} - {{opcion.op}}
+            i(class='error' ng-show="$fCtrl.errores.op" ng-repeat="opcion in  $fCtrl.errores.op")
+              | {{ opcion }} 
+        div(layout="row" layout-align="end end")
+          md-button.md-raised.md-primary(ng-click="$fCtrl.guardar()") Siguiente
+      //- Editar
+      md-content(ng-show="$fCtrl.id")
+        div(layout="row" layout-align="center center" layout-margin)
+          //-  md-input-container.w-100.md-block(flex)
+              label Estado
+              md-select(ng-model='$fCtrl.form.estado')
+                md-option(ng-repeat='opcion in ["Activo", "Finalizado"]', ng-value='opcion')
+                  | {{opcion}}
+          span(flex="70")
+            span Orden de Producción : 
+              b {{ $fCtrl.form.nombre_op }} - &nbsp;
+            b {{ $fCtrl.obtenerLinea($fCtrl.form.linea) }} - &nbsp;
+            span Carrocería : 
+              b {{ $fCtrl.form.carroceria }}, &nbsp;
+            span Chasis : 
+              b {{ $fCtrl.form.chasis }}, &nbsp;
+            span Centro : 
+              b {{ $fCtrl.form.centro }}
+          md-button.md-raised.md-primary(ng-click="$fCtrl.finalizar()") Finalizar
+          
+        div(layout="row" ng-show="$fCtrl.operaciones && $fCtrl.operaciones.length")
+          div(flex layout-margin)
+            fieldset.demo-fieldset 
+             legend.demo-legend &nbsp; 
+               b Operaciones &nbsp;
+             md-list
+               //- md-subheader.md-no-sticky lista
+               md-list-item.noright(ng-repeat='operacion in $fCtrl.operaciones' style="border-bottom: 1px solid;")
+                 div(layout="column" flex)
+                   div(layout="row")
+                     b(style="margin: 12px 0 -17px 0;") {{ operacion.categoria }}
+                   div(layout="row" ng-click='$fCtrl.openModal($event, operacion)' style="cursor:pointer;")
+                     p {{ operacion.nombre }} &nbsp;
+                       i(style="color:red;" ) {{ $fCtrl.obtenerDefectos(operacion) }}
+                  
+                 //- md-checkbox.md-primary(ng-model='selected')
+                 span.defectos(ng-if="operacion.defectos.length && operacion.nombre_defectos") {{ operacion.defectos.length }}
+                 md-icon.md-secondary.md-fab.md-mini(md-svg-icon='/static/content/icons/danger.svg'  aria-label='Send Email')
+                   //md-button(class="md-fab md-mini" aria-label="Eat cake") 2
+        
+        div(layout="row" layout-align="end end")
+          md-button.md-raised(href="/chequeo/control") Volver
+        
+        div(style='visibility: hidden')
+          #myDialog.md-dialog-container
+            md-dialog(flex="60" flex-xs="90" flex-sm="90")
+              md-toolbar
+                .md-toolbar-tools
+                  h2 Defectos
+                  span(flex='')
+                  md-button.md-icon-button(ng-click='$fCtrl.close()' style="font-size:22pt;") X       
+              md-dialog-content(layout-margin layout-paddig)
+                md-list
+                  md-list-item(ng-repeat='defecto in $fCtrl.defectos')
+                    p {{ defecto.nombre }}
+                    md-checkbox.md-primary(ng-model='defecto.selected')
+              
+              md-dialog-actions(layout-align="end end" layout="row" style="background:#f6f6f6;")
+                md-button.md-raised(ng-click='$fCtrl.close()') Cancelar
+                md-button.md-raised.md-primary(ng-click='$fCtrl.guardarDefectos()') Guardar
+              

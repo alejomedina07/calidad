@@ -11,29 +11,29 @@ block content
     //- md-divider
     div(ng-if="$fCtrl.loading" layout='row', layout-sm='column', layout-align='center center')
       md-progress-linear(flex md-mode='indeterminate')
-    div(layout="row" layout-xs="column" layout-align="start start" flex )
-      .md-whiteframe-2dp(layout="column" layout-align="center center" flex layout-margin layout-padding)
+    div(layout="row" layout-sm="column" layout-xs="column" layout-align="start start" flex )
+      .w-100.md-whiteframe-2dp(layout="column" layout-align="center center" flex layout-margin layout-padding)
         md-content(style="width:100%" layout-margin layout-padding)
           div(layout="row" layout-xs="column" layout-sm="column" layout-align="center center" layout-margin )
-            md-input-container.md-block(flex)
+            md-input-container.w-100.md-block(flex)
               label Nombre Completo
               input(ng-model='$fCtrl.form.nombre')
               i(class='error' ng-show="$fCtrl.errores.nombre" ng-repeat="opcion in  $fCtrl.errores.nombre")
                 | {{ opcion }}
-            md-input-container.md-block(flex style=" margin-top: -15px;")
-              label Estado
-              md-select(ng-model='$fCtrl.form.estado')
-                md-option(ng-repeat='opcion in ["Activo", "Inactivo"]', ng-value='opcion')
-                  | {{opcion}}
-              i(class='error' ng-show="$fCtrl.errores.estado" ng-repeat="opcion in  $fCtrl.errores.estado")
-                | {{ opcion }}          
+            br(hide-gt-sm)
+            md-input-container.w-100.md-block(flex)
+              label Cedula
+              input(ng-model='$fCtrl.form.cedula')
+              i(class='error' ng-show="$fCtrl.errores.cedula" ng-repeat="opcion in  $fCtrl.errores.cedula")
+                | {{ opcion }}
+                    
           div(layout="row" layout-xs="column" layout-sm="column" layout-align="center center" layout-margin )
-            md-input-container.md-block(flex)
+            md-input-container.w-100.md-block(flex)
               label Correo 
               input(ng-model='$fCtrl.form.correo')
               i(class='error' ng-show="$fCtrl.errores.correo" ng-repeat="opcion in  $fCtrl.errores.correo")
                 | {{ opcion }}
-            md-input-container.md-block(flex)
+            md-input-container.w-100.md-block(flex)
               label Usuario de Red
               input(ng-model='$fCtrl.form.usuarioRed')
               i(class='error' ng-show="$fCtrl.errores.usuarioRed" ng-repeat="opcion in  $fCtrl.errores.usuarioRed")
@@ -51,12 +51,21 @@ block content
               i(class='error' ng-show="$fCtrl.errores.contrasena2" ng-repeat="opcion in  $fCtrl.errores.contrasena2")
                 | {{ opcion }}
           div(layout="row" layout-xs="column" layout-sm="column" layout-align="center center" layout-margin )
-            md-input-container.md-block(flex)
+            md-input-container.w-100.md-block(flex)
               label Ingrese ID de la aplicación movil
               input(ng-model='$fCtrl.form.idAplicacionMovil')
               i(class='error' ng-show="$fCtrl.errores.idAplicacionMovil" ng-repeat="opcion in  $fCtrl.errores.idAplicacionMovil")
                 | {{ opcion }}
-            md-input-container.md-block(flex style=" margin-top: -15px;")
+            br(hide-gt-sm)
+            md-input-container.w-100.md-block(flex style=" margin-top: -15px;")
+              label Estado
+              md-select(ng-model='$fCtrl.form.estado')
+                md-option(ng-repeat='opcion in ["Activo", "Inactivo"]', ng-value='opcion')
+                  | {{opcion}}
+              i(class='error' ng-show="$fCtrl.errores.estado" ng-repeat="opcion in  $fCtrl.errores.estado")
+                | {{ opcion }}  
+            br(hide-gt-sm)
+            md-input-container.w-100.md-block(flex style=" margin-top: -15px;")
               label Rol
               md-select(ng-model='$fCtrl.form.idRol' multiple)
                 md-option(ng-repeat='opcion in $fCtrl.roles' ng-value='opcion.id')

@@ -1,0 +1,42 @@
+extends ../../layout/layout
+
+block header
+  include ../../inclusions/header
+block content
+  style.
+    .grafica {
+      width: 100%;
+      height: 500px;
+    }
+    .grafica-grande {
+      width: 100%;
+      height: 1500px;
+    }
+  // Resources
+  script(src='https://www.amcharts.com/lib/4/core.js')
+  script(src='https://www.amcharts.com/lib/4/charts.js')
+  script(src='https://www.amcharts.com/lib/4/themes/dataviz.js')
+  script(src="https://www.amcharts.com/lib/4/themes/spiritedaway.js")
+  script(src='https://www.amcharts.com/lib/4/themes/animated.js')
+  br
+  .md-whiteframe-2dp(layout-margin layout-padding ng-controller="indicadorOp as $iCtrl" ng-cloak) 
+    h2() Indicador por orden de producción &nbsp;
+    div(layout="row" layout-align="start center")
+      md-input-container.w-100.md-block(flex )
+        label Orden de Producción
+        md-select(ng-model='$iCtrl.op' md-on-close="$iCtrl.busquedaOp = ''" md-on-open='$iCtrl.focoParaBuscar()')
+          md-select-header
+            input.campo-busqueda(ng-model='$iCtrl.busquedaOp' ng-keydown="$iCtrl.buscar($event)" type='search' placeholder='Buscar orden de Producción...')
+          md-option(ng-value='opcion.idOp' ng-repeat="opcion in $iCtrl.ops | filter:$iCtrl.busquedaOp | limitTo:100") {{opcion.prefijo}} - {{opcion.op}}
+      md-datepicker(ng-model="$iCtrl.fechaInicio" md-placeholder="Fecha inicio" )
+      md-datepicker(ng-model="$iCtrl.fechaFin" md-placeholder="Fecha fin" )
+      md-button.md-primary.md-raised(ng-click="$iCtrl.obtenerDatos()" ng-disabled="!$iCtrl.op || !$iCtrl.fechaInicio || !$iCtrl.fechaFin") Filtrar
+
+    div(layout="row" )
+      div(flex)
+        .grafica-grande#chartdiv(ng-show="$iCtrl.op")
+    div(layout="row" layout-align="space-around center" layout-wrap)
+      div(flex="30" ng-repeat="defecto in $iCtrl.defectos")
+        h2 {{ defecto.nombre }}
+        .grafica(id="grafica{{$index}}" ng-init="$iCtrl.graficaOperacion(defecto, $index)")
+    

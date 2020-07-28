@@ -38,6 +38,17 @@ app.use('/centros', require('./routes/centros'));
 app.use('/usuarios', require('./routes/usuarios'));
 app.use('/notificaciones', require('./routes/notificaciones'));
 
+app.use('/fotos', require('./routes/fotos'));
+
+app.use('/chequeo/defectos', require('./routes/chequeo/defectos'));
+app.use('/chequeo/categorias', require('./routes/chequeo/categorias'));
+app.use('/chequeo/operaciones', require('./routes/chequeo/operaciones'));
+app.use('/chequeo/centro', require('./routes/chequeo/centro'));
+app.use('/chequeo/control', require('./routes/chequeo/control'));
+app.use('/chequeo/chasis-carroceria', require('./routes/chequeo/chasis-carroceria'));
+
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

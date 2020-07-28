@@ -1,0 +1,49 @@
+extends ../../layout/layout
+
+block header
+  include ../../inclusions/header
+block content
+  br
+  div(layout="row" ng-controller="formChasisCarroceria as $fCtrl" layout-margin)
+    .md-whiteframe-2dp(layout-margin layout-padding flex ng-init="$fCtrl.id = " + id + ';$fCtrl.init();')
+      h2(style="margin-top: 25px;") Formulario de chasis-carroceria
+      md-divider
+      div(layout="row" layout-xs="column" layout-sm="column")
+        md-input-container.w-100.md-block(flex)
+          label Carroceria
+          md-select(ng-model='$fCtrl.form.carroceria' md-on-close="$fCtrl.busqueda = ''" md-on-open='$fCtrl.focoParaBuscar()' ng-change="$fCtrl.buscarChasis()" ng-disabled="$fCtrl.form.id")
+            md-select-header
+              input.campo-busqueda(ng-model='$fCtrl.busqueda' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar carroceria...')
+            md-option(ng-value='opcion.id' ng-repeat="opcion in $fCtrl.carrocerias | filter:$fCtrl.busqueda") {{opcion.nombre}}
+          i(class='error' ng-show="$fCtrl.errores.carroceria" ng-repeat="opcion in  $fCtrl.errores.carroceria")
+            | {{ opcion }} 
+
+        md-input-container.w-100.md-block(flex)
+          label Chasis
+          md-select(ng-model='$fCtrl.form.idChasisCarroceria' md-on-close="$fCtrl.busquedaChasis = ''" md-on-open='$fCtrl.focoParaBuscar()' ng-disabled="!$fCtrl.form.carroceria || $fCtrl.form.id")
+            md-select-header
+              input.campo-busqueda(ng-model='$fCtrl.busquedaChasis' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar chasis...')
+            md-option(ng-value='opcion.id' ng-repeat="opcion in $fCtrl.chasis | filter:$fCtrl.busquedaChasis") {{opcion.abreviatura}}
+          i(class='error' ng-show="$fCtrl.errores.idChasisCarroceria" ng-repeat="opcion in  $fCtrl.errores.idChasisCarroceria")
+            | {{ opcion }} 
+      
+      div(layout="row" layout-padding ng-repeat="categoria in $fCtrl.form.categorias"  ng-init="$fCtrl.buscarOperaciones(categoria, $index)")
+        fieldset.demo-fieldset(flex='')
+          legend.demo-legend &nbsp; 
+            b {{ categoria.nombre }} 
+          div
+            md-input-container.md-block.w-100(flex style="margin-bottom: -20px;")
+              label Filtrar
+              input(ng-model="search" type="text")
+          div(layout='row', layout-wrap='', flex='')
+            div(flex-xs='', flex='50' ng-init="index = $index" style="padding-left: 10px;padding-top: 12px;")
+              md-checkbox.md-primary(aria-label='Select All', ng-checked='$fCtrl.isChecked(index, categoria.operaciones)', md-indeterminate='$fCtrl.isIndeterminate(index, categoria.operaciones)', ng-click='$fCtrl.toggleAll(index, categoria.operaciones)')
+                span(ng-if='$fCtrl.isChecked(index, categoria.operaciones)') Des-
+                | Seleccionar Todo
+            .demo-select-all-checkboxes(flex='100', ng-repeat='operacion in categoria.operaciones | filter : search' style="padding-left: 35px;")
+              md-checkbox.md-primary(ng-model="operacion.selected" ng-checked='$fCtrl.exists(operacion, $fCtrl.selected[index])', ng-click='$fCtrl.toggle(operacion, $fCtrl.selected[index])')
+                | {{ operacion.nombre }}
+      
+      div(layout="row" layout-align="end end")
+        md-button.md-raised(href="/chequeo/chasis-carroceria") Cancelar
+        md-button.md-raised.md-primary(ng-click="$fCtrl.guardar()") Guardar

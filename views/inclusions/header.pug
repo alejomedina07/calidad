@@ -7,7 +7,7 @@ header(ng-controller="header as $cCtr")
         md-icon(md-svg-src='/static/content/icons/menu.svg')
       span(flex flex-xs)
       a(href="/notificaciones/" title="Calidad" hide-xs)
-        .nombre-empresa
+        .nombre-empresa(hide-sm)
           b Notificaciones
           //- span Sistema Integrado de Notificaciones
       //- span Notificaciones
@@ -16,7 +16,7 @@ header(ng-controller="header as $cCtr")
       span.nombre-usuario(hide-xs)
         b Hola, 
         | #{usuario.nombre}
-      md-button.md-icon-button(aria-label='Menú de opciones' href="/logout" hide-xs)
+      md-button.md-icon-button(aria-label='Menú de opciones' href="/logout")
         md-icon(md-svg-src='/static/content/icons/logout.svg')
   section(layout="row" flex)
     
@@ -31,13 +31,17 @@ header(ng-controller="header as $cCtr")
             div(layout='row')
               h4= usuario.rol
               span(flex)
-              md-icon(md-svg-src='/static/content/icons/user.svg')        
+              //- md-icon(md-svg-src='/static/content/icons/user.svg')      
+              md-button.md-icon-button(aria-label='Menú de opciones' href="/logout")
+                md-icon(md-svg-src='/static/content/icons/logout.svg')  
         ul.side-menu
           li.parent-list-item(ng-repeat='section in $cCtr.menu.sections', ng-class="{'parentActive' : vm.isSectionSelected(section)}")
             h2.menu-heading(ng-if="section.type === 'heading'", id='heading_{{ section.name }}')
               | {{section.Name}}
             menu-link(section='section' ng-if="section.type === 'link' && $cCtr.obtenerPermiso(section.permiso)")
             menu-toggle(section='section' ng-if="section.type === 'toggle' && $cCtr.obtenerPermiso(section.permiso)")      
+        span(flex)
+        
       //- md-toolbar(layout='row')
       //-   h1.md-toolbar-tools MENU
       //-   md-button(aria-label='Menú de opciones' ng-click='$cCtr.abrirMenuIzquierda()')

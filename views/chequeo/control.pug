@@ -1,0 +1,101 @@
+extends ../layout/layout
+
+block header
+  include ../inclusions/header
+block content
+
+  .md-whiteframe-2dp(layout-margin layout-padding ng-controller="formCentro as $cCtrl" ng-cloak)
+    div(layout="row" layout-align="center center" flex ng-init="$cCtrl.id = " + id + ';$cCtrl.init();')
+      b.titulo Crear Chequeo
+    //- md-divider
+    div(ng-if="$cCtrl.loading" layout='row', layout-sm='column', layout-align='center center')
+      md-progress-linear(flex md-mode='indeterminate')
+    form(action="")
+      md-content(style="width:100%" layout-margin layout-padding)
+        //- div(layout="row" layout-align="center center" layout-sm="column" layout-xs="column")
+        div(layout="column" layout-align="center center" flex )
+          i(class='error' ng-show="$cCtrl.errores.linea" ng-repeat="opcion in $cCtrl.errores.linea")
+            | {{ opcion }}
+          md-radio-group(ng-model='$cCtrl.form.linea' layout="row" layout-xs="column" layout-align-xs="start start" layout-align="center center" ng-change="$cCtrl.obtenerOPs()" ng-disabled="$cCtrl.id")
+            md-radio-button.md-primary(value='LL') 
+              b Linea Liviana
+            md-radio-button.md-primary(value='LP') 
+              b Linea Pesada
+            md-radio-button.md-primary(value='LB') 
+              b Linea BusStar
+        br
+        div(layout="row" layout-xs="column" layout-sm="column" layout-align="center center" layout-margin )
+          md-input-container.w-100.md-block(flex)
+            label Centro de trabajo
+            md-select(ng-model='$cCtrl.form.idCentro' md-on-close="$cCtrl.busqueda = ''" md-on-open='$cCtrl.focoParaBuscar()' ng-disabled="!$cCtrl.form.linea || $cCtrl.id")
+              md-select-header
+                input.campo-busqueda(ng-model='$cCtrl.busqueda' ng-keydown="$cCtrl.buscar($event)" type='search' placeholder='Buscar Centro...')
+              md-option(ng-value='opcion.id' ng-repeat="opcion in $cCtrl.listaOps | filter:$cCtrl.busqueda") {{opcion.codigo}} - {{opcion.descripcion}}
+            i(class='error' ng-show="$cCtrl.errores.idCentro" ng-repeat="opcion in  $cCtrl.errores.idCentro")
+              | {{ opcion }}  
+          md-input-container.w-100.md-block(flex)
+            label Orden de Produccion
+            md-select(ng-model='$cCtrl.form.defecto')
+              md-option(ng-repeat='opcion in [1,2,3,4,5]', ng-value='opcion')
+                | OP {{opcion}}
+            i(class='error' ng-show="$cCtrl.errores.estado" ng-repeat="opcion in  $cCtrl.errores.estado")
+              | {{ opcion }}  
+          md-input-container.w-100.md-block(flex )
+            label Estado
+            md-select(ng-model='$cCtrl.form.estado')
+              md-option(ng-repeat='opcion in ["Activo", "Inactivo"]', ng-value='opcion')
+                | {{opcion}}
+            i(class='error' ng-show="$cCtrl.errores.estado" ng-repeat="opcion in  $cCtrl.errores.estado")
+              | {{ opcion }}  
+        div(layout="row" layout-align="center center" layout-margin )
+          div(layout="row" flex layout-align="center center")
+            b Defectos
+          div(flex  layout-xs="column" layout-align="center center")
+            div(layout="row" layout-align="center center")
+              h3 Categoría 1
+            md-divider
+            div(layout="row" layout-align="space-around center")
+              md-button.md-icon-button(aria-label='boton' href="#" ) 
+                md-icon(md-svg-src='/static/content/icons/back.svg')
+              span Operacion 1
+              md-button.md-icon-button(aria-label='boton' href="#" ) 
+                md-icon(md-svg-src='/static/content/icons/right-arrow.svg')
+        md-divider  
+        div(ng-repeat="item in [1,2,3,4,5]" layout="row" layout-align="center center" style="margin: 0; padding: 0;padding-top: 15px; border-bottom: 1px solid #888;")
+          div(flex layout="row" layout-align="center center" style="margin-bottom: 16px;") Ejemplo de defecto {{ item }}   
+          div(flex layout="row" layout-align="center center")
+            md-checkbox(ng-model="cb1" aria-label="Checkbox 1")  
+        md-divider
+        div(layout="row" layout-wrap="" layout-align="space-around center")
+          div(flex layout-margin)
+            fieldset.demo-fieldset 
+             legend.demo-legend &nbsp; 
+               b Categoria {{ item }} &nbsp;
+             md-list
+               md-subheader.md-no-sticky Operaciones
+               md-list-item.noright(ng-repeat='person in [1,2,3,4]')
+                 p Operacion {{ person }} &nbsp;
+                   i(style="color:red;") (Mal corte ) 
+                 md-checkbox.md-primary(ng-model='selected')
+                 span.defectos(ng-if="$index == 0") 2
+                 md-icon.md-secondary.md-hue-3(md-svg-icon='/static/content/icons/danger.svg' ng-click='$cCtrl.openModal($event)', aria-label='Send Email')
+                   md-tooltip(md-direction="bottom" ng-if="$index == 0") Defecto 1, Defecto 2
+                 //md-button(class="md-fab md-mini" aria-label="Eat cake") 2
+        div(style='visibility: hidden')
+          #myDialog.md-dialog-container
+            md-dialog(flex="60" flex-xs="90" flex-sm="90")
+              md-toolbar
+                .md-toolbar-tools
+                  h2 Defectos
+                  span(flex='')
+                  md-button.md-icon-button(ng-click='$cCtrl.close()' style="font-size:22pt;") X       
+              md-dialog-content(layout-margin layout-paddig)
+                md-list
+                  md-list-item(ng-repeat='person in [1,2,3,4]')
+                    p Defecto {{ person }}
+                    md-checkbox.md-primary(ng-model='selected')
+              
+              md-dialog-actions(layout-align="end end" layout="row" style="background:#f6f6f6;")
+                md-button.md-raised(ng-click='$cCtrl.close()') Cancelar
+                md-button.md-raised.md-primary(ng-click='$cCtrl.close()') Guardar
+              

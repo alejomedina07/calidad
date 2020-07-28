@@ -8,6 +8,7 @@ var MENU = [
 ];
 
 var app = angular.module('calidad', [
+  'ui.sortable',
   'ngMaterial',
   'ngMessages',
   'ngAnimate',

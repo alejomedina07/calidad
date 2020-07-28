@@ -11,6 +11,22 @@
     $lCtrl.form = {};
 
 
+    $lCtrl.excelAsistencias = function() {
+      if (moment($lCtrl.fechaFin).diff($lCtrl.fechaInicio, "month", true) <= 3) {
+        $lCtrl.loading = true;
+        let url = `/notificaciones/listar-asistencias?fechaInicio=${moment($lCtrl.fechaInicio).format('YYYY-MM-DD')}
+          &fechaFin=${moment($lCtrl.fechaFin).format('YYYY-MM-DD')}`
+        $http.get(url)
+        .then(function(result){
+          fnExcelReport(result.data, true);
+          $lCtrl.loading = false;
+        })
+        .catch(function(e){
+          console.log(e);
+          $lCtrl.loading = false;
+        });
+      }else ToastFactoria.rojo({contenido: 'El rango entre las fechas no deben ser mayor a 3 meses.'});
+    }
 
 
     $lCtrl.excel = function (filtrados) {
@@ -23,13 +39,15 @@
       fnExcelReport(array);
     }
 
-    function fnExcelReport(array)
+    function fnExcelReport(array, asistentes)
     {
       var k = '<tbody>'
       array.forEach((item, i) => {
         item.estado = item.fechaCierre ? 'Cerrada' : 'Abierta';
         let fechaCierre = item.fechaCierre ? moment(item.fechaCierre).format('LLL') : '';
         k+= '<tr>';
+        if (asistentes)
+          k+= '<td>' + item.id + '</td>';
         k+= '<td>' + item.usuario + '</td>';
         k+= '<td>' + moment(item.fechaCreacion).format('LLL') + '</td>';
         k+= '<td>' + fechaCierre + '</td>';
@@ -37,14 +55,20 @@
         k+= '<td>' + item.causa + '</td>';
         k+= '<td>' + item.centro + '</td>';
         k+= '<td>' + item.estado + '</td>';
+        if (asistentes) {
+          let fechaAsistencia = item.fechaAsistencia ? moment(item.fechaAsistencia).format('LLL') : '';
+          k+= '<td>' + item.asistente + '</td>';
+          k+= '<td>' + item.estadoAsistencia + '</td>';
+          k+= '<td>' + fechaAsistencia + '</td>';
+        }
         k+= '</tr>';
       });
 
       k+='</tbody>';
-      document.getElementById('tbody').innerHTML = k;
+      document.getElementById(asistentes ? 'tbodyAsistencias' : 'tbody').innerHTML = k;
         var tab_text="<table border='2px'><tr bgcolor='#87AFC6'>";
         var textRange; var j=0,
-        tab = document.getElementById('headerTable'); // id of table
+        tab =  document.getElementById(asistentes ? 'headerTableAsistentes' : 'headerTable'); // id of table
 
         for(j = 0 ; j < tab.rows.length ; j++)
         {

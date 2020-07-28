@@ -13,14 +13,19 @@
     "angular-material": "^1.1.21",
     "angular-md5": "^0.1.10",
     "angular-messages": "^1.7.9",
+    "angular-ui-sortable": "^0.19.0",
+    "basic-ftp": "^4.6.2",
     "body-parser": "^1.19.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "easy-ftp": "^0.4.1",
     "express": "~4.16.1",
     "express-favicon": "^2.0.1",
+    "express-fileupload": "^1.1.7-alpha.4",
     "express-session": "^1.17.0",
     "http-errors": "~1.6.3",
     "jquery": "^3.4.1",
+    "jquery-ui": "^1.12.1",
     "jsonwebtoken": "^8.5.1",
     "ldapjs": "^1.0.2",
     "md5": "^2.2.1",
@@ -30,6 +35,7 @@
     "node-gyp": "^6.1.0",
     "pug": "2.0.0-beta11",
     "pushsafer-notifications": "^0.1.8",
-    "rebuild": "^0.1.2"
+    "rebuild": "^0.1.2",
+    "sharp": "^0.25.4"
   }
 }

@@ -27,6 +27,9 @@ block content
       md-button.md-raised(ng-click="$lCtrl.excel()" style="margin-left:5px;") 
         | Exportar notificaciones Cerradas &nbsp; 
         md-icon(md-svg-src='/static/content/icons/excel.svg')
+      md-button.md-raised(ng-click="$lCtrl.excelAsistencias()" style="margin-left:5px;") 
+        | Exportar Asistentes &nbsp; 
+        md-icon(md-svg-src='/static/content/icons/excel.svg')
       span(flex)
       
     md-content
@@ -117,3 +120,18 @@ block content
             th Centro
             th Estado
         tbody(id="tbody")
+      table#headerTableAsistentes
+        thead
+          tr
+            th Notificación
+            th Creador
+            th Fecha de Creación
+            th Fecha de Cierre
+            th Descripción
+            th Causa
+            th Centro
+            th Estado
+            th Asistente
+            th Estado de Asistencia
+            th Fecha de Asistencia
+        tbody(id="tbodyAsistencias")

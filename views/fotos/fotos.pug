@@ -1,0 +1,115 @@
+extends ../layout/layout
+
+block header
+  include ../inclusions/header
+block content
+  br
+  div(layout="row" ng-controller="fotos as $fCtrl" layout-margin)
+    .md-whiteframe-2dp(layout-margin layout-padding  flex="40" ng-init="$fCtrl.mensaje = " + mensaje + ';$fCtrl.init();')
+      form(method='post', action='/fotos', enctype='multipart/form-data')
+        div(ng-if="$fCtrl.loading" layout='row', layout-sm='column', layout-align='center center')
+          md-progress-linear(flex md-mode='indeterminate')  
+        div(layout="column" layout-align="center center" flex )
+          i(class='error' ng-show="$fCtrl.errores.linea" ng-repeat="opcion in $fCtrl.errores.linea")
+            | {{ opcion }}
+          md-radio-group(ng-model='$fCtrl.form.linea' layout="row" layout-xs="column" layout-align-xs="start start" layout-align="center center" ng-change="$fCtrl.obtener_ops();")
+            md-radio-button.md-primary(value='LL') 
+              b Linea Liviana
+            md-radio-button.md-primary(value='LP') 
+              b Linea Pesada
+            md-radio-button.md-primary(value='LB') 
+              b Linea BusStar
+        br
+        br
+        div(layout="row")
+          md-input-container.w-100.md-block(flex)
+            label Orden de Producción
+            md-select(ng-model='$fCtrl.form.idOp' name="idOp" md-on-close="$fCtrl.busquedaOp = ''" md-on-open='$fCtrl.focoParaBuscar()' ng-change="$fCtrl.cambioOp()" ng-disabled="!$fCtrl.form.linea")
+              md-select-header
+                input.campo-busqueda(ng-model='$fCtrl.busquedaOp' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar orden de Producción...')
+              md-option(ng-value='opcion.id' ng-repeat="opcion in $fCtrl.ops | filter:$fCtrl.busquedaOp | limitTo:100") {{opcion.prefijo}} - {{opcion.op}}
+            i(class='error' ng-show="$fCtrl.errores.op" ng-repeat="opcion in  $fCtrl.errores.op")
+              | {{ opcion }}         
+        br
+        div(layout="row" layout-align="center center" flex )
+          md-input-container.w-100.md-block(flex)
+            input(type='file', name='imagenes')
+        div.ng-hide(layout="row" layout-align="center center" flex )
+          md-input-container.w-100.md-block(flex)
+            input(type='text', name='op' ng-model="$fCtrl.form.op" id="op")
+        md-button.md-raised.md-primary(type="submit" ng-click="$fCtrl.loading = true") Crear
+    .md-whiteframe-2dp(layout-margin layout-padding  flex="60")
+      div(layout="row" layout-align="center center" flex)
+        h2 Lista de fotos
+        md-input-container.md-block(md-no-float='' flex style="margin-bottom: 0;margin-left:40px;" )
+          md-icon(md-svg-src='/static/content/icons/search.svg')
+          input(ng-model='$fCtrl.search' type='text' placeholder='Buscar...' aria-label='Buscar...' ng-change="$fCtrl.filtrar()")
+      md-content   
+        div(ng-if="$fCtrl.loading" layout='row', layout-sm='column', layout-align='center center')
+          md-progress-linear(flex md-mode='indeterminate')   
+        table.responsive-table
+          thead
+            tr
+              th(scope='col' ng-click="$fCtrl.ordenarPor('id')") 
+                div(layout="row")
+                  span id
+                  span(flex)
+                  md-icon(md-svg-src="/static/content/icons/sort{{ $fCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$fCtrl.propertyName === 'id'")
+              th(scope='col' ng-click="$fCtrl.ordenarPor('nombre')") 
+                div(layout="row")
+                  span(flex)
+                  span OP
+                  span(flex)
+                  md-icon(md-svg-src="/static/content/icons/sort{{ $fCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$fCtrl.propertyName === 'codigo'")
+              th(scope='col' ng-click="$fCtrl.ordenarPor('estado')") 
+                div(layout="row")
+                  span(flex)
+                  span Usuario
+                  span(flex)
+                  md-icon(md-svg-src="/static/content/icons/sort{{ $fCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$fCtrl.propertyName === 'estado'")
+              
+              th(scope='col' ng-click="$fCtrl.ordenarPor('estado')") 
+                div(layout="row")
+                  span(flex)
+                  span Fecha de Creacion
+                  span(flex)
+                  md-icon(md-svg-src="/static/content/icons/sort{{ $fCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$fCtrl.propertyName === 'estado'")
+              
+          tfoot
+            tr
+              td.text-right(colspan='4')
+                div(layout="row" layout-xs="column" layout-align="end center")
+                  span Mostrando &nbsp; 
+                  md-select(placeholder='' ng-model='$fCtrl.registrosXpagina' ng-change="$fCtrl.pagina = 0;$fCtrl.paginar()")
+                    md-option(ng-value='opcion' ng-repeat='opcion in [10, 20, 50]') {{opcion}}
+                  span &nbsp; Registros Por Página
+                  div
+                    md-button.md-icon-button(aria-label='boton' ng-disabled="$fCtrl.pagina == 0" ng-click="$fCtrl.pagina = $fCtrl.pagina - 1" ) 
+                      span.flechas <
+                    span {{ $fCtrl.pagina + 1 }} / {{$fCtrl.totalPaginas}}
+                    md-button.md-icon-button(aria-label='boton' ng-disabled="$fCtrl.pagina == ($fCtrl.totalPaginas - 1)" ng-click="$fCtrl.pagina = $fCtrl.pagina + 1" ) 
+                      span.flechas >
+          tbody
+            tr(ng-repeat="item in $fCtrl.registrosFiltrados | limitTo : $fCtrl.registrosXpagina : ($fCtrl.registrosXpagina*$fCtrl.pagina) | orderBy:$fCtrl.propertyName:$fCtrl.reverse | filter:$fCtrl.search")
+              th(scope='row') {{ item.id }}
+              td(data-title='OP :') {{ item.op }}
+              td(data-title='Usuario :') {{ item.usuario }}
+              td(data-title='Fecha de Creación :') {{ item.fechaCreacion | date : 'medium' }}            
+              
+      div(style='visibility: hidden')
+        #myDialog.md-dialog-container
+          md-dialog(aria-label='Eliminar')
+            form(ng-cloak='')
+              md-toolbar(style="background:red;")
+                .md-toolbar-tools
+                  span(flex='')
+                  b Eliminar Registro
+                  span(flex='')
+                  md-button.md-icon-button(ng-click='$fCtrl.cerrar()' style="font-size:22pt;") X
+              md-dialog-content
+                .md-dialog-content
+                  p Esta seguro que desea eliminar el registro ?
+              md-dialog-actions(layout='row' layout-align="end end")
+                md-button.md-raised(ng-click="$fCtrl.eliminar()" style="color:red;") Eliminar
+                md-button.md-raised(ng-click="$fCtrl.cerrar()") Cancelar
+   

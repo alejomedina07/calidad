@@ -1,0 +1,79 @@
+extends ../../layout/layout
+
+block header
+  include ../../inclusions/header
+block content
+  br
+  div(ng-controller="listCentro as $lCtrl" layout-margin)
+    .md-whiteframe-2dp(layout-margin layout-padding )
+      div(layout="row" layout-align="center center" flex)
+        h2 Lista de Centros de chequeo
+        md-input-container.md-block(md-no-float='' flex style="margin-bottom: 0;margin-left:40px;" )
+          md-icon(md-svg-src='/static/content/icons/search.svg')
+          input(ng-model='$lCtrl.search' type='text' placeholder='Buscar...' aria-label='Buscar...' ng-change="$lCtrl.filtrar()")
+        md-button.md-raised.md-primary(href="/chequeo/centro/formulario") Crear 
+      md-content
+        div(ng-if="$lCtrl.loading" layout='row', layout-sm='column', layout-align='center center')
+          md-progress-linear(flex md-mode='indeterminate')   
+        table.responsive-table
+          thead
+            tr
+              th(scope='col' ng-click="$lCtrl.ordenarPor('linea')") 
+                div(layout="row")
+                  span linea
+                  span(flex)
+                  md-icon(md-svg-src="/static/content/icons/sort{{ $lCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$lCtrl.propertyName === 'id'")
+              th(scope='col' ng-click="$lCtrl.ordenarPor('centro')") 
+                div(layout="row")
+                  span(flex)
+                  span Centro
+                  span(flex)
+                  md-icon(md-svg-src="/static/content/icons/sort{{ $lCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$lCtrl.propertyName === 'codigo'")
+              
+              th(scope='col' ng-click="$lCtrl.ordenarPor('carroceria')") 
+                div(layout="row")
+                  span(flex)
+                  span Carrocería
+                  span(flex)
+                  md-icon(md-svg-src="/static/content/icons/sort{{ $lCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$lCtrl.propertyName === 'estado'")
+              
+              th(scope='col' ng-click="$lCtrl.ordenarPor('chasis')") 
+                div(layout="row")
+                  span(flex)
+                  span Chasis
+                  span(flex)
+                  md-icon(md-svg-src="/static/content/icons/sort{{ $lCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$lCtrl.propertyName === 'codigo'")
+              
+              th(scope='col' ) Operaciones
+              th(scope='col' ) Usuario que crea
+              th(scope='col' ) Fecha de creación
+              th(scope='col' ) Acciones
+          tfoot
+            tr
+              td.text-right(colspan='8')
+                div(layout="row" layout-xs="column" layout-align="end center")
+                  span Mostrando &nbsp; 
+                  md-select(placeholder='' ng-model='$lCtrl.registrosXpagina' ng-change="$lCtrl.pagina = 0;$lCtrl.paginar()")
+                    md-option(ng-value='opcion' ng-repeat='opcion in [10, 20, 50]') {{opcion}}
+                  span &nbsp; Registros Por Página
+                  div
+                    md-button.md-icon-button(aria-label='boton' ng-disabled="$lCtrl.pagina == 0" ng-click="$lCtrl.pagina = $lCtrl.pagina - 1" ) 
+                      span.flechas <
+                    span {{ $lCtrl.pagina + 1 }} / {{$lCtrl.totalPaginas}}
+                    md-button.md-icon-button(aria-label='boton' ng-disabled="$lCtrl.pagina == ($lCtrl.totalPaginas - 1)" ng-click="$lCtrl.pagina = $lCtrl.pagina + 1" ) 
+                      span.flechas >
+          tbody
+            tr(ng-repeat="item in $lCtrl.registrosFiltrados | limitTo : $lCtrl.registrosXpagina : ($lCtrl.registrosXpagina*$lCtrl.pagina) | orderBy:$lCtrl.propertyName:$lCtrl.reverse | filter:$lCtrl.search")
+              th(scope='row') {{ $lCtrl.obtenerLinea(item.linea) }}
+              td(data-title='Centro:') {{ item.centro }}
+              td(data-title='Carrocería :') {{ item.carroceria }}
+              td(data-title='Chasis :') {{ item.chasis }}            
+              td(data-title='Operaciones :') {{ item.operaciones }}
+              td(data-title='Usuario que crea :') {{ item.usuario }}
+              td(data-title='Fecha de Creación :') {{ item.fechaCreacion | date:'medium' }}
+              td(data-title='Acciones :') 
+                md-button.md-icon-button(aria-label='boton' href="/chequeo/centro/editar/{{ item.idChasisCarroceria }}/{{ item.idCentro }}" ng-click="$lCtrl.form = item") 
+                  md-icon(md-svg-src='/static/content/icons/edit.svg')
+              
+    
+      

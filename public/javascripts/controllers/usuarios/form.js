@@ -68,6 +68,17 @@
     var _validar = {
       nombre: {
         presence: {message: "^El campo 'Nombre' es requerido"},
+        length: {
+          minimum: 6,
+          message: "El Nombre es muy corto"
+        }
+      },
+      cedula: {
+        presence: {message: "^El campo 'Cedula' es requerido"},
+        length: {
+          minimum: 5,
+          message: "La cédula es muy corta"
+        }
       },
       estado: {
         presence: {message: "^El campo 'Estado' es requerido"},

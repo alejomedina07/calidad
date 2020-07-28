@@ -242,3 +242,25 @@ md-sidenav {
   padding-top: 12px;
   padding-bottom: 12px;
 }
+
+
+.sortable {
+  list-style: none;
+  padding-left: 8px;
+}
+
+.sortable .item {
+  padding:8px 12px;
+  margin: 12px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.defectos {
+  position: absolute;
+  right: 0px;
+  background: red;
+  padding: 0px 7px;
+  border-radius: 50%;
+  color: #fff;
+}
