@@ -53,30 +53,30 @@
 
 
       sections.push({
-        name: 'Chequeo',  permiso:'centro',
+        name: 'Chequeo',  permiso:'chequeo',
         type: 'toggle', icon:'checklist',
         pages: [{
-          name: 'Defectos',  permiso:'centro.listar',
+          name: 'Defectos',  permiso:'defecto.listar',
           state: '/chequeo/defectos',
           type: 'link', icon: 'fa fa-group'
         }, {
-          name: 'Categorías',  permiso:'centro.crear',
+          name: 'Categorías',  permiso:'categoria.crear',
           state: '/chequeo/categorias',
           type: 'link', icon: 'fa fa-map-marker'
         }, {
-          name: 'Operaciones',  permiso:'centro.crear',
+          name: 'Operaciones',  permiso:'operacion.crear',
           state: '/chequeo/operaciones',
           type: 'link', icon: 'fa fa-map-marker'
         }, {
-          name: 'Chasis-Carroceria',  permiso:'centro.crear',
+          name: 'Operaciones Chasis-Carroceria',  permiso:'chequeoCentro.listar',
           state: '/chequeo/chasis-carroceria',
           type: 'link', icon: 'fa fa-map-marker'
         }, {
-          name: 'Chequeo por centro',  permiso:'centro.crear',
+          name: 'Chequeo por centro de trabajo',  permiso:'chequeoCentro.listar',
           state: '/chequeo/centro/',
           type: 'link', icon: 'fa fa-map-marker'
         }, {
-          name: 'Chequeo',  permiso:'centro.crear',
+          name: 'Chequeo',  permiso:'chequeo.listar',
           state: '/chequeo/control',
           type: 'link', icon: 'fa fa-map-marker'
         }]
@@ -149,7 +149,7 @@
         '</md-button>\n' +
         '<ul ng-show="isOpen()" id="docs-menu-{{section.name | nospace}}" class="menu-toggle-list">\n' +
         '  <li ng-repeat="page in section.pages">\n' +
-        '    <menu-link section="page"></menu-link>\n' +
+        '    <menu-link section="page" ng-if="obtenerPermiso(page.permiso)"></menu-link>\n' +
         '  </li>\n' +
         '</ul>\n' +
         '');
@@ -162,9 +162,13 @@
         templateUrl: 'partials/menu-toggle.tmpl.html',
         link: function (scope, element) {
           var controller = element.parent().controller();
+          var operaciones = localStorage.getItem("operaciones");
 
           scope.isOpen = function () {
             return controller.isOpen(scope.section);
+          };
+          scope.obtenerPermiso = function(permiso) {
+            return operaciones.includes(permiso);
           };
           scope.toggle = function () {
             controller.toggleOpen(scope.section);

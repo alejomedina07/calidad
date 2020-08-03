@@ -10,6 +10,8 @@
 
     $fCtrl.init = function() {
       $fCtrl.form = {};
+      $fCtrl.obtenerOPs();
+      $fCtrl.obtener_ops();
       if ($fCtrl.id) {
         $fCtrl.form.id = $fCtrl.id;
         obtenerRegistro();
@@ -18,7 +20,8 @@
     };
 
     $fCtrl.obtener_ops = function() {
-      $http.get('/chequeo/control/obtener-ops/'+  $fCtrl.obtenerLinea($fCtrl.form.linea) )
+      // $http.get('/chequeo/control/obtener-ops/'+  $fCtrl.obtenerLinea($fCtrl.form.linea) )
+      $http.get('/chequeo/control/obtener-ops/linea')
       .then(function(result){
         $fCtrl.ops = result.data;
         console.log($fCtrl.ops);
@@ -82,7 +85,7 @@
     };
 
     $fCtrl.buscarChasis = function() {
-      $http.get('/chequeo/centro/chasis/' + $fCtrl.form.idCarroceria)
+      $http.get('/chequeo/control/chasis/' + $fCtrl.form.idCarroceria)
       .then(result => {
         $fCtrl.chasis = result.data;
         // if ($fCtrl.id && fCtrl.id.id) {
@@ -103,16 +106,6 @@
       $http.get(url)
       .then(function(result){
         $fCtrl.operaciones = result.data;
-        // if ($fCtrl.id && fCtrl.id.id) {
-        //   let operacionesSeleccionadas = [];
-        //   $fCtrl.form.operaciones.forEach((item) => {
-        //     let index = $fCtrl.operaciones.findIndex(i => i.idOperacion == item.idOperacion );
-        //     if (index >= 0) {
-        //       operacionesSeleccionadas.push($fCtrl.operaciones[index]);
-        //     }
-        //   });
-        //   $fCtrl.form.operaciones = operacionesSeleccionadas;
-        // }
         $fCtrl.loading = false;
       })
       .catch(function(e){
@@ -125,6 +118,14 @@
 
     $fCtrl.openModal = function(ev, operacion) {
       $fCtrl.operacionSeleccionada = operacion;
+      if ($fCtrl.form.estado == 'Activo') {
+        abrirModalDefectosActivos(ev);
+      }else {
+        abrirModalDefectosACerrar(ev);
+      }
+    };
+
+    function abrirModalDefectosActivos(ev) {
       if ($fCtrl.operacionSeleccionada.defectos) {
         $fCtrl.defectos.forEach((item, i) => {
           var index = $fCtrl.operacionSeleccionada.defectos.indexOf(item.idDefecto.toString());
@@ -139,7 +140,26 @@
         });
       }
 
+      $mdDialog.show({
+        contentElement: '#myDialog',
+        parent: angular.element(document.body),
+        targetEvent: ev,
+        clickOutsideToClose: false
+      });
+    }
 
+    function abrirModalDefectosACerrar(ev) {
+      $fCtrl.defectosACerrar = [];
+      if ($fCtrl.operacionSeleccionada.defectos) {
+        $fCtrl.defectos.forEach((item, i) => {
+          var index = $fCtrl.operacionSeleccionada.defectos.indexOf(item.idDefecto.toString());
+          if (index >= 0)
+            $fCtrl.defectosACerrar.push(item);
+        });
+      }else {
+        ToastFactoria.rojo({contenido: 'No hay defectos.'});
+        return '';
+      }
 
       $mdDialog.show({
         contentElement: '#myDialog',
@@ -147,7 +167,7 @@
         targetEvent: ev,
         clickOutsideToClose: false
       });
-    };
+    }
 
     $fCtrl.close = function() {
       $fCtrl.operacionSeleccionada = null;
@@ -171,7 +191,7 @@
 
 
     $fCtrl.obtenerOPs = function () {
-      $http.get('/chequeo/control/obtener-centros?codigo=' + $fCtrl.form.linea)
+      $http.get('/chequeo/control/obtener-centros?codigo=1')
       .then(function(result){
         $fCtrl.listaOps = result.data;
         if (!$fCtrl.listaOps || !$fCtrl.listaOps.length) {
@@ -260,21 +280,67 @@
       });
     };
 
+    $fCtrl.cerrarDefectos = function() {
+      $fCtrl.loading = true;
+      var form = { id:$fCtrl.form.id, idOperacion: $fCtrl.operacionSeleccionada.idOperacion, arrayDefectos:[] };
+      $fCtrl.operacionSeleccionada.defectos = '';
+      $fCtrl.defectosACerrar.forEach((item, i) => {
+        if (item.selected)
+          form.arrayDefectos.push(item.idDefecto);
+      });
 
-    $fCtrl.finalizar = function () {
-      $http.get('/chequeo/control/finalizar/' + $fCtrl.form.id)
-      .then(function(result){
-        window.location.href = "/chequeo/control";
+      $http.post('/chequeo/control/defecto/cerrar', form)
+      .then(result => {
+        ToastFactoria.verde({contenido: 'Defecto Cerrado exitosamente'});
+        console.log('result');
+        console.log(result);
+        $timeout(function(){
+          $fCtrl.buscarOperaciones();
+        }, 500);
+        $fCtrl.close();
+        if (result.data.affectedRows == 1) {
+          notificacionFinalizado();
+        }
       })
-      .catch(function(e){
-        console.log(e);
+      .catch(error => {
+        console.log(error);
+        ToastFactoria.rojo({contenido: 'No se pudo realizar la acción intentelo de nuevo.'});
+        $fCtrl.loading = false;
       });
     };
 
+
+
+    function notificacionFinalizado() {
+      var confirm = $mdDialog.confirm()
+      .title('Notificación')
+      .textContent('Se ha finalizado con éxito el chequeo.')
+      .ariaLabel('Finalizado')
+      .ok('Aceptar')
+      $mdDialog.show(confirm).then(function() {
+        window.location.href = "/chequeo/control";
+      }, function() {
+        window.location.href = "/chequeo/control";
+      });
+    }
+
+    $fCtrl.finalizar = function () {
+      $fCtrl.errores = validate($fCtrl.form, _validar_observacion);
+      if (!$fCtrl.errores) {
+        $http.get('/chequeo/control/finalizar/' + $fCtrl.form.id + '?observacion=' + $fCtrl.form.observacion)
+        .then(function(result){
+          window.location.href = "/chequeo/control";
+        })
+        .catch(function(e){
+          console.log(e);
+        });
+      }
+    };
+
     var _validar = {
-      linea: {
-        presence: {message: "^El campo 'Línea de Producción' es requerido"},
-      },
+      // linea: {
+      //   presence: {message: "^El campo 'Línea de Producción' es requerido"},
+      // },
       idCentro: {
         presence: {message: "^El campo 'Centro de Trabajo' es requerido"},
       },
@@ -288,6 +354,10 @@
         presence: {message: "^El campo 'Orden de Producción' es requerido", allowEmpty: false},
       }
 
+    },_validar_observacion = {
+      observacion: {
+        presence: {message: "^El campo 'Observación' es requerido", allowEmpty: false},
+      }
     };
 
   });

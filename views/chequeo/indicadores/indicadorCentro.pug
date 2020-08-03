@@ -32,11 +32,24 @@ block content
       md-datepicker(ng-model="$iCtrl.fechaFin" md-placeholder="Fecha fin" )
       span &nbsp;
       md-button.md-primary.md-raised(ng-click="$iCtrl.obtenerDatos()" ng-disabled="!$iCtrl.centro || !$iCtrl.fechaInicio || !$iCtrl.fechaFin") Filtrar
+
+    div(layout="row" layout-align="center center" layout-padding ng-if="$iCtrl.cantidadVehiculos")
+      span(flex)
+      .md-whiteframe-2dp(layout="column"  layout-padding)
+        span Cantidad de Vehiculos: 
+          b {{ $iCtrl.cantidadVehiculos }}
+        md-divider
+        span Cantidad de Defectos: 
+          b {{ $iCtrl.cantidadDefectos }}
+      span(flex)
+    div(layout="row" )
+      div(flex)
+        .grafica#chartdivTotal(ng-show="$iCtrl.centro")
     
     div(layout="row" )
       div(flex)
         .grafica-grande#chartdiv(ng-show="$iCtrl.centro")
     div(layout="row" layout-align="space-around center" layout-wrap)
-      div(flex="30" ng-repeat="defecto in $iCtrl.defectos")
+      div(flex="33" ng-repeat="defecto in $iCtrl.defectos")
         h2 {{ defecto.nombre }}
         .grafica(id="grafica{{$index}}" ng-init="$iCtrl.graficaOperacion(defecto, $index)")

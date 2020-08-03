@@ -1,7 +1,7 @@
-var Centro = function(){};
+var Chequeo = function(){};
 
 
-Centro.prototype.PERMISO = {
+Chequeo.prototype.PERMISO = {
 	DEFECTO:{
 		CREAR:  'defecto.crear',
 		EDITAR:  'defecto.editar',
@@ -23,13 +23,13 @@ Centro.prototype.PERMISO = {
 		LISTAR:  'centro.listar',
 	},
 	CONTROL:{
-		CREAR:  'control.crear',
-		EDITAR:  'control.editar',
-		LISTAR:  'control.listar',
+		CREAR:  'chequeo.crear',
+		EDITAR:  'chequeo.editar',
+		LISTAR:  'chequeo.listar',
 	},
 
 },
 
 
 
-module.exports = new Centro();
+module.exports = new Chequeo();

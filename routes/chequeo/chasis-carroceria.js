@@ -76,10 +76,12 @@ router.get('/chasis/:idCarroceria',  mdAutenticacion.verificatoken(chequeo.PERMI
 router.get('/listar',  mdAutenticacion.verificatoken(chequeo.PERMISO.OPERACION.LISTAR), (req, res, next) => {
   let connection = mysql.createConnection(config.connection);
   connection.connect();
-  let query = `SELECT cc.*, chaca.idChasis, chaca.idCarroceria, ca.nombre, cha.abreviatura, COUNT(cco.id) as operaciones FROM chasis_carroceria cc
+  let query = `SELECT cc.*, u.nombre as usuario, chaca.idChasis, chaca.idCarroceria, ca.nombre, cha.abreviatura, COUNT(cco.id) as operaciones
+    FROM chasis_carroceria cc
     INNER JOIN pdmsinergia.chasis_carroceria chaca ON chaca.id = cc.idChasisCarroceria
     INNER JOIN pdmsinergia.carroceria ca ON ca.id = chaca.idCarroceria
     INNER JOIN pdmsinergia.chasis cha ON cha.id = chaca.idChasis
+    INNER JOIN usuario u ON u.id = cc.idUsuarioCreacion
     LEFT JOIN calidad.chasis_carroceria_operacion cco on cco.idChasisCarroceria = cc.id AND cco.estado = 'Activo' GROUP BY cco.idChasisCarroceria`
   let promesa = config.consultar(connection, query);
   promesa.then(value => {

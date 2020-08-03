@@ -53,10 +53,11 @@ block content
                   md-icon(md-svg-src="/static/content/icons/sort{{ $dCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$dCtrl.propertyName === 'estado'")
               
               th(scope='col' ) Fecha de creación
+              th(scope='col' ) Usuario que Crea
               th(scope='col' ) Acciones
           tfoot
             tr
-              td.text-right(colspan='5')
+              td.text-right(colspan='6')
                 div(layout="row" layout-xs="column" layout-align="end center")
                   span Mostrando &nbsp; 
                   md-select(placeholder='' ng-model='$dCtrl.registrosXpagina' ng-change="$dCtrl.pagina = 0;$dCtrl.paginar()")
@@ -74,6 +75,7 @@ block content
               td(data-title='Centro de Red :') {{ item.nombre }}
               td(data-title='Correo :') {{ item.estado }}            
               td(data-title='Fecha de Creación :') {{ item.fechaCreacion | date:'medium' }}
+              td(data-title='Usuario :') {{ item.usuario }}            
               td(data-title='Acciones :') 
                 md-button.md-icon-button(aria-label='boton' href="#" ng-click="$dCtrl.form = item") 
                   md-icon(md-svg-src='/static/content/icons/edit.svg')

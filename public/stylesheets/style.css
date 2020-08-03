@@ -264,3 +264,9 @@ md-sidenav {
   border-radius: 50%;
   color: #fff;
 }
+
+
+
+.rotate {
+  writing-mode: vertical-rl;
+}

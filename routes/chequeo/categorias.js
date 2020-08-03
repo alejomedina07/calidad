@@ -13,7 +13,7 @@ router.get('/', mdAutenticacion.verificatoken(chequeo.PERMISO.CATEGORIA.LISTAR),
 router.get('/listar',  mdAutenticacion.verificatoken(chequeo.PERMISO.CATEGORIA.LISTAR), (req, res, next) => {
   let connection = mysql.createConnection(config.connection);
   connection.connect();
-  let query = `SELECT * FROM categoria`
+  let query = `SELECT c.*, u.nombre as usuario FROM categoria c INNER JOIN usuario u ON u.id = c.idUsuarioCreacion`
   let promesa = config.consultar(connection, query);
   promesa.then(value => {
     res.json(value);

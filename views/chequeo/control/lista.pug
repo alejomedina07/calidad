@@ -5,6 +5,26 @@ block header
 block content
   br
   div(ng-controller="listControl as $lCtrl" layout-margin)
+    script(src='https://unpkg.com/jspdf@latest/dist/jspdf.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.6/jspdf.plugin.autotable.js')
+    table#basic-table(style='display: none;' ng-init="categoriaAnterior = ''")
+      thead
+        tr
+          th OPERACIONES Y DEFECTOS
+          th
+      tbody(ng-repeat="item in $lCtrl.registroPdf.operaciones")
+        tr(ng-if="$lCtrl.validarCategoria(item)" ) 
+          td.categoria(colspan='2' align='center' style="text-align:center") 
+            b {{ item.categoria }}
+        
+        tr
+          td(align='left') 
+            h4 Operación: 
+              b {{ item.operacion }}  &nbsp;
+          td(align='left')
+            h4 Defectos: 
+              b {{ item.defectos }}
+          
     .md-whiteframe-2dp(layout-margin layout-padding )
       div(layout="row" layout-align="center center" flex)
         h2 Lista de Chequeos
@@ -23,9 +43,9 @@ block content
                   span ID
                   span(flex)
                   md-icon(md-svg-src="/static/content/icons/sort{{ $lCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$lCtrl.propertyName === 'id'")
-              th(scope='col' ng-click="$lCtrl.ordenarPor('linea')") 
+              th(scope='col' ng-click="$lCtrl.ordenarPor('nombre_op')") 
                 div(layout="row")
-                  span linea
+                  span OP
                   span(flex)
                   md-icon(md-svg-src="/static/content/icons/sort{{ $lCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$lCtrl.propertyName === 'id'")
               th(scope='col' ng-click="$lCtrl.ordenarPor('centro')") 
@@ -51,10 +71,11 @@ block content
               
               th(scope='col' ) Estado
               th(scope='col' ) Fecha de creación
+              th(scope='col' ) Usuario que crea
               th(scope='col' ) Acciones
           tfoot
             tr
-              td.text-right(colspan='7')
+              td.text-right(colspan='9')
                 div(layout="row" layout-xs="column" layout-align="end center")
                   span Mostrando &nbsp; 
                   md-select(placeholder='' ng-model='$lCtrl.registrosXpagina' ng-change="$lCtrl.pagina = 0;$lCtrl.paginar()")
@@ -69,15 +90,91 @@ block content
           tbody
             tr(ng-repeat="item in $lCtrl.registrosFiltrados | limitTo : $lCtrl.registrosXpagina : ($lCtrl.registrosXpagina*$lCtrl.pagina) | orderBy:$lCtrl.propertyName:$lCtrl.reverse | filter:$lCtrl.search")
               td(data-title='Id:') {{ item.id }}
-              th(scope='row') {{ $lCtrl.obtenerLinea(item.linea) }}
+              th(scope='row') {{ item.nombre_op }}
               td(data-title='Centro:') {{ item.centro }}
               td(data-title='Carrocería :') {{ item.carroceria }}
               td(data-title='Chasis :') {{ item.chasis }}            
               td(data-title='Operaciones :') {{ item.estado }}
-              td(data-title='Fecha de Creación :') {{ item.fechaCreacion | date:'medium' }}
+              td(data-title='Fecha de Creación :') {{ item.fechaCreacion | date:'short' }}
+              td(data-title='Usuario que crea :') {{ item.usuario }}
               td(data-title='Acciones :') 
-                md-button.md-icon-button(aria-label='boton' href="/chequeo/control/editar/{{ item.id }}" ng-disabled="item.estado == 'Finalizado'") 
+                md-button.md-icon-button(aria-label='boton' href="/chequeo/control/editar/{{ item.id }}" ng-hide="item.estado == 'Finalizado'") 
                   md-icon(md-svg-src='/static/content/icons/edit.svg')
-              
+                md-button.md-icon-button(ng-click="$lCtrl.exportar(item)" ng-hide="item.estado == 'Activo'")
+                  md-icon(md-svg-src='/static/content/icons/pdf.svg')
     
-      
+    #customers(style='display: none;')
+      .table-responsive45
+        table.table.table-header-rotated
+          thead
+            tr
+              // First column header is not rotated
+              th
+              // Following headers are rotated
+              th
+                div
+                  span Column header 1
+              th
+                div
+                  span Column header 2
+              th
+                div
+                  span Column header 3
+              th
+                div
+                  span Column header 4
+              th
+                div
+                  span Column header 5
+              th
+                div
+                  span Column header 6
+          tbody
+            tr
+              th.row-header Row header 1
+              td
+                input(checked='checked', name='column1[]', type='radio', value='row1-column1')
+              td
+                input(checked='checked', name='column2[]', type='radio', value='row1-column2')
+              td
+                input(name='column3[]', type='radio', value='row1-column3')
+              td
+                input(name='column4[]', type='radio', value='row1-column4')
+              td
+                input(name='column5[]', type='radio', value='row1-column5')
+              td
+                input(name='column6[]', type='radio', value='row1-column6')
+            tr
+              th.row-header Row header 2
+              td
+                input(name='column1[]', type='radio', value='row2-column1')
+              td
+                input(name='column2[]', type='radio', value='row2-column2')
+              td
+                input(checked='checked', name='column3[]', type='radio', value='row2-column3')
+              td
+                input(checked='checked', name='column4[]', type='radio', value='row2-column4')
+              td
+                input(name='column5[]', type='radio', value='row2-column5')
+              td
+                input(name='column6[]', type='radio', value='row2-column6')
+      //- 
+        span Orden de Producción : 
+          b  {{$lCtrl.registroPdf.nombre_op}}  - &nbsp;
+        span Carrocería : 
+          b  {{$lCtrl.registroPdf.carroceria}} , &nbsp;
+        span Chasis : 
+          b  {{$lCtrl.registroPdf.chasis}} &nbsp;
+        br
+        span Centro : 
+          b  {{$lCtrl.registroPdf.centro}} , &nbsp;
+        span Estado : 
+          b  {{$lCtrl.registroPdf.estado}} 
+        div(layout="column" ng-repeat="item in $lCtrl.registroPdf.operaciones")
+          h4 Categoría: 
+            b {{ item.categoria }}
+          h4 Operación: 
+            b {{ item.operacion }}
+          h4 Defectos: 
+            b {{ item.defectos }}
+          md-dividery

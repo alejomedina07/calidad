@@ -31,7 +31,7 @@ block content
           md-button.md-raised.md-primary(ng-click="$oCtrl.guardar()") {{ $oCtrl.form.id ? 'Editar' : 'Crear'}}
     .md-whiteframe-2dp(layout-margin layout-padding flex="100" flex-gt-md="70")
       div(layout="row" layout-align="center center" flex)
-        h2 Lista de Categorías
+        h2 Lista de Operaciones
         md-input-container.md-block(md-no-float='' flex style="margin-bottom: 0;margin-left:40px;" )
           md-icon(md-svg-src='/static/content/icons/search.svg')
           input(ng-model='$oCtrl.search' type='text' placeholder='Buscar...' aria-label='Buscar...' ng-change="$oCtrl.filtrar()")

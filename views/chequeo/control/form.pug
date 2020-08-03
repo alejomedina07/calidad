@@ -8,13 +8,11 @@ block content
   .md-whiteframe-2dp(layout-margin layout-padding ng-controller="formControl as $fCtrl" ng-cloak)
     div(layout="row" layout-align="center center" flex ng-init="$fCtrl.id = " + id + ';$fCtrl.init();')
       b.titulo Crear Chequeo
-    //- md-divider
     div(ng-if="$fCtrl.loading" layout='row', layout-sm='column', layout-align='center center')
       md-progress-linear(flex md-mode='indeterminate')
     form(action="")
       md-content(style="width:100%" layout-margin layout-padding ng-show="!$fCtrl.id")
-        //- div(layout="row" layout-align="center center" layout-sm="column" layout-xs="column")
-        div(layout="column" layout-align="center center" flex )
+        //-div(layout="column" layout-align="center center" flex )
           i(class='error' ng-show="$fCtrl.errores.linea" ng-repeat="opcion in $fCtrl.errores.linea")
             | {{ opcion }}
           md-radio-group(ng-model='$fCtrl.form.linea' layout="row" layout-xs="column" layout-align-xs="start start" layout-align="center center" ng-change="$fCtrl.obtenerOPs();$fCtrl.obtener_ops();" ng-disabled="$fCtrl.id")
@@ -27,7 +25,7 @@ block content
         div(layout="row" layout-xs="column" layout-sm="column" layout-align="center center" layout-margin )
           md-input-container.w-100.md-block(flex)
             label Centro de trabajo
-            md-select(ng-model='$fCtrl.form.idCentro' md-on-close="$fCtrl.busqueda = ''" md-on-open='$fCtrl.focoParaBuscar()' ng-change="$fCtrl.buscarCarrocerias()" ng-disabled="!$fCtrl.form.linea || $fCtrl.id")
+            md-select(ng-model='$fCtrl.form.idCentro' md-on-close="$fCtrl.busqueda = ''" md-on-open='$fCtrl.focoParaBuscar()' ng-change="$fCtrl.buscarCarrocerias()" ng-disabled="$fCtrl.id")
               md-select-header
                 input.campo-busqueda(ng-model='$fCtrl.busqueda' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar Centro...')
               md-option(ng-value='opcion.idCentro' ng-repeat="opcion in $fCtrl.listaOps | filter:$fCtrl.busqueda") {{opcion.codigo}} - {{opcion.nombre}}
@@ -35,7 +33,7 @@ block content
               | {{ opcion }}  
           md-input-container.w-100.md-block(flex)
             label Carrocería
-            md-select(ng-model='$fCtrl.form.idCarroceria' md-on-close="$fCtrl.busqueda = ''" md-on-open='$fCtrl.focoParaBuscar()' ng-change="$fCtrl.buscarChasis()" ng-disabled="!$fCtrl.form.linea || $fCtrl.id")
+            md-select(ng-model='$fCtrl.form.idCarroceria' md-on-close="$fCtrl.busqueda = ''" md-on-open='$fCtrl.focoParaBuscar()' ng-change="$fCtrl.buscarChasis()" ng-disabled="$fCtrl.id")
               md-select-header
                 input.campo-busqueda(ng-model='$fCtrl.busqueda' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar Centro...')
               md-option(ng-value='opcion.id' ng-repeat="opcion in $fCtrl.carrocerias | filter:$fCtrl.busqueda") {{opcion.nombre}}
@@ -54,7 +52,7 @@ block content
         div(layout="row")
           md-input-container.w-100.md-block(flex)
             label Orden de Producción
-            md-select(ng-model='$fCtrl.form.op' md-on-close="$fCtrl.busquedaOp = ''" md-on-open='$fCtrl.focoParaBuscar()' ng-disabled="!$fCtrl.form.linea")
+            md-select(ng-model='$fCtrl.form.op' md-on-close="$fCtrl.busquedaOp = ''" md-on-open='$fCtrl.focoParaBuscar()')
               md-select-header
                 input.campo-busqueda(ng-model='$fCtrl.busquedaOp' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar orden de Producción...')
               md-option(ng-value='opcion.id' ng-repeat="opcion in $fCtrl.ops | filter:$fCtrl.busquedaOp | limitTo:100") {{opcion.prefijo}} - {{opcion.op}}
@@ -65,23 +63,22 @@ block content
       //- Editar
       md-content(ng-show="$fCtrl.id")
         div(layout="row" layout-align="center center" layout-margin)
-          //-  md-input-container.w-100.md-block(flex)
-              label Estado
-              md-select(ng-model='$fCtrl.form.estado')
-                md-option(ng-repeat='opcion in ["Activo", "Finalizado"]', ng-value='opcion')
-                  | {{opcion}}
-          span(flex="70")
+          span(flex)
             span Orden de Producción : 
               b {{ $fCtrl.form.nombre_op }} - &nbsp;
-            b {{ $fCtrl.obtenerLinea($fCtrl.form.linea) }} - &nbsp;
+            //-b {{ $fCtrl.obtenerLinea($fCtrl.form.linea) }} - &nbsp;
             span Carrocería : 
               b {{ $fCtrl.form.carroceria }}, &nbsp;
             span Chasis : 
               b {{ $fCtrl.form.chasis }}, &nbsp;
             span Centro : 
-              b {{ $fCtrl.form.centro }}
-          md-button.md-raised.md-primary(ng-click="$fCtrl.finalizar()") Finalizar
+              b {{ $fCtrl.form.centro }}, &nbsp;
+            span Estado : 
+              b {{ $fCtrl.form.estado }}
           
+        div(layout="row" layout-align="center center" layout-margin)
+          span(flex) Observación: &nbsp;
+            b {{ $fCtrl.form.observacion }}
         div(layout="row" ng-show="$fCtrl.operaciones && $fCtrl.operaciones.length")
           div(flex layout-margin)
             fieldset.demo-fieldset 
@@ -102,9 +99,16 @@ block content
                  md-icon.md-secondary.md-fab.md-mini(md-svg-icon='/static/content/icons/danger.svg'  aria-label='Send Email')
                    //md-button(class="md-fab md-mini" aria-label="Eat cake") 2
         
+        div(layout="row" ng-hide="$fCtrl.form.estado == 'En progreso'")
+           md-input-container.md-block(flex)
+             label Observación
+             textarea(ng-model='$fCtrl.form.observacion', md-maxlength='150', rows='5', md-select-on-focus='')
+             i(class='error' ng-show="$fCtrl.errores.observacion" ng-repeat="opcion in  $fCtrl.errores.observacion")
+               | {{ opcion }} 
         div(layout="row" layout-align="end end")
           md-button.md-raised(href="/chequeo/control") Volver
-        
+          md-button.md-raised.md-primary(ng-click="$fCtrl.finalizar('En progreso')" ng-disabled="$fCtrl.form.estado != 'Activo'") En progreso
+
         div(style='visibility: hidden')
           #myDialog.md-dialog-container
             md-dialog(flex="60" flex-xs="90" flex-sm="90")
@@ -114,12 +118,18 @@ block content
                   span(flex='')
                   md-button.md-icon-button(ng-click='$fCtrl.close()' style="font-size:22pt;") X       
               md-dialog-content(layout-margin layout-paddig)
-                md-list
-                  md-list-item(ng-repeat='defecto in $fCtrl.defectos')
+                md-list(ng-if="$fCtrl.form.estado == 'En progreso'")
+                  md-list-item(ng-repeat='defecto in $fCtrl.defectosACerrar' )
+                    p {{ defecto.nombre }}
+                    md-checkbox.md-primary(ng-model='defecto.selected')
+              
+                md-list(ng-if="$fCtrl.form.estado == 'Activo'")
+                  md-list-item(ng-repeat='defecto in $fCtrl.defectos' )
                     p {{ defecto.nombre }}
                     md-checkbox.md-primary(ng-model='defecto.selected')
               
               md-dialog-actions(layout-align="end end" layout="row" style="background:#f6f6f6;")
                 md-button.md-raised(ng-click='$fCtrl.close()') Cancelar
-                md-button.md-raised.md-primary(ng-click='$fCtrl.guardarDefectos()') Guardar
+                md-button.md-raised.md-primary(ng-click='$fCtrl.guardarDefectos()' ng-if="$fCtrl.form.estado == 'Activo'") Guardar defectos
+                md-button.md-raised.md-primary(ng-click='$fCtrl.cerrarDefectos()' ng-if="$fCtrl.form.estado == 'En progreso'") Cerrar defectos
               

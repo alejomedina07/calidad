@@ -26,14 +26,112 @@
       });
     };
 
+    $cCtrl.categoriaAnterior = '';
+    $cCtrl.validarCategoria = function (item) {
+      if ($cCtrl.categoriaAnterior != item.categoria) {
+        $cCtrl.categoriaAnterior = item.categoria;
+        return true;
+      }else {
+        return false;
+      }
+    };
+
+
+    $cCtrl.exportar = function(chequeo) {
+      console.log(chequeo);
+      $cCtrl.registroPdf = chequeo;
+      // $http.get('/chequeo/control/obtener-para-pdf')
+      let url = `/chequeo/control/operaciones-pdf/${chequeo.id}`
+      $http.get(url)
+      .then(function(result){
+        $cCtrl.registroPdf.operaciones = result.data;
+        // debugger;
+        $timeout(function(){
+          // generarPdf();
+          generate();
+        }, 500);
+      })
+      .catch(function(e){
+        $cCtrl.loading = false;
+        console.log(e);
+      });
+
+      function generarPdf() {
+        var pdf = new jsPDF('p', 'pt', 'letter');
+        var source = $('#customers')[0];
+        var specialElementHandlers = {
+            '#bypassme': function (element, renderer) {
+                return true
+            }
+        };
+        var margins = {
+            top: 80,
+            bottom: 60,
+            left: 10,
+            width: 700
+        };
+        pdf.fromHTML(
+        source, // HTML string or DOM elem ref.
+        margins.left, // x coord
+        margins.top, { // y coord
+            'width': margins.width, // max width of content on PDF
+            'elementHandlers': specialElementHandlers
+        },
+
+        function (dispose) {
+          let nombre = `Chequo-${$cCtrl.registroPdf.id}.pdf`
+          pdf.save(nombre);
+        }, margins);
+      }
+
+      function generate() {
+
+        var doc = new jsPDF('p', 'pt');
+
+        var res = doc.autoTableHtmlToJson(document.getElementById("basic-table"));
+        // doc.autoTable(res.columns, res.data, {margin: {top: 150}});
+
+        var header = function(data) {
+          doc.setFontSize(12);
+          doc.setTextColor(40);
+          doc.setFontStyle('normal');
+          //doc.addImage(headerImgData, 'JPEG', data.settings.margin.left, 20, 50, 50);
+          let titulo = `Orden de Producción : ${$cCtrl.registroPdf.nombre_op} Carrocería : ${$cCtrl.registroPdf.carroceria} \nChasis : ${$cCtrl.registroPdf.chasis} \nCentro de trabajo: ${$cCtrl.registroPdf.centro} \nEstado : ${$cCtrl.registroPdf.estado} \nObservacion : ${$cCtrl.registroPdf.observacion}\nAuditor : ${$cCtrl.registroPdf.auditor}`
+          doc.text(titulo, data.settings.margin.left, 50);
+        };
+
+        var options = {
+          beforePageContent: header,
+          styles: {
+              halign: 'center'
+          },
+          columnStyles:{
+            0:{halign:'left'},
+            1:{halign:'left'}
+          },
+          margin: {
+            top: 150
+          },
+          // startY: doc.autoTableEndPosY() + 20
+
+        };
+
+        doc.autoTable(res.columns, res.data, options);
+
+        doc.save("table.pdf");
+      }
+
+    };
+
+
     $cCtrl.filtrar = function() {
-      $cCtrl.centrosFiltrados = $filter('filter')($cCtrl.centros, $cCtrl.search);
+      $cCtrl.registrosFiltrados = $filter('filter')($cCtrl.registros, $cCtrl.search);
       $cCtrl.paginar();
     };
 
 
     $cCtrl.paginar = function() {
-      $cCtrl.totalPaginas = Math.ceil($cCtrl.centrosFiltrados.length/$cCtrl.registrosXpagina);
+      $cCtrl.totalPaginas = Math.ceil($cCtrl.registrosFiltrados.length/$cCtrl.registrosXpagina);
     };
 
 
@@ -60,178 +158,6 @@
     }
 
     $cCtrl.listarCentros();
-
-
-
-
-    //
-    //
-    // am4core.ready(function() {
-    //
-    // // Themes begin
-    // // am4core.useTheme(am4themes_dataviz);
-    // am4core.useTheme(am4themes_spiritedaway);
-    // am4core.useTheme(am4themes_animated);
-    // // Themes end
-    //
-    // // Create chart instance
-    // var chart = am4core.create("chartdivv", am4charts.XYChart);
-    //
-    // // Add data
-    // chart.data = [{
-    //     "country": "Lateral Der",
-    //     "visits": 25
-    //   }, {
-    //     "country": "Lateral Izq",
-    //     "visits": 23
-    //   }, {
-    //     "country": "Techos",
-    //     "visits": 19
-    //   }, {
-    //     "country": "Base",
-    //     "visits": 15
-    //   }];
-    //
-    //   // Create axes
-    //
-    //   var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-    //   categoryAxis.dataFields.category = "country";
-    //   categoryAxis.renderer.grid.template.location = 0;
-    //   categoryAxis.renderer.minGridDistance = 30;
-    //
-    //   categoryAxis.renderer.labels.template.adapter.add("dy", function(dy, target) {
-    //     if (target.dataItem && target.dataItem.index & 2 == 2) {
-    //       return dy + 25;
-    //     }
-    //     return dy;
-    //   });
-    //
-    //   var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-    //
-    //   // Create series
-    //   var series = chart.series.push(new am4charts.ColumnSeries());
-    //   series.dataFields.valueY = "visits";
-    //   series.dataFields.categoryX = "country";
-    //   series.name = "Visits";
-    //   series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
-    //   series.columns.template.fillOpacity = .8;
-    //
-    //   var columnTemplate = series.columns.template;
-    //   columnTemplate.strokeWidth = 2;
-    //   columnTemplate.strokeOpacity = 1;
-    //
-    //   }); // end am4core.ready()
-    //
-    //
-    //
-    // am4core.ready(function() {
-    //
-    // // Themes begin
-    // am4core.useTheme(am4themes_dataviz);
-    // am4core.useTheme(am4themes_animated);
-    // // Themes end
-    //
-    // // Create chart instance
-    // var chart = am4core.create("chartdiv", am4charts.XYChart);
-    // chart.scrollbarX = new am4core.Scrollbar();
-    //
-    // // // Add data
-    // // chart.data = [{
-    // //   "country": "USA",
-    // //   "visits": 3025
-    // // }, {
-    // //   "country": "China",
-    // //   "visits": 1882
-    // // }, {
-    // //   "country": "Japan",
-    // //   "visits": 1809
-    // // }, {
-    // //   "country": "Germany",
-    // //   "visits": 1322
-    // // }, {
-    // //   "country": "UK",
-    // //   "visits": 1122
-    // // }, {
-    // //   "country": "France",
-    // //   "visits": 1114
-    // // }, {
-    // //   "country": "India",
-    // //   "visits": 984
-    // // }, {
-    // //   "country": "Spain",
-    // //   "visits": 711
-    // // }, {
-    // //   "country": "Netherlands",
-    // //   "visits": 665
-    // // }, {
-    // //   "country": "Russia",
-    // //   "visits": 580
-    // // }, {
-    // //   "country": "South Korea",
-    // //   "visits": 443
-    // // }, {
-    // //   "country": "Canada",
-    // //   "visits": 441
-    // // }];
-    //
-    // chart.data = [{
-    //     "country": "Soldadura sin pulir",
-    //     "visits": 25
-    //   }, {
-    //     "country": "Soldadura sin aplicar",
-    //     "visits": 23
-    //   }, {
-    //     "country": "Faltan amarras",
-    //     "visits": 19
-    //   }, {
-    //     "country": "Falta abrazadera",
-    //     "visits": 15
-    //   }, {
-    //     "country": "Mal corte",
-    //     "visits": 10
-    //   }];
-    // // Create axes
-    // var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-    // categoryAxis.dataFields.category = "country";
-    // categoryAxis.renderer.grid.template.location = 0;
-    // categoryAxis.renderer.minGridDistance = 30;
-    // categoryAxis.renderer.labels.template.horizontalCenter = "right";
-    // categoryAxis.renderer.labels.template.verticalCenter = "middle";
-    // categoryAxis.renderer.labels.template.rotation = 270;
-    // categoryAxis.tooltip.disabled = true;
-    // categoryAxis.renderer.minHeight = 110;
-    //
-    // var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-    // valueAxis.renderer.minWidth = 50;
-    //
-    // // Create series
-    // var series = chart.series.push(new am4charts.ColumnSeries());
-    // series.sequencedInterpolation = true;
-    // series.dataFields.valueY = "visits";
-    // series.dataFields.categoryX = "country";
-    // series.tooltipText = "[{categoryX}: bold]{valueY}[/]";
-    // series.columns.template.strokeWidth = 0;
-    //
-    // series.tooltip.pointerOrientation = "vertical";
-    //
-    // series.columns.template.column.cornerRadiusTopLeft = 10;
-    // series.columns.template.column.cornerRadiusTopRight = 10;
-    // series.columns.template.column.fillOpacity = 0.8;
-    //
-    // // on hover, make corner radiuses bigger
-    // var hoverState = series.columns.template.column.states.create("hover");
-    // hoverState.properties.cornerRadiusTopLeft = 0;
-    // hoverState.properties.cornerRadiusTopRight = 0;
-    // hoverState.properties.fillOpacity = 1;
-    //
-    // series.columns.template.adapter.add("fill", function(fill, target) {
-    //   return chart.colors.getIndex(target.dataItem.index);
-    // });
-    //
-    // // Cursor
-    // chart.cursor = new am4charts.XYCursor();
-    //
-    // }); // end am4core.ready()
 
 
 

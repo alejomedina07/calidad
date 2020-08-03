@@ -7,7 +7,7 @@ block content
   div(ng-controller="listCentro as $lCtrl" layout-margin)
     .md-whiteframe-2dp(layout-margin layout-padding )
       div(layout="row" layout-align="center center" flex)
-        h2 Lista de Centros de chequeo
+        h2 Lista de chequeo por centros de trabajo   
         md-input-container.md-block(md-no-float='' flex style="margin-bottom: 0;margin-left:40px;" )
           md-icon(md-svg-src='/static/content/icons/search.svg')
           input(ng-model='$lCtrl.search' type='text' placeholder='Buscar...' aria-label='Buscar...' ng-change="$lCtrl.filtrar()")

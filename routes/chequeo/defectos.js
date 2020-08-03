@@ -14,7 +14,9 @@ router.get('/listar',  mdAutenticacion.verificatoken(chequeo.PERMISO.DEFECTO.LIS
   let connection = mysql.createConnection(config.connection);
   connection.connect();
   // usuario_centro_trabajo.id,
-  let query = `SELECT * FROM defecto`
+  let query = `SELECT d.*, u.nombre as usuario
+    FROM defecto d
+    INNER JOIN usuario u ON u.id = d.idUsuarioCreacion`
   let promesa = config.consultar(connection, query);
   promesa.then(value => {
     res.json(value);

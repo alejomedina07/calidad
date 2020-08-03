@@ -44,10 +44,11 @@ block content
               
               th(scope='col' ) Operaciones
               th(scope='col' ) Fecha de creación
+              th(scope='col' ) Usuario que Crea
               th(scope='col' ) Acciones
           tfoot
             tr
-              td.text-right(colspan='7')
+              td.text-right(colspan='8')
                 div(layout="row" layout-xs="column" layout-align="end center")
                   span Mostrando &nbsp; 
                   md-select(placeholder='' ng-model='$lCtrl.registrosXpagina' ng-change="$lCtrl.pagina = 0;$lCtrl.paginar()")
@@ -67,6 +68,7 @@ block content
               td(data-title='Correo :') {{ item.estado }}            
               td(data-title='Operaciones :') {{ item.operaciones }}
               td(data-title='Fecha de Creación :') {{ item.fechaCreacion | date:'medium' }}
+              td(data-title='Usuario que Crea :') {{ item.usuario }}
               td(data-title='Acciones :') 
                 md-button.md-icon-button(aria-label='boton' href="/chequeo/chasis-carroceria/editar/{{ item.id }}" ng-click="$lCtrl.form = item") 
                   md-icon(md-svg-src='/static/content/icons/edit.svg')

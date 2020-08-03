@@ -6,6 +6,9 @@ var SEED = require('../config/config').SEED;
 
 exports.verificatoken = function(permiso, sinPermiso) {
   return function(req, res, next) {
+    debug('req.session.usuario.operaciones');
+    debug(permiso);
+    debug(req.session.usuario.operaciones);
     var token = req.session.loggedin;
     jwt.verify( token, SEED, ( err, decoded ) => {
       if (err || !req.session.usuario || !req.session.usuario.operaciones || !req.session.usuario.operaciones.includes(permiso)) {
