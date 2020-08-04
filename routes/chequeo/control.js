@@ -72,9 +72,45 @@ router.get('/listar',  mdAutenticacion.verificatoken(chequeo.PERMISO.CONTROL.LIS
 router.get('/obtener-ops/linea',  mdAutenticacion.verificatoken(chequeo.PERMISO.CONTROL.LISTAR), (req, res, next) => {
   let connection = mysql.createConnection(config.connection);
   connection.connect();
-  // usuario_centro_trabajo.id,
-  let query = `SELECT prefijo, op, id FROM pdmsinergia.orden_produccion WHERE estado <> 'comercial'`;
+  let query = `SELECT op.idCarroceria, op.prefijo, op.op, op.id, op.lineaProduccion AS lineaReal, ca.lineaProduccion AS lineaDefinida FROM pdmsinergia.orden_produccion op
+                  INNER JOIN pdmsinergia.carroceria ca ON ca.id=op.idCarroceria
+                  WHERE op.estado in ('Planeado', 'Produccion', 'Calidad' )`;
   let promesa = config.consultar(connection, query);
+  promesa.then(value => {
+    res.json(value);
+  })
+  .catch(err => {
+    debug(err);
+    res.status(500).json(err);
+  });
+});
+
+router.get('/obtener-centro-real/:linea',  mdAutenticacion.verificatoken(chequeo.PERMISO.CONTROL.LISTAR), (req, res, next) => {
+  let connection = mysql.createConnection(config.connection);
+  connection.connect();
+  let query = `SELECT * FROM homologacion.centro_trabajo
+    WHERE codigo like '${req.params.linea}%' OR descripcion like '%ALISTAMIENTO%' OR descripcion like '%TEST%' OR descripcion like '%LIBERACION%' OR descripcion like '%pintura%' OR descripcion like '%PARTES MAQUINAS CORTE PLASMA%' OR descripcion like 'DISPOSITIVOS%'`;
+  let promesa = config.consultar(connection, query);
+  debug('query');
+  debug(query);
+  promesa.then(value => {
+    res.json(value);
+  })
+  .catch(err => {
+    debug(err);
+    res.status(500).json(err);
+  });
+});
+
+router.get('/obtener-centro-definido/:codigo/:descripcionCorta',  mdAutenticacion.verificatoken(chequeo.PERMISO.CONTROL.LISTAR), (req, res, next) => {
+  let connection = mysql.createConnection(config.connection);
+  connection.connect();
+  let query = `SELECT * FROM homologacion.centro_trabajo WHERE  (codigo like '${req.params.codigo}%'
+    OR descripcion like '%ALISTAMIENTO%GENERAL' OR descripcion like '%TEST%' OR descripcion like '%LIBERACION%' OR descripcion like '%pintura%' OR descripcion like '%PARTES MAQUINAS CORTE PLASMA%' OR descripcion like 'DISPOSITIVOS%')
+    AND descripcionCorta = '${req.params.descripcionCorta}'`;
+  let promesa = config.consultar(connection, query);
+  debug('query');
+  debug(query);
   promesa.then(value => {
     res.json(value);
   })
@@ -105,8 +141,9 @@ router.get('/chasis/:idCarroceria',  mdAutenticacion.verificatoken(chequeo.PERMI
 
 router.post('/',  mdAutenticacion.verificatoken(chequeo.PERMISO.CONTROL.CREAR), (req, res, next) => {
   let connection = mysql.createConnection(config.connection);
-  let query = `INSERT INTO chequeo ( idCentro, idCarroceria, idChasisCarroceria, idOp, idUsuarioCreacion)
-   values (${req.body.idCentro},${req.body.idCarroceria}, ${req.body.idChasisCarroceria}, ${req.body.op}, ${req.session.usuario.id})`;
+  debug(req.body);
+  let query = `INSERT INTO chequeo ( idCentro, idCentroReal, idCarroceria, idChasisCarroceria, idOp, idUsuarioCreacion)
+   values (${req.body.idCentro},${req.body.idCentroReal},${req.body.idCarroceria}, ${req.body.idChasisCarroceria}, ${req.body.op}, ${req.session.usuario.id})`;
   connection.connect();
   let promesa = config.consultar(connection, query);
   debug(666666666666666666666666666666666666666666);
@@ -294,7 +331,7 @@ router.get('/obtener-grafica', mdAutenticacion.verificatoken(chequeo.PERMISO.CEN
         FROM chequeo ch
         INNER JOIN chequeo_operacion_defecto cod ON cod.idChequeo = ch.id
         INNER JOIN operacion_chequeo o ON cod.idOperacion = o.id
-        WHERE idCentro = ${req.query.centro} AND Date(cod.fechaCreacion) BETWEEN '${req.query.fechaInicio}' AND '${req.query.fechaFin}'
+        WHERE idCentroReal = ${req.query.centro} AND Date(cod.fechaCreacion) BETWEEN '${req.query.fechaInicio}' AND '${req.query.fechaFin}'
         GROUP BY cod.idOperacion`;
   }else {
     query = `SELECT o.id, o.nombre, COUNT(cod.idDefecto) as defectos
@@ -313,7 +350,7 @@ router.get('/obtener-grafica', mdAutenticacion.verificatoken(chequeo.PERMISO.CEN
     let connection2 = mysql.createConnection(config.connection);
       let query2 = `SELECT week(cod.fechaCreacion) AS semana, COUNT(*)  AS defectos FROM chequeo che
       INNER JOIN chequeo_operacion_defecto cod ON cod.idChequeo=che.id
-      WHERE che.idCentro=${req.query.centro} AND DATE(cod.fechaCreacion) BETWEEN '${req.query.fechaInicio}' AND '${req.query.fechaFin}'
+      WHERE che.idCentroReal=${req.query.centro} AND DATE(cod.fechaCreacion) BETWEEN '${req.query.fechaInicio}' AND '${req.query.fechaFin}'
       GROUP BY week(cod.fechaCreacion)`;
     connection2.connect();
     let promesa2 = config.consultar(connection2, query2);
@@ -321,14 +358,14 @@ router.get('/obtener-grafica', mdAutenticacion.verificatoken(chequeo.PERMISO.CEN
 
     let connection3 = mysql.createConnection(config.connection);
       let query3 = `SELECT week(fechaCreacion) AS semana, COUNT(DISTINCT(idOp)) as vehiculos FROM chequeo
-        WHERE idCentro=${req.query.centro} AND Date(fechaCreacion) BETWEEN '${req.query.fechaInicio}' AND '${req.query.fechaFin}'
+        WHERE idCentroReal=${req.query.centro} AND Date(fechaCreacion) BETWEEN '${req.query.fechaInicio}' AND '${req.query.fechaFin}'
         GROUP BY week(fechaCreacion)`;
     connection3.connect();
     let promesa3 = config.consultar(connection3, query3);
     arrayPromesas.push(promesa3);
 
     let connection4 = mysql.createConnection(config.connection);
-      let query4 = `SELECT COUNT(DISTINCT(idOp)) as vehiculos FROM chequeo WHERE idCentro=${req.query.centro} AND Date(fechaCreacion) BETWEEN '${req.query.fechaInicio}' AND '${req.query.fechaFin}'`;
+      let query4 = `SELECT COUNT(DISTINCT(idOp)) as vehiculos FROM chequeo WHERE idCentroReal=${req.query.centro} AND Date(fechaCreacion) BETWEEN '${req.query.fechaInicio}' AND '${req.query.fechaFin}'`;
     connection4.connect();
     let promesa4 = config.consultar(connection4, query4);
     arrayPromesas.push(promesa4);
@@ -336,7 +373,7 @@ router.get('/obtener-grafica', mdAutenticacion.verificatoken(chequeo.PERMISO.CEN
     let connection5 = mysql.createConnection(config.connection);
       let query5 = `SELECT COUNT(*) AS defectos FROM chequeo che
         INNER JOIN chequeo_operacion_defecto cod ON cod.idChequeo=che.id
-        WHERE idCentro=${req.query.centro} AND Date(cod.fechaCreacion) BETWEEN '${req.query.fechaInicio}' AND '${req.query.fechaFin}'`;
+        WHERE idCentroReal=${req.query.centro} AND Date(cod.fechaCreacion) BETWEEN '${req.query.fechaInicio}' AND '${req.query.fechaFin}'`;
     connection5.connect();
     let promesa5 = config.consultar(connection5, query5);
     arrayPromesas.push(promesa5);
@@ -360,7 +397,7 @@ router.get('/obtener-grafica-defectos/:idOperacion', mdAutenticacion.verificatok
       FROM chequeo ch
       INNER JOIN chequeo_operacion_defecto cod ON cod.idChequeo=ch.id AND cod.idOperacion=${req.params.idOperacion} AND Date(cod.fechaCreacion) BETWEEN '${req.query.fechaInicio}' AND '${req.query.fechaFin}'
       INNER JOIN defecto d ON d.id=cod.idDefecto
-      WHERE ch.idCentro = ${req.query.centro}
+      WHERE ch.idCentroReal = ${req.query.centro}
       GROUP BY cod.idDefecto`;
   }else {
     query = `SELECT ch.*, d.nombre, COUNT(d.id) AS defectos

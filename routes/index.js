@@ -69,25 +69,32 @@ app.post('/login',  ( req, res ) => {
       // Authenticate
       // ad.authenticate(`amedinar@busscarad.local`, '+busscar2022', function(err, auth) {
       ad.authenticate(`${req.body.usuarioRed}@busscarad.local`, req.body.contrasena, function(err, auth) {
+          debug(req.body);
           debug('auth');
           debug(auth);
           debug('err');
           debug(err);
+          // autenticar();
           if (err) res.status(400).json( { error:true, mensaje: 'Credenciales incorrectas'});
           else {
             if (auth) {
-              usuario = usuario[0];
-              token = jwt.sign( { usuario: usuario }, SEED, { expiresIn:14400 } ) // 4horas
-              req.session.loggedin = token;
-              req.session.usuario = usuario;
-
-              let md5 = require('md5');
-              req.body.contrasena = md5(req.body.contrasena);
-              if (usuario.contrasena != req.body.contrasena) guardarContrasena(req.body.usuarioRed, req.body.contrasena);
-              delete usuario.contrasena;
-              return res.status(200).json( { error:false, usuario, token });
+              autenticar();
             }
             else res.status(400).json( { error:true, mensaje: 'Credenciales incorrectas'});
+          }
+
+
+          function autenticar() {
+            usuario = usuario[0];
+            token = jwt.sign( { usuario: usuario }, SEED, { expiresIn:14400 } ) // 4horas
+            req.session.loggedin = token;
+            req.session.usuario = usuario;
+
+            let md5 = require('md5');
+            req.body.contrasena = md5(req.body.contrasena);
+            if (usuario.contrasena != req.body.contrasena) guardarContrasena(req.body.usuarioRed, req.body.contrasena);
+            delete usuario.contrasena;
+            return res.status(200).json( { error:false, usuario, token });
           }
       });
 

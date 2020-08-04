@@ -12,33 +12,35 @@ block content
       md-progress-linear(flex md-mode='indeterminate')
     form(action="")
       md-content(style="width:100%" layout-margin layout-padding ng-show="!$fCtrl.id")
-        //-div(layout="column" layout-align="center center" flex )
-          i(class='error' ng-show="$fCtrl.errores.linea" ng-repeat="opcion in $fCtrl.errores.linea")
-            | {{ opcion }}
-          md-radio-group(ng-model='$fCtrl.form.linea' layout="row" layout-xs="column" layout-align-xs="start start" layout-align="center center" ng-change="$fCtrl.obtenerOPs();$fCtrl.obtener_ops();" ng-disabled="$fCtrl.id")
-            md-radio-button.md-primary(value='LL') 
-              b Linea Liviana
-            md-radio-button.md-primary(value='LP') 
-              b Linea Pesada
-            md-radio-button.md-primary(value='LB') 
-              b Linea BusStar
+        
+        div(layout="row")
+          md-input-container.w-100.md-block(flex)
+            label Orden de Producción
+            md-select(ng-model='$fCtrl.form.op' ng-change="$fCtrl.buscarCentro()" md-on-close="$fCtrl.busquedaOp = ''" md-on-open='$fCtrl.focoParaBuscar()')
+              md-select-header
+                input.campo-busqueda(ng-model='$fCtrl.busquedaOp' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar orden de Producción...')
+              md-option(ng-value='opcion' ng-repeat="opcion in $fCtrl.ops | filter:$fCtrl.busquedaOp | limitTo:100") {{opcion.prefijo}} - {{opcion.op}}
+            i(class='error' ng-show="$fCtrl.errores.op" ng-repeat="opcion in  $fCtrl.errores.op")
+              | {{ opcion }} 
+
+          md-input-container.w-100.md-block(flex)
+            label Centro de trabajo Real
+            md-select(ng-model='$fCtrl.form.centroReal' ng-change="$fCtrl.buscarCentroDefinido()" md-on-close="$fCtrl.busquedaOp = ''" md-on-open='$fCtrl.focoParaBuscar()')
+              md-select-header
+                input.campo-busqueda(ng-model='$fCtrl.busquedaCentro' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar orden de Producción...')
+              md-option(ng-value='opcion' ng-repeat="opcion in $fCtrl.centroReales | filter:$fCtrl.busquedaCentro | limitTo:100") {{ opcion.descripcion }}
+            i(class='error' ng-show="$fCtrl.errores.op" ng-repeat="opcion in  $fCtrl.errores.op")
+              | {{ opcion }} 
+        
         div(layout="row" layout-xs="column" layout-sm="column" layout-align="center center" layout-margin )
           md-input-container.w-100.md-block(flex)
-            label Centro de trabajo
-            md-select(ng-model='$fCtrl.form.idCentro' md-on-close="$fCtrl.busqueda = ''" md-on-open='$fCtrl.focoParaBuscar()' ng-change="$fCtrl.buscarCarrocerias()" ng-disabled="$fCtrl.id")
-              md-select-header
-                input.campo-busqueda(ng-model='$fCtrl.busqueda' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar Centro...')
-              md-option(ng-value='opcion.idCentro' ng-repeat="opcion in $fCtrl.listaOps | filter:$fCtrl.busqueda") {{opcion.codigo}} - {{opcion.nombre}}
-            i(class='error' ng-show="$fCtrl.errores.idCentro" ng-repeat="opcion in  $fCtrl.errores.idCentro")
-              | {{ opcion }}  
-          md-input-container.w-100.md-block(flex)
             label Carrocería
-            md-select(ng-model='$fCtrl.form.idCarroceria' md-on-close="$fCtrl.busqueda = ''" md-on-open='$fCtrl.focoParaBuscar()' ng-change="$fCtrl.buscarChasis()" ng-disabled="$fCtrl.id")
+            md-select(ng-model='$fCtrl.form.idCarroceria' md-on-close="$fCtrl.busqueda = ''" md-on-open='$fCtrl.focoParaBuscar()' ng-disabled="true")
               md-select-header
                 input.campo-busqueda(ng-model='$fCtrl.busqueda' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar Centro...')
               md-option(ng-value='opcion.id' ng-repeat="opcion in $fCtrl.carrocerias | filter:$fCtrl.busqueda") {{opcion.nombre}}
             i(class='error' ng-show="$fCtrl.errores.idCarroceria" ng-repeat="opcion in  $fCtrl.errores.idCarroceria")
-              | {{ opcion }}    
+              | {{ opcion }}  
           
           md-input-container.w-100.md-block(flex)
             label Chasis
@@ -47,16 +49,6 @@ block content
                 input.campo-busqueda(ng-model='$fCtrl.busquedaChasis' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar chasis...')
               md-option(ng-value='opcion.id' ng-repeat="opcion in $fCtrl.chasis | filter:$fCtrl.busquedaChasis") {{opcion.abreviatura}}
             i(class='error' ng-show="$fCtrl.errores.idChasisCarroceria" ng-repeat="opcion in  $fCtrl.errores.idChasisCarroceria")
-              | {{ opcion }} 
-        
-        div(layout="row")
-          md-input-container.w-100.md-block(flex)
-            label Orden de Producción
-            md-select(ng-model='$fCtrl.form.op' md-on-close="$fCtrl.busquedaOp = ''" md-on-open='$fCtrl.focoParaBuscar()')
-              md-select-header
-                input.campo-busqueda(ng-model='$fCtrl.busquedaOp' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar orden de Producción...')
-              md-option(ng-value='opcion.id' ng-repeat="opcion in $fCtrl.ops | filter:$fCtrl.busquedaOp | limitTo:100") {{opcion.prefijo}} - {{opcion.op}}
-            i(class='error' ng-show="$fCtrl.errores.op" ng-repeat="opcion in  $fCtrl.errores.op")
               | {{ opcion }} 
         div(layout="row" layout-align="end end")
           md-button.md-raised.md-primary(ng-click="$fCtrl.guardar()") Siguiente

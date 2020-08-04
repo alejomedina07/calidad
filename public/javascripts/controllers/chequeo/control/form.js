@@ -32,6 +32,37 @@
     };
 
 
+    $fCtrl.buscarCentro = function() {
+      console.log($fCtrl.form.op);
+      $fCtrl.form.idCarroceria = $fCtrl.form.op.idCarroceria
+      $http.get('/chequeo/control/obtener-centro-real/' + $fCtrl.obtenerPrefijoLinea($fCtrl.form.op.lineaReal))
+      .then(function(result){
+        $fCtrl.centroReales = result.data;
+        console.log('$fCtrl.centroReales');
+        console.log($fCtrl.centroReales);
+      })
+      .catch(function(e){
+        console.log(e);
+      });
+    };
+
+
+    $fCtrl.buscarCentroDefinido = function() {
+      // debugger;
+      console.log($fCtrl.form.centroReal);
+      $http.get('/chequeo/control/obtener-centro-definido/' + $fCtrl.obtenerPrefijoLinea($fCtrl.form.op.lineaDefinida) + '/' + $fCtrl.form.centroReal.descripcionCorta)
+      .then(function(result){
+        $fCtrl.form.idCentro = result.data[0].id;
+        $fCtrl.buscarCarrocerias();
+        console.log('$fCtrl.centroReales');
+        console.log($fCtrl.centroReales);
+      })
+      .catch(function(e){
+        console.log(e);
+      });
+    };
+
+
     function obtenerRegistro() {
       $http.get('/chequeo/control/obtener-registro/' + $fCtrl.form.id)
       .then(function(result){
@@ -76,8 +107,9 @@
       .then(function(result){
         $fCtrl.carrocerias = result.data;
         if (!$fCtrl.carrocerias || !$fCtrl.carrocerias.length) {
-          ToastFactoria.rojo({contenido: 'No hay carrocerias conofigurados.'});
+          ToastFactoria.rojo({contenido: 'No hay carrocerias configurados.'});
         }
+        $fCtrl.buscarChasis();
       })
       .catch(function(e){
         console.log(e);
@@ -224,16 +256,39 @@
       }
     }
 
+
+    $fCtrl.obtenerPrefijoLinea = function (linea) {
+      switch (linea) {
+        case "Linea Liviana":
+          return "LL";
+          break;
+        case "Linea Pesada":
+          return "LP";
+            break;
+        case "Linea BusStar":
+          return "LB";
+            break;
+      }
+    }
+
     // $fCtrl.init();
 
     $fCtrl.guardar = function() {
       $fCtrl.loading = true;
-      $fCtrl.errores = validate($fCtrl.form, _validar);
+
+      var form = {
+        idCarroceria: $fCtrl.form.op.idCarroceria,
+        op: $fCtrl.form.op.id,
+        idCentroReal:$fCtrl.form.centroReal.id,
+        idCentro: $fCtrl.form.idCentro,
+        idChasisCarroceria: $fCtrl.form.idChasisCarroceria
+
+      };
+      $fCtrl.errores = validate(form, _validar);
       if (!$fCtrl.errores) {
-        var form = {}, operaciones = [];
 
         var url = $fCtrl.form.id ? '/chequeo/control/editar' : '/chequeo/control/';
-        $http.post(url, $fCtrl.form)
+        $http.post(url, form)
         .then(result => {
           ToastFactoria.verde({contenido: 'Chequeo creado exitosamente'});
           console.log('result.data[0]');
