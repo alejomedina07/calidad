@@ -10,6 +10,28 @@
     $lCtrl.fechaFin = new Date()
     $lCtrl.form = {};
 
+    $lCtrl.segundoLlamado = function() {
+      $lCtrl.loading = true;
+      let url = `/notificaciones/segundo-llamado/${$lCtrl.detalleNotificacion.id}`,
+       arrayNumeros = [];
+
+      $lCtrl.detalleNotificacion.asistentes.forEach((item, i) => {
+        if( item.estado == 'Pendiente' )
+          arrayNumeros.push('57'+ item.telefonoMovil)
+      });
+
+
+      $http.post(url, {arrayNumeros:arrayNumeros, nombreCentro:$lCtrl.detalleNotificacion.centro})
+      .then(function(result){
+        ToastFactoria.verde({contenido: 'Segundo llamado realizado exitosamente'});
+        $lCtrl.loading = false;
+      })
+      .catch(function(e){
+        console.log(e);
+        $lCtrl.loading = false;
+      });
+    }
+
 
     $lCtrl.excelAsistencias = function() {
       if (moment($lCtrl.fechaFin).diff($lCtrl.fechaInicio, "month", true) <= 3) {

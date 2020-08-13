@@ -129,15 +129,15 @@
       idOp: {
         presence: {message: "^El campo 'OP' es requerido"},
       },
-      icono: {
-        presence: {message: "^El campo 'Icono' es requerido"}
-      },
+      // icono: {
+      //   presence: {message: "^El campo 'Icono' es requerido"}
+      // },
       linea: {
         presence: {message: "^El campo 'Línea' es requerido"},
       },
-      sonido: {
-        presence: {message: "^El campo 'Sonido' es requerido"},
-      },
+      // sonido: {
+      //   presence: {message: "^El campo 'Sonido' es requerido"},
+      // },
       descripcion: {
         presence: {message: "^El campo 'Descripción' es requerido"},
       },

@@ -26,7 +26,7 @@
         // });
 
         $fCtrl.form.id = $fCtrl.id;
-        $fCtrl.form.idAplicacionMovil = String($fCtrl.form.idAplicacionMovil);
+        // $fCtrl.form.idAplicacionMovil = String($fCtrl.form.idAplicacionMovil);
       })
       .catch(error => {
         ToastFactoria.rojo({contenido: 'Error al obtener el usuario.'});
@@ -90,23 +90,18 @@
       usuarioRed: {
         presence: {message: "^El campo 'Usuario de Red' es requerido"},
       },
-      // contrasena: {
-      //   presence: {message: "^El campo 'Contraseña' es requerido"},
-      // },
-      // contrasena2: {
-      //   presence: {message: "^El campo 'Confirmar Contraseña' es requerido"},
-      //   equality: {
-      //     attribute: "contrasena",
-      //     message: "^EL campo 'Confirmar Contraseña' no coincide con la 'Contraseña'"
-      //   }
-      // },
-      idAplicacionMovil: {
-        presence: {message: "^El campo 'ID de Aplicación Movil' es requerido"},
+      telefonoMovil: {
+        presence: {message: "^El campo 'Teléfono Móvil' es requerido"},
         format: {
           // Must be numbers followed by a name
           pattern: "[0-9]+",
           flags: "i",
-          message: "^El id Solo debe contener números"
+          message: "^El Teléfono Móvil Solo debe contener números"
+        },
+        length: {
+          minimum: 10,
+          maximum:10,
+          message: "^El Teléfono Móvil debe tener 10 dígitos"
         }
       },
       idRol: {

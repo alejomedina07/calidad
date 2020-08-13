@@ -11,11 +11,14 @@ md-dialog(aria-label='Eliminar'  flex="70" flex-xs="90" flex-sm="90")
         span.titulo 
           b Descripción: &nbsp; 
           | {{ $lCtrl.detalleNotificacion.descripcion }}
+        //- div(layout="row" layout-align="end end")
         div(layout="row" layout-align="center center")
           h4 Asistencia de usuarios
           md-input-container.md-block(md-no-float='' flex style="margin-bottom: 0;margin-left:40px;" )
             md-icon(md-svg-src='/static/content/icons/search.svg')
             input(ng-model='$lCtrl.buscarAsistente' type='text' placeholder='Buscar usuario...' aria-label='Buscar...' )
+          md-button.md-primary.md-raised(ng-click="$lCtrl.segundoLlamado()") Segundo llamado
+          
         .md-whiteframe-2dp(layout-paddig)
           table.responsive-table.w-100
             thead
@@ -23,6 +26,7 @@ md-dialog(aria-label='Eliminar'  flex="70" flex-xs="90" flex-sm="90")
                 th(scope='col') Nombre
                 th(scope='col') Estado
                 th(scope='col') Fecha de Asistencia
+                th(scope='col') Segunda Llamada
             tbody
               tr(ng-repeat="item in $lCtrl.detalleNotificacion.asistentes | filter:$lCtrl.buscarAsistente")
                 th(scope='row') {{ item.nombre }}
@@ -35,6 +39,8 @@ md-dialog(aria-label='Eliminar'  flex="70" flex-xs="90" flex-sm="90")
                     md-icon(md-svg-src='/static/content/icons/tick.svg')
                     | &nbsp; {{ item.fechaAsistencia | date : 'short' }}
 
+                td(data-title='Fecha de Segunda Llamda :') {{ item.fechaSegundaLlamada | date : 'short' }}
+          
         div(ng-if="$lCtrl.detalleNotificacion.fechaCierre")
           h4 
             b Causa: &nbsp; 

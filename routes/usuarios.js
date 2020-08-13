@@ -45,8 +45,8 @@ router.get('/formulario/:id', mdAutenticacion.verificatoken(usuario.PERMISO.EDIT
 
 router.post('/',  mdAutenticacion.verificatoken(usuario.PERMISO.CREAR), (req, res, next) => {
   let connection = mysql.createConnection(config.connection),
-    query = "INSERT INTO usuario (nombre, estado, usuarioRed, contrasena, correo, idAplicacionMovil, idUsuarioCreacion, cedula) VALUES (?,?,?,?,?,?,?,?)",
-    data = [req.body.nombre, req.body.estado, req.body.usuarioRed, req.body.contrasena, req.body.correo, req.body.idAplicacionMovil, req.session.usuario.id, req.body.cedula];
+    query = "INSERT INTO usuario (nombre, estado, usuarioRed, contrasena, correo, telefonoMovil, idUsuarioCreacion, cedula) VALUES (?,?,?,?,?,?,?,?)",
+    data = [req.body.nombre, req.body.estado, req.body.usuarioRed, req.body.contrasena, req.body.correo, req.body.telefonoMovil, req.session.usuario.id, req.body.cedula];
   connection.connect();
   let promesa = config.consultar(connection, query, data);
   promesa
@@ -75,7 +75,7 @@ router.post('/editar',  mdAutenticacion.verificatoken(usuario.PERMISO.EDITAR), (
   debug('**************-*************-************');
   let connection = mysql.createConnection(config.connection),
     query = `UPDATE usuario
-     SET nombre = '${req.body.nombre}', estado = '${req.body.estado}', usuarioRed = '${req.body.usuarioRed}', correo = '${req.body.correo}', idAplicacionMovil = '${req.body.idAplicacionMovil}', cedula = '${req.body.cedula}'
+     SET nombre = '${req.body.nombre}', estado = '${req.body.estado}', usuarioRed = '${req.body.usuarioRed}', correo = '${req.body.correo}', telefonoMovil = '${req.body.telefonoMovil}', cedula = '${req.body.cedula}'
      WHERE id = '${req.body.id}'`;
   connection.connect();
   let promesaUsuario = config.consultar(connection, query);

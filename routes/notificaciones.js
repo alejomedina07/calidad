@@ -103,8 +103,10 @@ router.get('/obtener-asistencias/:id', mdAutenticacion.verificatoken(notificacio
   connection.connect();
   let query = `SELECT
               	usuario.nombre,
+                usuario.telefonoMovil,
                   asistencia.id,
                   asistencia.fechaAsistencia,
+                  asistencia.fechaSegundaLlamada,
                   asistencia.estado
               FROM asistencia
               INNER JOIN usuario ON usuario.id = asistencia.idUsuario
@@ -151,7 +153,7 @@ router.post('/',  mdAutenticacion.verificatoken(notificacion.PERMISO.CREAR), (re
   let connection = mysql.createConnection(config.connection),
     arrayPromesasNOtificacion = [],
 
-    query = `SELECT uct.idUsuario, u.idAplicacionMovil
+    query = `SELECT uct.idUsuario, u.telefonoMovil
       FROM usuario_centro_trabajo uct
       INNER JOIN usuario u ON uct.idUsuario = u.id
       WHERE uct.idCentro = '${req.body.idCentro}' AND uct.estado = 'Activo' AND uct.idRol = 5`;
@@ -177,25 +179,72 @@ router.post('/',  mdAutenticacion.verificatoken(notificacion.PERMISO.CREAR), (re
 
 
     let connection = mysql.createConnection(config.connection),
-      data = '';
+    data = '', arrayNumeros = [];
     value[0].forEach((item, i) => {
       data = ` ${data} ( ${item.idUsuario}, ${value[1].insertId},'Pendiente' ),`;
-      debug('item safasfasdfasdfasd');
-      debug(item);
-      var msg = {
-          m: `Se solicita en ${req.body.nombreCentro}`,
-          t: "Notificación", s: req.body.sonido, v: '3', i: req.body.icono, pr: '2', re: '60',
-          d: item.idAplicacionMovil.toString()
-      };
-      if (req.body.icono == 5) msg.c = '#FF0000';
-      debug('msg 123154661*********** ')
-      debug(msg)
-      arrayPromesas.push(pushsafer.send(msg));
+      // var msg = {
+      //     m: `Se solicita en ${req.body.nombreCentro}`,
+      //     t: "Notificación", s: req.body.sonido, v: '3', i: req.body.icono, pr: '2', re: '60',
+      //     d: item.idAplicacionMovil.toString()
+      // };
+      // if (req.body.icono == 5) msg.c = '#FF0000';
+      // arrayPromesas.push(pushsafer.send(msg));
+
+      arrayNumeros.push(`57${item.telefonoMovil}`);
     });
-    // if (req.body.icono == 5) msg.c = '#FF0000';
-    // debug('msg 123154661*********** ')
-    // debug(msg)
-    // arrayPromesas.push(pushsafer.send(msg));
+
+    const axios = require('axios');
+    // let dataLlamada = {
+    //    "destinationsList":arrayNumeros,
+    //    "stepList":[
+    //        {
+    //          "id":"1",
+    //          "rootStep":true,
+    //          "nextStepId":"2",
+    //          "stepType":"CALL"
+    //        },
+    //        {
+    //          "id":"2",
+    //          "rootStep":false,
+    //          "nextStepId":"3",
+    //          "text":`Hola esto es una prueba desde Buscar T I, Se solicita en ${req.body.nombreCentro}`,
+    //          "voice":"PEDRO",
+    //          "speed":100,
+    //          "stepType": "SAY"
+    //        },
+    //        {
+    //          "id":"3",
+    //          "rootStep":false,
+    //          "stepType": "HANGUP"
+    //        }
+    //      ]
+    //   };
+
+    let dataLlamada = {
+    	"message":`Busscar informa, Se solicita en ${req.body.nombreCentro}`,
+    	"priority":"HIGH",
+    	"destinationsList": arrayNumeros,
+    	"landingCustomFields":{
+        	"573212786301":{
+    		      "name":"Busscar"
+        	}
+    	}
+    };
+
+    debug('dataLlamada');
+    debug(dataLlamada);
+
+    let configuracion = {
+        headers: {
+            'Content-Type': 'application/json',
+            'apiKey' :'3b9abdd462fb48f8b5c5d43ee6a7947c',
+            'apiSecret' :'7687680318056658'
+        }
+    };
+
+    // arrayPromesas.push(axios.post('https://cloud.go4clients.com:8580/api/campaigns/voice/v1.0/5f2b2660d2dd7d000afc9a84', dataLlamada, configuracion));
+    arrayPromesas.push(axios.post('https://cloud.go4clients.com:8580/api/campaigns/sms/v1.0/5f31ae9f4394c700083b8061', dataLlamada, configuracion));
+
     data = data.slice(0, data.length - 1);
     let query = `INSERT INTO asistencia
      (idUsuario,idNotificacion,estado)
@@ -209,9 +258,7 @@ router.post('/',  mdAutenticacion.verificatoken(notificacion.PERMISO.CREAR), (re
     return Promise.all(arrayPromesas)
   })
   .then(value => {
-    debug('+++++++++++++++++++++++++++++++++++++++');
-    debug(value);
-    res.json({data: value});
+    res.json({data: 'Notificación realizada con éxito'});
   })
   .catch(err => {
     debug('¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿');
@@ -219,6 +266,66 @@ router.post('/',  mdAutenticacion.verificatoken(notificacion.PERMISO.CREAR), (re
     res.status(500).json(err);
   });
 });
+
+router.post('/segundo-llamado/:id', mdAutenticacion.verificatoken(notificacion.PERMISO.CREAR), (req, res, next) => {
+  debug(req.body);
+  const axios = require('axios');
+  let dataLlamada = {
+     "destinationsList":req.body.arrayNumeros,
+     "stepList":[
+         {
+           "id":"1",
+           "rootStep":true,
+           "nextStepId":"2",
+           "stepType":"CALL"
+         },
+         {
+           "id":"2",
+           "rootStep":false,
+           "nextStepId":"3",
+           "text":`    Buscar informa, Se solicita en ${req.body.nombreCentro}`,
+           "voice":"PEDRO",
+           "speed":100,
+           "stepType": "SAY"
+         },
+         {
+           "id":"3",
+           "rootStep":false,
+           "stepType": "HANGUP"
+         }
+       ]
+  }, arrayPromesas=[], moment = require('moment');
+
+  debug('dataLlamada');
+  debug(dataLlamada);
+
+  let configuracion = {
+      headers: {
+          'Content-Type': 'application/json',
+          'apiKey' :'3b9abdd462fb48f8b5c5d43ee6a7947c',
+          'apiSecret' :'7687680318056658'
+      }
+  };
+
+  let connection = mysql.createConnection(config.connection),
+    query = `UPDATE asistencia
+     SET fechaSegundaLlamada = '${moment().format('YYYY-MM-DD hh:mm:ss')}'
+     WHERE idNotificacion = '${req.params.id}' AND estado='Pendiente'`;
+  connection.connect();
+  let promesa = config.consultar(connection, query);
+  arrayPromesas.push(promesa);
+
+  arrayPromesas.push(axios.post('https://cloud.go4clients.com:8580/api/campaigns/voice/v1.0/5f2b2660d2dd7d000afc9a84', dataLlamada, configuracion));
+  Promise.all(arrayPromesas)
+  .then(value => {
+    res.json({data: 'Segundo Llamado realizado con éxito'});
+  })
+  .catch(err => {
+    debug(err);
+    res.status(500).json(err);
+  });
+});
+
 
 router.post('/cerrar-notificacion',  mdAutenticacion.verificatoken(notificacion.PERMISO.EDITAR), (req, res, next) => {
   let moment = require('moment');

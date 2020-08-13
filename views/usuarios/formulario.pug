@@ -52,9 +52,9 @@ block content
                 | {{ opcion }}
           div(layout="row" layout-xs="column" layout-sm="column" layout-align="center center" layout-margin )
             md-input-container.w-100.md-block(flex)
-              label Ingrese ID de la aplicación movil
-              input(ng-model='$fCtrl.form.idAplicacionMovil')
-              i(class='error' ng-show="$fCtrl.errores.idAplicacionMovil" ng-repeat="opcion in  $fCtrl.errores.idAplicacionMovil")
+              label Teléfono móvil
+              input(ng-model='$fCtrl.form.telefonoMovil')
+              i(class='error' ng-show="$fCtrl.errores.telefonoMovil" ng-repeat="opcion in  $fCtrl.errores.telefonoMovil")
                 | {{ opcion }}
             br(hide-gt-sm)
             md-input-container.w-100.md-block(flex style=" margin-top: -15px;")
@@ -72,7 +72,7 @@ block content
                   | {{ opcion.nombre }}
               i(class='error' ng-show="$fCtrl.errores.idRol" ng-repeat="opcion in  $fCtrl.errores.idRol")
                 | {{ opcion }}
-      .md-whiteframe-2dp(layout="column" layout-align="center center" flex-xs layout-margin layout-padding)
+    //-  .md-whiteframe-2dp(layout="column" layout-align="center center" flex-xs layout-margin layout-padding)
         b(style="margin-bottom:-2px;") Escanear Código QR
         img(src="/static/images/QR.png")
 

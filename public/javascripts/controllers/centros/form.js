@@ -1,7 +1,7 @@
 (function(){
   'use strict';
 
-  app.controller('formCentro', function($http, $timeout, md5, ToastFactoria, $location){
+  app.controller('formCentroDeTrabajo', function($http, $timeout, md5, ToastFactoria, $location){
     var $fCtrl = this;
     $fCtrl.form = {};
 
