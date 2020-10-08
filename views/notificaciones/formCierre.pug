@@ -17,7 +17,7 @@ md-dialog(aria-label='Eliminar'  flex="70" flex-xs="90" flex-sm="90")
           md-input-container.md-block(md-no-float='' flex style="margin-bottom: 0;margin-left:40px;" )
             md-icon(md-svg-src='/static/content/icons/search.svg')
             input(ng-model='$lCtrl.buscarAsistente' type='text' placeholder='Buscar usuario...' aria-label='Buscar...' )
-          md-button.md-primary.md-raised(ng-click="$lCtrl.segundoLlamado()") Segundo llamado
+          md-button.md-primary.md-raised(ng-click="$lCtrl.segundoLlamado()" ng-disabled="$lCtrl.detalleNotificacion.fechaCierre") Segundo llamado
           
         .md-whiteframe-2dp(layout-paddig)
           table.responsive-table.w-100

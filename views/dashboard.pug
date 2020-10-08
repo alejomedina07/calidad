@@ -1,0 +1,36 @@
+extends ./layout/layout
+block header
+  include ./inclusions/header
+block content
+  br
+  div(ng-controller="header as $cCtr")
+    div(layout='row' layout-xs="column" layout-align="center center" layout-fill )
+      div(flex='5' hide-xs)
+      div(flex='90')
+        div()
+          div(layout='row' layout-xs="column" layout-sm="column" layout-wrap="" )
+            div(flex="33" ng-repeat="section in $cCtr.menu.sections" ng-if="$cCtr.obtenerPermiso(section.permiso)" style="margin-bottom:15px;")
+              div.menu-navegacion()
+                md-card.tarjeta
+                  md-icon.icono(md-svg-src="/static/content/icons/{{section.icon}}.svg")
+                  md-card-title
+                    md-card-title-text
+                      span.md-headline.texto-centrado {{section.name}}        
+                  md-card-actions(layout='column' layout-align='start' ng-if="$cCtr.obtenerPermiso(section.permiso)")
+                    md-button.md-raised.botones(ng-if="$cCtr.obtenerPermiso(page.permiso)" md-theme="default" ng-repeat="page in section.pages" href="{{page.state}}" ui-sref-active="activo")
+                      | {{page.name}}
+      div(flex='5' hide-sm hide-xs)  
+    //-div(layout="row" layout-xs="column" layout-align="space-around center" flex layout-margin layout-wrap="")
+      .md-whiteframe-2dp.w-100(
+        flex="30" flex-xs="100" flex-md="45" flex-sm="45" layout="column" layout-align="center center" 
+        ng-repeat='section in $cCtr.menu.sections' )
+        md-toolbar
+          .md-toolbar-tools
+            md-icon(class="md-primary" md-svg-src="/static/content/icons/{{section.icon}}.svg")
+            span(flex)
+            b {{ section.name }}
+            span(flex)
+        span(flex)
+        div(ng-repeat="page in section.pages" layout="row" layout-margin)
+          .md-whiteframe-2dp(flex layout-padding)
+            span {{ page.name }}

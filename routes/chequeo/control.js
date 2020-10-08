@@ -19,6 +19,26 @@ router.get('/editar/:id', mdAutenticacion.verificatoken(chequeo.PERMISO.CONTROL.
   res.render("chequeo/control/form", { title: 'Categorías', usuario:req.session.usuario, id:req.params.id });
 });
 
+
+router.get('/inactivar/:id',  mdAutenticacion.verificatoken(chequeo.PERMISO.CONTROL.INACTIVAR), (req, res, next) => {
+  debug('permiso');
+  debug(chequeo.PERMISO.CONTROL.INACTIVAR);
+  let connection = mysql.createConnection(config.connection),
+    query = `UPDATE chequeo
+      SET estado = 'Inactivo' WHERE id = '${req.params.id}'`;
+  connection.connect();
+  let promesa = config.consultar(connection, query);
+  promesa.then(value => {
+    res.redirect('/chequeo/control')
+  })
+  .catch(err => {
+    debug('??????????????');
+    debug(err);
+    res.status(500).json(err);
+  });
+});
+
+
 router.get('/obtener-registro/:id',  mdAutenticacion.verificatoken(chequeo.PERMISO.CONTROL.CREAR), (req, res, next) => {
   let connection = mysql.createConnection(config.connection);
   connection.connect();
@@ -57,7 +77,8 @@ router.get('/listar',  mdAutenticacion.verificatoken(chequeo.PERMISO.CONTROL.LIS
       INNER JOIN pdmsinergia.orden_produccion op ON op.id=che.idOp
       INNER JOIN usuario u ON u.id = che.idUsuarioCreacion
       LEFT JOIN usuario usu ON usu.id = che.idUsuarioCierra
-      INNER JOIN pdmsinergia.chasis pdmch ON pdmch.id=chaca.idChasis`
+      INNER JOIN pdmsinergia.chasis pdmch ON pdmch.id=chaca.idChasis
+      ORDER BY che.id DESC`
   let promesa = config.consultar(connection, query);
   promesa.then(value => {
     res.json(value);
@@ -89,7 +110,16 @@ router.get('/obtener-centro-real/:linea',  mdAutenticacion.verificatoken(chequeo
   let connection = mysql.createConnection(config.connection);
   connection.connect();
   let query = `SELECT * FROM homologacion.centro_trabajo
-    WHERE codigo like '${req.params.linea}%' OR descripcion like '%ALISTAMIENTO%' OR descripcion like '%TEST%' OR descripcion like '%LIBERACION%' OR descripcion like '%pintura%' OR descripcion like '%PARTES MAQUINAS CORTE PLASMA%' OR descripcion like 'DISPOSITIVOS%'`;
+    WHERE codigo like '${req.params.linea}%' OR descripcion like '%ALISTAMIENTO%' OR descripcion like '%TEST%' OR descripcion like '%LIBERACION%' OR descripcion like '%pintura%' OR descripcion like '%PARTES MAQUINAS CORTE PLASMA%' OR descripcion like 'DISPOSITIVOS%'
+    OR descripcion like '%externo%'
+    OR descripcion like '%interno%'
+    OR descripcion like '%electrico%'
+    OR descripcion like '%mecanico%'
+    OR descripcion like '%etc%'
+    OR descripcion like '%ruta%'
+    OR descripcion like '%agua%'
+    OR descripcion like '%acondicionad%'
+    OR descripcion like '%carcamo%'`;
   let promesa = config.consultar(connection, query);
   debug('query');
   debug(query);
@@ -106,7 +136,16 @@ router.get('/obtener-centro-definido/:codigo/:descripcionCorta',  mdAutenticacio
   let connection = mysql.createConnection(config.connection);
   connection.connect();
   let query = `SELECT * FROM homologacion.centro_trabajo WHERE  (codigo like '${req.params.codigo}%'
-    OR descripcion like '%ALISTAMIENTO%GENERAL' OR descripcion like '%TEST%' OR descripcion like '%LIBERACION%' OR descripcion like '%pintura%' OR descripcion like '%PARTES MAQUINAS CORTE PLASMA%' OR descripcion like 'DISPOSITIVOS%')
+    OR descripcion like '%ALISTAMIENTO%GENERAL' OR descripcion like '%TEST%' OR descripcion like '%LIBERACION%' OR descripcion like '%pintura%' OR descripcion like '%PARTES MAQUINAS CORTE PLASMA%' OR descripcion like 'DISPOSITIVOS%'
+    OR descripcion like '%externo%'
+    OR descripcion like '%interno%'
+    OR descripcion like '%electrico%'
+    OR descripcion like '%mecanico%'
+    OR descripcion like '%etc%'
+    OR descripcion like '%ruta%'
+    OR descripcion like '%agua%'
+    OR descripcion like '%acondicionad%'
+    OR descripcion like '%carcamo%')
     AND descripcionCorta = '${req.params.descripcionCorta}'`;
   let promesa = config.consultar(connection, query);
   debug('query');
@@ -168,13 +207,13 @@ router.post('/defecto',  mdAutenticacion.verificatoken(chequeo.PERMISO.CONTROL.C
     if (req.body.arrayDefectos &&  req.body.arrayDefectos.length) {
       let connection2 = mysql.createConnection(config.connection), data = '';
       req.body.arrayDefectos.forEach((item, i) => {
-        data = ` ${data} ( ${req.body.id}, ${req.body.idOperacion}, ${item}, 'Activo', ${req.session.usuario.id} ),`;
+        data = ` ${data} ( ${req.body.id}, ${req.body.idOperacion}, ${item.id}, '${item.observacion || '-'}', 'Activo', ${req.session.usuario.id} ),`;
       });
       data = data.slice(0, data.length - 1);
       debug('data 22222222222222222222222');
-      debug(data);
-      let query2 = `INSERT INTO chequeo_operacion_defecto (idChequeo, idOperacion, idDefecto, estado, idUsuarioCreacion)
+      let query2 = `INSERT INTO chequeo_operacion_defecto (idChequeo, idOperacion, idDefecto, observacion, estado, idUsuarioCreacion)
       values ${data} ON DUPLICATE KEY update estado='Activo'`;
+      debug(query2);
       connection2.connect();
       let promesa = config.consultar(connection2, query2);
       promesa
@@ -182,6 +221,7 @@ router.post('/defecto',  mdAutenticacion.verificatoken(chequeo.PERMISO.CONTROL.C
       return value;
   })
   .then(value => {
+    debug(value);
     res.json(value);
   })
   .catch(err => {
@@ -455,7 +495,7 @@ router.get('/operaciones/:idChasisCarroceria/:idCentro',  mdAutenticacion.verifi
   let connection = mysql.createConnection(config.connection);
   connection.connect();
   let query = `SELECT o.nombre, o.id as idOperacion, c.nombre as categoria
-   	,GROUP_CONCAT(cod.idDefecto) as defectos
+   	,GROUP_CONCAT(cod.idDefecto) as defectos, GROUP_CONCAT(cod.observacion) as observacionDefectos
       FROM centro_operacion cco
       LEFT JOIN operacion_chequeo o ON o.id=cco.idOperacion AND o.estado = 'Activo'
       LEFT JOIN chequeo_operacion_defecto cod ON cod.idChequeo = ${req.query.id} AND cco.idOperacion = cod.idOperacion AND cod.estado = 'Activo'
@@ -477,7 +517,7 @@ router.get('/operaciones/:idChasisCarroceria/:idCentro',  mdAutenticacion.verifi
 router.get('/operaciones-pdf/:idChequeo',  mdAutenticacion.verificatoken(chequeo.PERMISO.CONTROL.LISTAR), (req, res, next) => {
   let connection = mysql.createConnection(config.connection);
   connection.connect();
-  let query = `SELECT cod.* ,GROUP_CONCAT(" ", d.nombre) as defectos ,o.nombre as operacion, c.nombre as categoria
+  let query = `SELECT cod.* ,GROUP_CONCAT(" ", d.nombre, " - ", cod.observacion) as defectos ,o.nombre as operacion, c.nombre as categoria
     FROM chequeo_operacion_defecto cod
     INNER JOIN defecto d ON d.id=cod.idDefecto
     INNER JOIN operacion_chequeo o ON o.id=cod.idOperacion

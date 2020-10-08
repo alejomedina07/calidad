@@ -41,7 +41,16 @@ router.get('/obtener-ops', mdAutenticacion.verificatoken(centro.PERMISO.CREAR), 
   // con.database = 'homologacion';
   let connection = mysql.createConnection(config.connection);
   connection.connect();
-  let promesa = config.consultar(connection, `SELECT * FROM homologacion.centro_trabajo WHERE codigo like '${req.query.codigo}%' OR descripcion like '%ALISTAMIENTO%' OR descripcion like '%LIBERACION%' OR descripcion like '%pintura%'` );
+  let promesa = config.consultar(connection, `SELECT * FROM homologacion.centro_trabajo WHERE codigo like '${req.query.codigo}%' OR descripcion like '%ALISTAMIENTO%' OR descripcion like '%LIBERACION%' OR descripcion like '%pintura%'
+    OR descripcion like '%externo%'
+    OR descripcion like '%interno%'
+    OR descripcion like '%electrico%'
+    OR descripcion like '%mecanico%'
+    OR descripcion like '%etc%'
+    OR descripcion like '%ruta%'
+    OR descripcion like '%agua%'
+    OR descripcion like '%acondicionad%'
+    OR descripcion like '%carcamo%'` );
   promesa.then(value => {
     res.json(value);
   })

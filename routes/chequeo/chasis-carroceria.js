@@ -76,7 +76,7 @@ router.get('/chasis/:idCarroceria',  mdAutenticacion.verificatoken(chequeo.PERMI
 router.get('/listar',  mdAutenticacion.verificatoken(chequeo.PERMISO.OPERACION.LISTAR), (req, res, next) => {
   let connection = mysql.createConnection(config.connection);
   connection.connect();
-  let query = `SELECT cc.*, u.nombre as usuario, chaca.idChasis, chaca.idCarroceria, ca.nombre, cha.abreviatura, COUNT(cco.id) as operaciones
+  let query = `SELECT cc.*, u.nombre as usuario, chaca.idChasis, chaca.idCarroceria, ca.nombre, CONCAT(cha.marca, " ", cha.referencia, " ", cha.distanciaEjes) as abreviatura, COUNT(cco.id) as operaciones
     FROM chasis_carroceria cc
     INNER JOIN pdmsinergia.chasis_carroceria chaca ON chaca.id = cc.idChasisCarroceria
     INNER JOIN pdmsinergia.carroceria ca ON ca.id = chaca.idCarroceria

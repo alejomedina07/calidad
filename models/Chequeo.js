@@ -26,6 +26,7 @@ Chequeo.prototype.PERMISO = {
 		CREAR:  'chequeo.crear',
 		EDITAR:  'chequeo.editar',
 		LISTAR:  'chequeo.listar',
+		INACTIVAR:  'chequeo.inactivar',
 	},
 
 },

@@ -5,8 +5,10 @@ block header
 block content
   br
   div(ng-controller="listControl as $lCtrl" layout-margin)
-    script(src='https://unpkg.com/jspdf@latest/dist/jspdf.min.js')
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.6/jspdf.plugin.autotable.js')
+    //-script(src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js')
+    //-script(src='https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.6/jspdf.plugin.autotable.js')
+    script(src='/static/plugins/jspdf/jspdf.min.js')
+    script(src='/static/plugins/jspdf/jspdf.plugin.autotable.js')
     table#basic-table(style='display: none;' ng-init="categoriaAnterior = ''")
       thead
         tr
@@ -102,7 +104,8 @@ block content
                   md-icon(md-svg-src='/static/content/icons/edit.svg')
                 md-button.md-icon-button(ng-click="$lCtrl.exportar(item)" ng-hide="item.estado == 'Activo'")
                   md-icon(md-svg-src='/static/content/icons/pdf.svg')
-    
+                md-button.md-icon-button(ng-if="$lCtrl.obtenerPermiso('chequeo.inactivar') && item.estado != 'Inactivo'" href="/chequeo/control/inactivar/{{item.id}}")
+                  md-icon(md-svg-src='/static/content/icons/delete.svg' style="color: red;")
     #customers(style='display: none;')
       .table-responsive45
         table.table.table-header-rotated

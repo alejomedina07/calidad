@@ -30,6 +30,36 @@ md-content {
   max-height: 84px !important;
 }
 
+
+.menu-navegacion {
+  overflow: hidden;
+  height: 100%;
+  padding-bottom: 16px;
+}
+.menu-navegacion md-card {
+  height: 100%;
+}
+.menu-navegacion .botones:hover {
+  background-color: rgba(158, 158, 158, 0.2) !important;
+}
+.menu-navegacion md-icon {
+  display: block;
+}
+.menu-navegacion .icono {
+  width: 100%;
+  height: 68px;
+  text-align: center;
+  background: black;
+  color: #fff!important;
+  background: #3f51b5;
+  color: black;
+  padding: 10px 0;
+}
+.menu-navegacion .icono i {
+  font-size: 120px;
+}
+
+
 .logo {
   height: 50px;
 }

@@ -36,6 +36,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', require('./routes/index'));
 app.use('/centros', require('./routes/centros'));
 app.use('/usuarios', require('./routes/usuarios'));
+app.use('/permisos', require('./routes/operacion'));
+app.use('/permisos/rol', require('./routes/operacion_rol'));
 app.use('/notificaciones', require('./routes/notificaciones'));
 
 app.use('/fotos', require('./routes/fotos'));

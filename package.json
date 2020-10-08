@@ -36,7 +36,6 @@
     "node-gyp": "^6.1.0",
     "pug": "2.0.0-beta11",
     "pushsafer-notifications": "^0.1.8",
-    "rebuild": "^0.1.2",
-    "sharp": "^0.25.4"
+    "rebuild": "^0.1.2"
   }
 }

@@ -242,8 +242,8 @@ router.post('/',  mdAutenticacion.verificatoken(notificacion.PERMISO.CREAR), (re
         }
     };
 
-    // arrayPromesas.push(axios.post('https://cloud.go4clients.com:8580/api/campaigns/voice/v1.0/5f2b2660d2dd7d000afc9a84', dataLlamada, configuracion));
-    arrayPromesas.push(axios.post('https://cloud.go4clients.com:8580/api/campaigns/sms/v1.0/5f31ae9f4394c700083b8061', dataLlamada, configuracion));
+    // arrayPromesas.push(axios.post('https://cloud.go4clients.com:8580/api/campaigns/sms/v1.0/5f31ae9f4394c700083b8061', dataLlamada, configuracion));
+    arrayPromesas.push(axios.post('https://cloud.go4clients.com:8580/api/campaigns/sms/v1.0/5f7df3bb6662b70008f16e63', dataLlamada, configuracion));
 
     data = data.slice(0, data.length - 1);
     let query = `INSERT INTO asistencia

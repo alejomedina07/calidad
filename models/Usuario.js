@@ -6,7 +6,13 @@ Usuario.prototype.PERMISO = {
 	EDITAR:  'usuario.editar',
 	// VER:  'usuario.ver',
 	LISTAR:  'usuario.listar',
+	FOTOS:  'fotos',
 	ELIMINAR:  'usuario.eliminar',
+	PERMISOS: {
+		CREAR:  'permisoOperacion.crear',
+		EDITAR:  'permisoOperacion.editar',
+		LISTAR:  'permisoOperacion.listar',
+	}
 },
 
 

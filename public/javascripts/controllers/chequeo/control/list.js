@@ -8,7 +8,11 @@
     $cCtrl.registrosXpagina = 10;
     $cCtrl.filtros = {};
 
+    $cCtrl.operaciones = localStorage.getItem("operaciones");
 
+    $cCtrl.obtenerPermiso = function(permiso) {
+      return $cCtrl.operaciones.includes(permiso);
+    };
 
 
     $cCtrl.listarCentros = function () {
@@ -48,7 +52,7 @@
         // debugger;
         $timeout(function(){
           // generarPdf();
-          generate();
+          generate(chequeo.id);
         }, 500);
       })
       .catch(function(e){
@@ -84,7 +88,7 @@
         }, margins);
       }
 
-      function generate() {
+      function generate(id) {
 
         var doc = new jsPDF('p', 'pt');
 
@@ -96,7 +100,18 @@
           doc.setTextColor(40);
           doc.setFontStyle('normal');
           //doc.addImage(headerImgData, 'JPEG', data.settings.margin.left, 20, 50, 50);
-          let titulo = `Orden de Producción : ${$cCtrl.registroPdf.nombre_op} Carrocería : ${$cCtrl.registroPdf.carroceria} \nChasis : ${$cCtrl.registroPdf.chasis} \nCentro de trabajo: ${$cCtrl.registroPdf.centro} \nEstado : ${$cCtrl.registroPdf.estado} \nObservacion : ${$cCtrl.registroPdf.observacion}\nAuditor : ${$cCtrl.registroPdf.auditor}`
+          debugger;
+          var observacion = '';
+          if ($cCtrl.registroPdf.observacion.length > 84) {
+            let index = Math.ceil($cCtrl.registroPdf.observacion.length/84);
+            for (var i = 0; i < index; i++) {
+
+              observacion = observacion + $cCtrl.registroPdf.observacion.substr(i*84, (i+1)*84)  +'\n';
+            }
+          }else {
+            observacion = $cCtrl.registroPdf.observacion;
+          }
+          let titulo = `Orden de Producción : ${$cCtrl.registroPdf.nombre_op} Carrocería : ${$cCtrl.registroPdf.carroceria} \nChasis : ${$cCtrl.registroPdf.chasis} \nCentro de trabajo: ${$cCtrl.registroPdf.centro} \nEstado : ${$cCtrl.registroPdf.estado} \nObservacion : ${observacion.trim()}\nAuditor : ${$cCtrl.registroPdf.usuario}`
           doc.text(titulo, data.settings.margin.left, 50);
         };
 
@@ -118,7 +133,7 @@
 
         doc.autoTable(res.columns, res.data, options);
 
-        doc.save("table.pdf");
+        doc.save( "cheqeo " + id +  ".pdf");
       }
 
     };

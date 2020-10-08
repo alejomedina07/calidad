@@ -45,7 +45,7 @@ router.get('/listar',  mdAutenticacion.verificatoken(centro.PERMISO.LISTAR), (re
     INNER JOIN pdmsinergia.chasis_carroceria pcc ON chaca.idChasisCarroceria = pcc.id
     INNER JOIN pdmsinergia.carroceria pc ON pcc.idCarroceria = pc.id
     INNER JOIN pdmsinergia.chasis pch ON pcc.idChasis = pch.id
-    GROUP BY co.idChasisCarroceria
+    GROUP BY co.idChasisCarroceria, co.idCentro
     `
   let promesa = config.consultar(connection, query);
   promesa.then(value => {

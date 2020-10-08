@@ -30,9 +30,6 @@ block content
         div(layout="row" layout-xs="column" layout-sm="column" layout-align="center center" layout-margin )
           md-input-container.w-100(style="margin-bottom:20px;" flex)
             label Centro de trabajo
-            //- md-select(ng-model='$fCtrl.form.idCentro' ng-disabled="!$fCtrl.form.linea || $fCtrl.id")
-            //-   md-option(ng-repeat='opcion in $fCtrl.listaOps', ng-value='opcion.id')
-            //-     | {{opcion.codigo}} - {{opcion.descripcion}}
             md-select(ng-model='$fCtrl.form.idCentro' md-on-close="$fCtrl.busqueda = ''" md-on-open='$fCtrl.focoParaBuscar()' ng-disabled="!$fCtrl.form.linea || $fCtrl.id")
               md-select-header
                 input.campo-busqueda(ng-model='$fCtrl.busqueda' ng-keydown="$fCtrl.buscar($event)" type='search' placeholder='Buscar Centro...')

@@ -99,11 +99,11 @@
       });
 
       sections.push({
-        name: 'Fotos',  permiso:'centro',
+        name: 'Fotos',  permiso:'fotos',
         type: 'toggle', icon:'photo',
         pages: [{
-          name: 'Indicador por Centros de trabajo',  permiso:'centro.listar',
-          state: '/chequeo/centro/foto/',
+          name: 'Gestión de fotos',  permiso:'fotos',
+          state: '/fotos',
           type: 'link', icon: 'fa fa-group'
         }]
       });

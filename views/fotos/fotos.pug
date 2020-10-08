@@ -33,7 +33,7 @@ block content
         br
         div(layout="row" layout-align="center center" flex )
           md-input-container.w-100.md-block(flex)
-            input(type='file', name='imagenes')
+            input(type='file', name='imagenes' multiple)
         div.ng-hide(layout="row" layout-align="center center" flex )
           md-input-container.w-100.md-block(flex)
             input(type='text', name='op' ng-model="$fCtrl.form.op" id="op")

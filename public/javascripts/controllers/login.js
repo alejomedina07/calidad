@@ -12,7 +12,7 @@
       .then(result => {
         localStorage.setItem("operaciones", result.data.usuario.operaciones);
         // $lCtrl.loading = false;
-        window.location.href = "/notificaciones/formulario";
+        window.location.href = "/dashboard";
       })
       .catch(error => {
         $lCtrl.loading = false;

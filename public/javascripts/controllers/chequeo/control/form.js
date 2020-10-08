@@ -34,9 +34,14 @@
 
     $fCtrl.buscarCentro = function() {
       console.log($fCtrl.form.op);
-      $fCtrl.form.idCarroceria = $fCtrl.form.op.idCarroceria
+      $fCtrl.form.idCarroceria = $fCtrl.form.op.idCarroceria;
+      // var aux = $fCtrl.ops.find(x => x.id === $fCtrl.form.op.id);
+      var index = $fCtrl.ops.findIndex(x => x.id === $fCtrl.form.op.id);
+      var aux = $fCtrl.ops.splice(index,1);
+      $fCtrl.ops = aux.concat($fCtrl.ops);
       $http.get('/chequeo/control/obtener-centro-real/' + $fCtrl.obtenerPrefijoLinea($fCtrl.form.op.lineaReal))
       .then(function(result){
+
         $fCtrl.centroReales = result.data;
         console.log('$fCtrl.centroReales');
         console.log($fCtrl.centroReales);
@@ -50,6 +55,34 @@
     $fCtrl.buscarCentroDefinido = function() {
       // debugger;
       console.log($fCtrl.form.centroReal);
+
+      if ($fCtrl.form.op.lineaDefinida == "Linea Pesada") {
+        if ($fCtrl.form.centroReal.descripcionCorta.includes("LINEA LIVIANA")) {
+          $fCtrl.form.centroReal.descripcionCorta = "LINEA PESADA" + $fCtrl.form.centroReal.descripcionCorta.substring(13)
+        }
+
+      }else {
+        if ($fCtrl.form.op.lineaDefinida == "Linea Liviana") {
+          if ($fCtrl.form.centroReal.descripcionCorta.includes("LINEA PESADA")) {
+            $fCtrl.form.centroReal.descripcionCorta = "LINEA LIVIANA" + $fCtrl.form.centroReal.descripcionCorta.substring(13)
+          }
+        }
+      }
+
+
+      // LINEA PESADA ESTRUCT
+      // LINEA PESADA ESTRUC
+
+      if ($fCtrl.form.centroReal.descripcionCorta.includes("ESTRUC") && !$fCtrl.form.centroReal.descripcionCorta.includes("ESTRUCT")) {
+        $fCtrl.form.centroReal.descripcionCorta = $fCtrl.form.centroReal.descripcionCorta + "T";
+      }
+
+      if ($fCtrl.form.centroReal.descripcionCorta.includes("FORRAD") && !$fCtrl.form.centroReal.descripcionCorta.includes("FORRADO")) {
+        $fCtrl.form.centroReal.descripcionCorta = $fCtrl.form.centroReal.descripcionCorta + "O";
+      }
+
+      debugger;
+
       $http.get('/chequeo/control/obtener-centro-definido/' + $fCtrl.obtenerPrefijoLinea($fCtrl.form.op.lineaDefinida) + '/' + $fCtrl.form.centroReal.descripcionCorta)
       .then(function(result){
         $fCtrl.form.idCentro = result.data[0].id;
@@ -82,21 +115,38 @@
       }, 500);
     };
 
+
+    $fCtrl.operacionOk = function(operacion) {
+      if (!localStorage.getItem($fCtrl.id+operacion.idOperacion)) {
+        localStorage.setItem($fCtrl.id+operacion.idOperacion, "ok");
+      }
+
+    };
+
+    $fCtrl.revisada = function(operacion) {
+      return localStorage.getItem($fCtrl.id+operacion.idOperacion) ? '#4c9c18' : '#000';
+    };
+
     $fCtrl.buscar = function(ev) {
         ev.stopPropagation();
     };
 
-    $fCtrl.obtenerDefectos = function(operacion) {
+    $fCtrl.obtenerDefectos = function(operacion, defectos) {
         if (!operacion.defectos || !$fCtrl.defectos) return '';
         else {
           if ( !Array.isArray(operacion.defectos) ) {
             operacion.defectos = operacion.defectos.split(",");
+            operacion.observacionDefectos = operacion.observacionDefectos.split(",");
+
             let array = [];
             operacion.defectos.forEach((item, i) => {
               let def = $fCtrl.defectos;
-              array.push(def.find(x => x.idDefecto == parseInt(item) ).nombre);
+              // if (defectos)
+              //   array.push(operacion.observacionDefectos[i]);
+              // else
+                array.push(def.find(x => x.idDefecto == parseInt(item) ).nombre + ' - Observación: (' + operacion.observacionDefectos[i] + ')');
             });
-            operacion.nombre_defectos = array.join(", ");
+            operacion.nombre_defectos = array.join(", * ");
           }
           return operacion.nombre_defectos;
         }
@@ -161,14 +211,19 @@
       if ($fCtrl.operacionSeleccionada.defectos) {
         $fCtrl.defectos.forEach((item, i) => {
           var index = $fCtrl.operacionSeleccionada.defectos.indexOf(item.idDefecto.toString());
-          if (index >= 0)
+          if (index >= 0) {
             item.selected = true;
-          else
+            item.observacion = $fCtrl.operacionSeleccionada.observacionDefectos[index];
+          }
+          else {
             item.selected = false;
+            item.observacion = '';
+          }
         });
       }else {
         $fCtrl.defectos.forEach((item, i) => {
           item.selected = false;
+          item.observacion = '';
         });
       }
 
@@ -317,7 +372,7 @@
       $fCtrl.operacionSeleccionada.defectos = '';
       $fCtrl.defectos.forEach((item, i) => {
         if (item.selected)
-          form.arrayDefectos.push(item.idDefecto);
+          form.arrayDefectos.push({id:item.idDefecto, observacion:item.observacion});
       });
 
       $http.post('/chequeo/control/defecto', form)

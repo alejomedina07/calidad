@@ -42,8 +42,8 @@
       let url = `/chequeo/control/obtener-grafica?op=${$iCtrl.op}&fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`
       $http.get(url)
       .then(function(result){
-        $iCtrl.defectos = result.data;
-        graficar(result.data, "chartdiv");
+        $iCtrl.defectos = result.data[0];
+        graficar($iCtrl.defectos, "chartdiv");
       })
       .catch(function(e){
         console.log(e);

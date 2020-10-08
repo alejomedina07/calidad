@@ -50,7 +50,7 @@ block content
             th(scope='col' ng-click="$lCtrl.ordenarPor('idAplicacionMovil')") 
               div(layout="row")
                 span(flex)
-                span Id Aplicación
+                span Teléfono
                 span(flex)
                 md-icon(md-svg-src="/static/content/icons/sort{{ $lCtrl.reverse ? 'Desc' : 'Asc' }}.svg" ng-show="$lCtrl.propertyName === 'idAplicacionMovil'")
             th(scope='col' ) Acciones
@@ -75,7 +75,7 @@ block content
             td(data-title='Correo :') {{ item.correo }}
             td(data-title='Fecha de Creación :') {{ item.fechaCreacion | date : 'short'}}
             td(data-title='Estado :') {{ item.estado }}
-            td(data-title='Estado :') {{ item.idAplicacionMovil }}
+            td(data-title='Estado :') {{ item.telefonoMovil }}
             td(data-title='Acciones :') 
               md-button.md-icon-button(aria-label='boton' href="/usuarios/formulario/{{ item.id }}" ) 
                 md-icon(md-svg-src='/static/content/icons/edit.svg')

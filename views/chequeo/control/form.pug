@@ -79,16 +79,19 @@ block content
              md-list
                //- md-subheader.md-no-sticky lista
                md-list-item.noright(ng-repeat='operacion in $fCtrl.operaciones' style="border-bottom: 1px solid;")
-                 div(layout="column" flex)
+                 div(layout="column" flex style="color:{{ $fCtrl.revisada(operacion) }};")
                    div(layout="row")
                      b(style="margin: 12px 0 -17px 0;") {{ operacion.categoria }}
                    div(layout="row" ng-click='$fCtrl.openModal($event, operacion)' style="cursor:pointer;")
                      p {{ operacion.nombre }} &nbsp;
-                       i(style="color:red;" ) {{ $fCtrl.obtenerDefectos(operacion) }}
+                      //-i(ng-bind="$fCtrl.obtenerDefectos(operacion)")
+                      i(style="color:red;"  )  {{ $fCtrl.obtenerDefectos(operacion) }}
+                        //- span(style="color:blue;") {{ $fCtrl.obtenerDefectos(operacion, true) }}
                   
                  //- md-checkbox.md-primary(ng-model='selected')
                  span.defectos(ng-if="operacion.defectos.length && operacion.nombre_defectos") {{ operacion.defectos.length }}
-                 md-icon.md-secondary.md-fab.md-mini(md-svg-icon='/static/content/icons/danger.svg'  aria-label='Send Email')
+                 //- md-icon.md-secondary.md-fab.md-mini(md-svg-icon='/static/content/icons/danger.svg'  aria-label='Send Email')
+                 md-icon.md-secondary.md-fab.md-mini(ng-click="$fCtrl.operacionOk(operacion)" ng-if="!operacion.defectos.length && !operacion.nombre_defectos" md-svg-icon='/static/content/icons/tick_.svg'  aria-label='Send Email')
                    //md-button(class="md-fab md-mini" aria-label="Eat cake") 2
         
         div(layout="row" ng-hide="$fCtrl.form.estado == 'En progreso'")
@@ -106,18 +109,20 @@ block content
             md-dialog(flex="60" flex-xs="90" flex-sm="90")
               md-toolbar
                 .md-toolbar-tools
-                  h2 Defectos
+                  h2 Defectos 
                   span(flex='')
                   md-button.md-icon-button(ng-click='$fCtrl.close()' style="font-size:22pt;") X       
               md-dialog-content(layout-margin layout-paddig)
                 md-list(ng-if="$fCtrl.form.estado == 'En progreso'")
                   md-list-item(ng-repeat='defecto in $fCtrl.defectosACerrar' )
                     p {{ defecto.nombre }}
+                    input( type="text" ng-blur="defecto.selected = true" ng-model="defecto.observacion")
                     md-checkbox.md-primary(ng-model='defecto.selected')
               
                 md-list(ng-if="$fCtrl.form.estado == 'Activo'")
                   md-list-item(ng-repeat='defecto in $fCtrl.defectos' )
                     p {{ defecto.nombre }}
+                    input( type="text" ng-model="defecto.observacion")
                     md-checkbox.md-primary(ng-model='defecto.selected')
               
               md-dialog-actions(layout-align="end end" layout="row" style="background:#f6f6f6;")
